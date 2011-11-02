@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Crossword Composer{% endblock %}
+{% block content %}
+
+<h4>Getting Started</h4>
+Click on any open square in the grid and you will see a yellow bar highlighting the active answer space.  Start typing the answer, and as you finish, the focus will
+shift to the clue entry box, which is prepopulated with the number of letters in the answer.  This will require modification in the case of multiple or hyphenated 
+answers.  Continuations to separate answer spaces must be entered manually at this time by referring to the continued clue in the clue space (e.g. the clue may read 
+"See 18" if clue 18 is a continuation into the clue in question.
+
+<h4>Word Lookup</h4>
+Often in the process of answer entry it becomes difficult to find words given the constraints imposed by answers already constructed in the puzzle.  If the yellow bar
+encompasses one or more letters in such a thorny situation, the "Words" button may be used to look up possibilities.  Alternatives will
+appear beneath the puzzle in the form of buttons which, if clicked, will autofill the answer space.  The dictionary used for this is the UK Advanced 
+Cryptics Dictionary.  Additionally, answers already used in the extensive database of extant puzzles are used to provide alternatives.
+
+<h4>Clue Lookup</h4>
+No self respecting setter will want to clue an answer in the same way as another, especially if that cluing has been used recently. To this end, the "Clue" button will
+look up the answer in the database of existing puzzles to check the cluing that has already appeared in publication.  We will add publicly available sources for both UK
+Cryptic and US fully checked non-cryptics as available.
+
+<h4>The Vision Thing</h4>
+We hope to provide an accessible and enticing environment for both amateur and professional setters to compose excellent edited content suitable for either
+publication or for sharing with friends and associates.  Simply by visiting our home page, we provide the means to create, save, print, and export puzzles 
+of both cryptic and US varieties.  Free membership will entitle the user to save puzzles and to choose a sharing model which may be completely private, shared with
+specific individuals for the purposes of collaboration, or open for the world to see.  We plan on providing solving and cluing competitions online, and facilitating
+publication through peer reviews, forums and chat features. 
+
+<h4>Feedback</h4>
+We are very interested in hearing what you think!!  Please feel free to contact us at <a href="mailto:info@crosswordcomposer.com">info@crosswordcomposer.com</a>
+{% endblock %}

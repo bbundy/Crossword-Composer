@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}The current value{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+  
+  <style>
+            
+        @import "http://bundy.org/xw/crossword-8-col.css";
+            
+
+	
+	</style>
+  
+  <script src="http://bundy.org/xw/jquery.hotkeys-0.7.9.js"></script>
+  <script src="http://bundy.org/xw/jquery.cookie.js"></script>
+  <script src="http://bundy.org/xw/crossword.js"></script>
+
+  <script>
+    
+    var crossword_identifier = 'crossword-agh4LXB1enpsZXIRCxIJQ3Jvc3N3b3JkGMGTOAw';
+    var intersections = {};
+    var solutions = {};
+    
+    intersections["4-down-6"] = "12-across-7";
+    
+    intersections["22-across-8"] = "8-down-10";
+    
+    intersections["10-across-5"] = "4-down-4";
+    
+    intersections["10-across-7"] = "7-down-3";
+    
+    intersections["22-across-4"] = "19-down-3";
+    
+    intersections["22-across-6"] = "14-down-5";
+    
+    intersections["15-down-1"] = "13-across-10";
+    
+    intersections["12-across-7"] = "4-down-6";
+    
+    intersections["24-across-1"] = "16-down-6";
+    
+    intersections["19-down-1"] = "18-across-4";
+    
+    intersections["18-across-8"] = "8-down-8";
+    
+    intersections["1-down-2"] = "5-across-3";
+    
+    intersections["12-across-3"] = "8-down-4";
+    
+    intersections["8-down-2"] = "10-across-1";
+    
+    intersections["2-down-2"] = "5-across-5";
+    
+    intersections["9-across-2"] = "5-down-3";
+    
+    intersections["2-down-4"] = "9-across-6";
+    
+    intersections["9-across-4"] = "1-down-4";
+    
+    intersections["14-down-3"] = "18-across-6";
+    
+    intersections["3-down-2"] = "6-across-2";
+    
+    intersections["9-across-6"] = "2-down-4";
+    
+    intersections["6-across-2"] = "3-down-2";
+    
+    intersections["3-down-4"] = "10-across-3";
+    
+    intersections["10-across-1"] = "8-down-2";
+    
+    intersections["13-across-10"] = "15-down-1";
+    
+    intersections["20-down-5"] = "25-across-2";
+    
+    intersections["4-down-4"] = "10-across-5";
+    
+    intersections["6-across-4"] = "4-down-2";
+    
+    intersections["5-across-1"] = "5-down-1";
+    
+    intersections["3-down-8"] = "13-across-8";
+    
+    intersections["12-across-5"] = "3-down-6";
+    
+    intersections["11-across-4"] = "1-down-6";
+    
+    intersections["13-across-2"] = "1-down-8";
+    
+    intersections["18-across-4"] = "19-down-1";
+    
+    intersections["18-across-2"] = "16-down-2";
+    
+    intersections["6-across-6"] = "7-down-1";
+    
+    intersections["8-down-10"] = "22-across-8";
+    
+    intersections["24-across-5"] = "14-down-7";
+    
+    intersections["21-across-1"] = "15-down-3";
+    
+    intersections["1-down-4"] = "9-across-4";
+    
+    intersections["21-across-3"] = "17-down-2";
+    
+    intersections["25-across-4"] = "15-down-7";
+    
+    intersections["25-across-6"] = "17-down-6";
+    
+    intersections["20-down-3"] = "23-across-1";
+    
+    intersections["12-across-9"] = "7-down-5";
+    
+    intersections["19-down-3"] = "22-across-4";
+    
+    intersections["17-down-2"] = "21-across-3";
+    
+    intersections["23-across-1"] = "20-down-3";
+    
+    intersections["5-across-5"] = "2-down-2";
+    
+    intersections["18-across-6"] = "14-down-3";
+    
+    intersections["17-down-4"] = "23-across-5";
+    
+    intersections["23-across-3"] = "15-down-5";
+    
+    intersections["23-across-5"] = "17-down-4";
+    
+    intersections["5-across-3"] = "1-down-2";
+    
+    intersections["5-down-1"] = "5-across-1";
+    
+    intersections["5-down-3"] = "9-across-2";
+    
+    intersections["5-down-5"] = "11-across-2";
+    
+    intersections["1-down-6"] = "11-across-4";
+    
+    intersections["1-down-8"] = "13-across-2";
+    
+    intersections["16-down-4"] = "22-across-2";
+    
+    intersections["8-down-6"] = "13-across-6";
+    
+    intersections["8-down-8"] = "18-across-8";
+    
+    intersections["7-down-5"] = "12-across-9";
+    
+    intersections["15-down-3"] = "21-across-1";
+    
+    intersections["15-down-5"] = "23-across-3";
+    
+    intersections["15-down-7"] = "25-across-4";
+    
+    intersections["17-down-6"] = "25-across-6";
+    
+    intersections["10-across-3"] = "3-down-4";
+    
+    intersections["20-down-1"] = "18-across-10";
+    
+    intersections["11-across-2"] = "5-down-5";
+    
+    intersections["16-down-2"] = "18-across-2";
+    
+    intersections["14-down-7"] = "24-across-5";
+    
+    intersections["24-across-3"] = "19-down-5";
+    
+    intersections["13-across-8"] = "3-down-8";
+    
+    intersections["19-down-5"] = "24-across-3";
+    
+    intersections["18-across-10"] = "20-down-1";
+    
+    intersections["7-down-1"] = "6-across-6";
+    
+    intersections["14-down-5"] = "22-across-6";
+    
+    intersections["8-down-4"] = "12-across-3";
+    
+    intersections["14-down-1"] = "13-across-4";
+    
+    intersections["4-down-2"] = "6-across-4";
+    
+    intersections["13-across-6"] = "8-down-6";
+    
+    intersections["3-down-6"] = "12-across-5";
+    
+    intersections["12-across-1"] = "2-down-6";
+    
+    intersections["16-down-6"] = "24-across-1";
+    
+    intersections["2-down-6"] = "12-across-1";
+    
+    intersections["25-across-2"] = "20-down-5";
+    
+    intersections["22-across-2"] = "16-down-4";
+    
+    intersections["13-across-4"] = "14-down-1";
+    
+    intersections["7-down-3"] = "10-across-7";
+    
+    var words_for_clue = {};
+    
+    words_for_clue["12-across"] = ['12-across'];
+    
+    words_for_clue["6-across"] = ['6-across'];
+    
+    words_for_clue["23-across"] = ['23-across'];
+    
+    words_for_clue["4-down"] = ['4-down'];
+    
+    words_for_clue["15-down"] = ['15-down'];
+    
+    words_for_clue["7-down"] = ['7-down'];
+    
+    words_for_clue["11-across"] = ['11-across'];
+    
+    words_for_clue["18-across"] = ['18-across'];
+    
+    words_for_clue["9-across"] = ['9-across'];
+    
+    words_for_clue["25-across"] = ['25-across'];
+    
+    words_for_clue["13-across"] = ['13-across'];
+    
+    words_for_clue["17-down"] = ['17-down'];
+    
+    words_for_clue["22-across"] = ['22-across'];
+    
+    words_for_clue["24-across"] = ['24-across'];
+    
+    words_for_clue["1-down"] = ['1-down'];
+    
+    words_for_clue["14-down"] = ['14-down'];
+    
+    words_for_clue["3-down"] = ['3-down'];
+    
+    words_for_clue["20-down"] = ['20-down'];
+    
+    words_for_clue["8-down"] = ['8-down'];
+    
+    words_for_clue["5-across"] = ['5-across'];
+    
+    words_for_clue["21-across"] = ['21-across'];
+    
+    words_for_clue["16-down"] = ['16-down'];
+    
+    words_for_clue["19-down"] = ['19-down'];
+    
+    words_for_clue["5-down"] = ['5-down'];
+    
+    words_for_clue["2-down"] = ['2-down'];
+    
+    words_for_clue["10-across"] = ['10-across'];
+    
+    
+    solutions["5-across-2"] = "A";
+    
+    solutions["10-across-8"] = "N";
+    
+    
+    
+    solutions["11-across-1"] = "H";
+    
+    solutions["11-across-2"] = "E";
+    
+    solutions["11-across-3"] = "R";
+    
+    solutions["11-across-4"] = "A";
+    
+    
+    
+    solutions["12-across-1"] = "E";
+    
+    solutions["12-across-2"] = "V";
+    
+    solutions["12-across-3"] = "I";
+    
+    solutions["12-across-4"] = "S";
+    
+    solutions["12-across-5"] = "C";
+    
+    solutions["12-across-6"] = "E";
+    
+    solutions["12-across-7"] = "R";
+    
+    solutions["12-across-8"] = "A";
+    
+    solutions["12-across-9"] = "T";
+    
+    solutions["12-across-10"] = "E";
+    
+    
+    
+    solutions["13-across-1"] = "D";
+        
+    solutions["22-across-8"] = "I";
+    
+    solutions["5-down-3"] = "O";
+    
+    solutions["5-down-4"] = "N";
+    
+    solutions["5-down-5"] = "E";
+    
+    solutions["5-down-6"] = "Y";
+    
+    
+    
+    solutions["7-down-1"] = "S";
+    
+    solutions["7-down-2"] = "H";
+    
+    solutions["7-down-3"] = "A";
+    
+    solutions["7-down-4"] = "N";
+    
+    solutions["7-down-5"] = "T";
+    
+    solutions["7-down-6"] = "Y";
+    
+    
+    
+    solutions["8-down-1"] = "P";
+    
+    solutions["8-down-2"] = "L";
+    
+    solutions["8-down-3"] = "A";
+    
+    solutions["8-down-4"] = "I";
+    
+    solutions["8-down-5"] = "N";
+    
+    solutions["8-down-6"] = "S";
+    
+    solutions["8-down-7"] = "T";
+    
+    solutions["8-down-8"] = "U";
+    
+    solutions["8-down-9"] = "P";
+    
+    solutions["8-down-10"] = "I";
+    
+</script>
+</div>
+
+{% endblock %}

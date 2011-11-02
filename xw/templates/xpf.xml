@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Puzzles Version="1.0">
+  <Puzzle>
+    <Title>{{ puzzle.title }}</Title>
+    <Author>{{ puzzle.author }}</Author>
+    <Editor>{{ puzzle.editor }}</Editor>
+    <Publisher>{{ puzzle.publisher }}</Publisher>
+    <Date>{{ puzzle.date }}</Date>
+    <Size>
+      <Rows>{{ puzzle.size }}</Rows>
+      <Cols>{{ puzzle.size }}</Cols>
+    </Size>
+    <Grid>
+{% for row in puzzle.row %}
+      <Row>{{ row }}</Row>
+{% endfor %}
+    </Grid>
+    <Clues>
+{% for clue in puzzle.across %}
+      <Clue Row="{{ clue.row }}" Col="{{ clue.col }}" Num="{{ clue.num }}" Dir="Across" Ans="{{ clue.ans }}">{{ clue.clue }}</Clue>
+{% endfor %}
+{% for clue in puzzle.down %}
+      <Clue Row="{{ clue.row }}" Col="{{ clue.col }}" Num="{{ clue.num }}" Dir="Down" Ans="{{ clue.ans }}">{{ clue.clue }}</Clue>
+{% endfor %}
+    </Clues>
+  </Puzzle>
+</Puzzles>

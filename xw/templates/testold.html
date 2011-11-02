@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}The current puzzle{% endblock %}
+{% block content %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://bundy.org/xw/crossword-8-col.css";
+</style>
+  
+<script src="http://bundy.org/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://bundy.org/xw/jquery.cookie.js"></script>
+<script src="http://bundy.org/xw/cwcompose.js"></script>
+<script>		
+  var crossword_identifier = 'crossword-zzzw';
+  var intersections = {};
+  var words_for_clue = {};
+  var solutions = {};
+  var has_numbers = true;
+</script>
+
+<form id="crossword" method="post">
+  <div id="grid" style="width: 525px; height: 525px;">
+    <img src="http://bundy.org/xw/gif/print-background.gif" alt="" id="print-background"  style="width: 525px; height: 525px;" />
+{% for clue in puzzle.clue %}
+
+    <span style="left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir}}"> {{ clue.num }}</span>
+    
+    <div id="{{ clue.num }}-{{ clue.dir }}" style="z-index: {{ clue.num }}; left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir }}">
+      <fieldset>
+	<legend>{{ clue.num }} {{ clue.dir }}</legend>
+	<ol>
+{% for dig in clue.sq %}	  
+	  <li>
+	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" ">
+	  </li>
+{% endfor %}
+	</ol>
+	</div>
+{% endfor %}
+  </div>
+  <div id="buttons-horizontal">
+    <h3>Actions</h3>
+    <input id="save" type="button" value="Save" />
+    <input id="abandon" type="button" value="Abandon Changes" />
+  </div>
+  <div id="clues">
+    <div class="clues-col">
+      <h4>Across</h4>
+      <ol>
+{% for clue in puzzle.clue %}
+{% if clue.is_across %}
+	<li><label id="{{ clue.num }}-across-clue" for="{{ clue.num }}-across">
+	    <span class="clue-number">{{ clue.num }}</span>  
+	    {{ clue.clue }}</label></li>
+{% endif %}
+{% endfor %}
+      </ol>
+    </div>
+    <div class="clues-col last">
+	<h4>Down</h4>
+	<ol>
+{% for clue in puzzle.clue %}
+{% if not clue.is_across %}
+	  <li><label id="{{ clue.num }}-down-clue" for="{{ clue.num }}-down">
+	      <span class="clue-number">{{ clue.num }}</span>  
+	      {{ clue.clue }}</label></li>
+{% endif %}
+{% endfor %}
+</ol>
+</div>
+</form>
+{% endblock %}
