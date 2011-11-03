@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--XPF document for the Sunday, October 02, 2011 New York Times crossword.-->
+<!--Conforms to Universal Crossword Puzzle Format XPF. See www.xwordinfo.com/XPF for details and licensing information.-->
+<Puzzles Version="1.0">
+  <Puzzle>
+    <Type>cryptic</Type>
+    <Title>NY Times, Sun, Oct 02, 2011 CRYPTIC CROSSWORD</Title>
+    <Author>Emily Cox and Henry Rathvon</Author>
+    <Editor>Will Shortz</Editor>
+    <Publisher>The New York Times</Publisher>
+    <Date>10/2/2011</Date>
+    <Size>
+      <Rows>15</Rows>
+      <Cols>15</Cols>
+    </Size>
+    <Grid>
+      <Row>RAGA.REARWINDOW</Row>
+      <Row>E.E...L.O.N.A.A</Row>
+      <Row>SORE.BARBECUING</Row>
+      <Row>T.M.C.N.E.A.S.E</Row>
+      <Row>PHILANDERING...</Row>
+      <Row>E.N.R...T.D.T.T</Row>
+      <Row>REAPPEARS.EPOCH</Row>
+      <Row>I.T.A.S.O.S.U.R</Row>
+      <Row>ONEAL.SINECURVE</Row>
+      <Row>D.S.T.I...E.N.E</Row>
+      <Row>...QUESTIONMARK</Row>
+      <Row>H.O.N.T.D.T.M.I</Row>
+      <Row>OFTENTIMES.FERN</Row>
+      <Row>S.O.E.N.A...N.G</Row>
+      <Row>THEOLOGIST.OTIS</Row>
+    </Grid>
+    <Clues>
+      <Clue Row="1" Col="1" Num="1" Dir="Across" Ans="RAGA">Piece by Joplin and a piece by Shankar (4)</Clue>
+      <Clue Row="1" Col="6" Num="3" Dir="Across" Ans="REARWINDOW">Opening in a building both narrow and wide, strangely (4,6)</Clue>
+      <Clue Row="3" Col="1" Num="9" Dir="Across" Ans="SORE">Angry fly is heard (4)</Clue>
+      <Clue Row="3" Col="6" Num="10" Dir="Across" Ans="BARBECUING">Behind tavern, be giving the signal by grilling (10)</Clue>
+      <Clue Row="5" Col="1" Num="12" Dir="Across" Ans="PHILANDERING">Philip &amp; Erin Green carrying on a flirtation (10)</Clue>
+      <Clue Row="7" Col="1" Num="15" Dir="Across" Ans="REAPPEARS">Harvest with juicy fruit is seen again (9)</Clue>
+      <Clue Row="7" Col="11" Num="17" Dir="Across" Ans="EPOCH">He holds a cop back for a long time (5)</Clue>
+      <Clue Row="9" Col="1" Num="18" Dir="Across" Ans="ONEAL">A single American League big guy in the N.B.A. (5)</Clue>
+      <Clue Row="9" Col="7" Num="19" Dir="Across" Ans="SINECURVE">Vee occupies an easy job, making a graph line (4,5)</Clue>
+      <Clue Row="11" Col="4" Num="20" Dir="Across" Ans="QUESTIONMARK">Square knot I'm unknotting ...? (8,4)</Clue>
+      <Clue Row="13" Col="1" Num="24" Dir="Across" Ans="OFTENTIMES">Frequently relating to X x (10)</Clue>
+      <Clue Row="13" Col="12" Num="25" Dir="Across" Ans="FERN">Leafy plant right inside swamp (4)</Clue>
+      <Clue Row="15" Col="1" Num="26" Dir="Across" Ans="THEOLOGIST">Student of the Bible both loose and tight, strangely (10)</Clue>
+      <Clue Row="15" Col="12" Num="27" Dir="Across" Ans="OTIS">Old Testament is uplifting fellow? (4)</Clue>
+      <Clue Row="1" Col="1" Num="1" Dir="Down" Ans="RESTPERIOD">Chance to relax is reported mistakenly (4,6)</Clue>
+      <Clue Row="1" Col="3" Num="2" Dir="Down" Ans="GERMINATES">Begins developing Teutonic octets in a vocal setting (10)</Clue>
+      <Clue Row="1" Col="7" Num="4" Dir="Down" Ans="ELAND">Excellent country for antelope (5)</Clue>
+      <Clue Row="1" Col="9" Num="5" Dir="Down" Ans="ROBERTSON">Davies who wrote "Torn Robes" novel (9)</Clue>
+      <Clue Row="1" Col="11" Num="6" Dir="Down" Ans="INCANDESCENT">Brilliant Peruvian ancestry? (12)</Clue>
+      <Clue Row="1" Col="13" Num="7" Dir="Down" Ans="DAIS">Where a speaker may stand amid Florida islands (4)</Clue>
+      <Clue Row="1" Col="15" Num="8" Dir="Down" Ans="WAGE">Payment for labor in the second Bush era (4)</Clue>
+      <Clue Row="4" Col="5" Num="11" Dir="Down" Ans="CARPALTUNNEL">Passageway to the arm of redesigned nuclear plant (6,6)</Clue>
+      <Clue Row="6" Col="13" Num="13" Dir="Down" Ans="TOURNAMENT">What to call us amid explosive series of contests (10)</Clue>
+      <Clue Row="6" Col="15" Num="14" Dir="Down" Ans="THREEKINGS">1999 George Clooney movie with things full of bad odor (5,5)</Clue>
+      <Clue Row="7" Col="7" Num="16" Dir="Down" Ans="ASSISTING">Helping family member caught in a con (9)</Clue>
+      <Clue Row="11" Col="9" Num="21" Dir="Down" Ans="IDEAS">Sadie changed lightbulbs? (5)</Clue>
+      <Clue Row="12" Col="1" Num="22" Dir="Down" Ans="HOST">Army master of ceremonies (4)</Clue>
+      <Clue Row="12" Col="3" Num="23" Dir="Down" Ans="OTOE">Indian digit under zero (4)</Clue>
+    </Clues>
+  </Puzzle>
+</Puzzles>

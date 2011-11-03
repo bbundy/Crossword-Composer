@@ -1,0 +1,1653 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>MultiValueDictKeyError at /toxpf/</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th { padding:1px 6px 1px 3px; background:#fefefe; text-align:left; font-weight:normal; font-size:11px; border:1px solid #ddd; }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; }
+    ul.traceback li.frame { padding-bottom:1em; }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#666; cursor:pointer; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:black; background-color:#ccc; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:black; text-decoration:none; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 0 20px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block' : 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.innerHTML = s.innerHTML == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.innerHTML = link.innerHTML == s1 ? s2 : s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>MultiValueDictKeyError at /toxpf/</h1>
+  <pre class="exception_value">&quot;Key &#39;format&#39; not found in &lt;QueryDict: {}&gt;&quot;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>GET</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://crosswordcomposer.com/toxpf/</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.3.1</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>MultiValueDictKeyError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&quot;Key &#39;format&#39; not found in &lt;QueryDict: {}&gt;&quot;</pre></td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Location:</th>
+      <td>/usr/lib/python2.5/site-packages/django/utils/datastructures.py in __getitem__, line 256</td>
+    </tr>
+
+    <tr>
+      <th>Python Executable:</th>
+      <td>/usr/bin/python</td>
+    </tr>
+    <tr>
+      <th>Python Version:</th>
+      <td>2.5.2</td>
+    </tr>
+    <tr>
+      <th>Python Path:</th>
+      <td><pre>[&#39;/usr/lib/python2.5/site-packages/setuptools-0.6c7-py2.5.egg&#39;,
+ &#39;/usr/lib/python2.5/site-packages/fpconst-0.7.2-py2.5.egg&#39;,
+ &#39;/usr/lib/python2.5/site-packages/RTMPy-0.1dev_r289-py2.5.egg&#39;,
+ &#39;/usr/lib/python2.5/site-packages/SQLAlchemy-0.4.6-py2.5.egg&#39;,
+ &#39;/usr/lib/python2.5/site-packages/MySQL_python-1.2.2-py2.5-linux-x86_64.egg&#39;,
+ &#39;/usr/lib/python2.5/site-packages/flup-1.0-py2.5.egg&#39;,
+ &#39;/usr/lib/python2.5/site-packages/PyAMF-0.4dev_r1433-py2.5.egg&#39;,
+ &#39;/usr/lib/python25.zip&#39;,
+ &#39;/usr/lib/python2.5&#39;,
+ &#39;/usr/lib/python2.5/plat-linux2&#39;,
+ &#39;/usr/lib/python2.5/lib-tk&#39;,
+ &#39;/usr/lib/python2.5/lib-dynload&#39;,
+ &#39;/usr/local/lib/python2.5/site-packages&#39;,
+ &#39;/usr/lib/python2.5/site-packages&#39;,
+ &#39;/usr/lib/python2.5/site-packages/Numeric&#39;,
+ &#39;/usr/lib/python2.5/site-packages/PIL&#39;,
+ &#39;/var/lib/python-support/python2.5&#39;,
+ &#39;/var/lib/python-support/python2.5/gtk-2.0&#39;,
+ &#39;/home/bbundy/sites&#39;]</pre></td>
+    </tr>
+    <tr>
+      <th>Server time:</th>
+      <td>Sat, 29 Oct 2011 19:32:57 -0700</td>
+    </tr>
+  </table>
+</div>
+
+
+
+
+<div id="traceback">
+  <h2>Traceback <span class="commands"><a href="#" onclick="return switchPastebinFriendly(this);">Switch to copy-and-paste view</a></span></h2>
+  
+  <div id="browserTraceback">
+    <ul class="traceback">
+      
+        <li class="frame">
+          <code>/usr/lib/python2.5/site-packages/django/core/handlers/base.py</code> in <code>get_response</code>
+
+          
+            <div class="context" id="c25369488">
+              
+                <ol start="104" class="pre-context" id="pre25369488"><li onclick="toggle('pre25369488', 'post25369488')"><pre>                    for middleware_method in self._view_middleware:</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                        response = middleware_method(request, callback, callback_args, callback_kwargs)</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                        if response:</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                            break</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre></pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                if response is None:</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                    try:</pre></li></ol>
+              
+              <ol start="111" class="context-line"><li onclick="toggle('pre25369488', 'post25369488')"><pre>                        response = callback(request, *callback_args, **callback_kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='112' class="post-context" id="post25369488"><li onclick="toggle('pre25369488', 'post25369488')"><pre>                    except Exception, e:</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                        # If the view raised an exception, run it through exception</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                        # middleware, and if the exception middleware returns a</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                        # response, use that. Otherwise, reraise the exception.</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                        for middleware_method in self._exception_middleware:</pre></li><li onclick="toggle('pre25369488', 'post25369488')"><pre>                            response = middleware_method(request, e)</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '25369488')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v25369488">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>exceptions</td>
+                    <td class="code"><pre>&lt;module &#39;django.core.exceptions&#39; from &#39;/usr/lib/python2.5/site-packages/django/core/exceptions.pyc&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>e</td>
+                    <td class="code"><pre>MultiValueDictKeyError(&quot;Key &#39;format&#39; not found in &lt;QueryDict: {}&gt;&quot;,)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>receivers</td>
+                    <td class="code"><pre>[(&lt;function _rollback_on_exception at 0x1103d70&gt;, None)]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware_method</td>
+                    <td class="code"><pre>&lt;bound method CsrfViewMiddleware.process_view of &lt;django.middleware.csrf.CsrfViewMiddleware object at 0x1025ad0&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x1013050&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>settings</td>
+                    <td class="code"><pre>&lt;django.conf.LazySettings object at 0xd14550&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {}&gt;,
+COOKIES:{&#39;crossword&#39;: &#39;csrfmiddlewaretoken%3Da3627e9ab43fe619cf6f713e09625d1e%26gridstr%3D15cAgCqqAQCqqACCurAQDquAQGrqCACqqAQCqqAIA%26format%3D1xsx2xsx3xsxbx4x5xsx6xsx7xsx8xesxbxsxbxsxbx9xbxsxbxsxbxsxbxsxe10xsxsxsxsxsxsxbx11xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe12xsxsxsxsxsxsxsxsxsxbx13xsxsxsxesxbxsxbxsxbxbxbxsxbx14xbxsxbxbxe15xsxsxsxsxsx16xbx17xsxsxsxsxsx18xesxbxbxbxsxbxsxbxsxbxsxbxbxbxsxe19xsx20xsxsxsxsxbx21xsxsxsx22xsxsxebxbxsxbxsxbxsxbxbxbxsxbxsxbxsxe23xsxsxsxbx24xsxsx25xsxsxsxsxsxsxesxbxsxbx26xbxsxbxsxbxsxbxsxbxsxe27xsxsxsxsxsxsxbx28xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe29xsxsxsxsxsxsxsxbx30xsxsxsxsxsxe%26title%3D%26author%3D%261a1m%261a2u%261a3s%261a4c%261a5a%261a6t%261d1m%261d2e%261d3s%261d4c%261d5a%261d6l%261d7i%261d8n%261d9e%262d1s%262d2a%262d3u%262d4s%262d5a%262d6g%262d7e%263d1a%263d2u%263d3g%263d4m%263d5e%263d6n%263d7t%263d8i%263d9n%263d10g%264a1a%264a2c%264a3r%264a4o%264a5n%264a6y%264a7m%264a8s%265d1c%265d2r%265d3y%265d4p%265d5t%265d6i%265d7c%265d8a%265d9l%266d1o%266d2a%266d3r%266d4s%267d1y%267d2u%267d3m%267d4m%267d5i%267d6e%267d7r%268d1s%268d2o%268d3n%268d4g%268d5s%269d1h%269d2e%269d3r%269d4e%2610a1s%2610a2n%2610a3u%2610a4g%2610a5g%2610a6l%2610a7e%2611a1y%2611a2a%2611a3r%2611a4d%2611a5m%2611a6a%2611a7n%2612a1a%2612a2b%2612a3a%2612a4s%2612a5e%2612a6m%2612a7e%2612a8n%2612a9t%2612a10s%2613a1f%2613a2i%2613a3g%2613a4s%2614d1l%2614d2a%2614d3m%2614d4p%2614d5o%2614d6o%2614d7n%2614d8e%2614d9r%2614d10y%2615a1i%2615a2d%2615a3e%2615a4a%2615a5t%2615a6e%2615a7d%2616d1d%2616d2a%2616d3s%2616d4t%2616d5a%2616d6r%2616d7d%2616d8l%2616d9y%2617a1c%2617a2h%2617a3a%2617a4g%2617a5r%2617a6i%2617a7n%2618d1n%2618d2a%2618d3k%2618d4e%2618d5d%2618d6n%2618d7e%2618d8s%2618d9s%2619a1e%2619a2r%2619a3m%2619a4i%2619a5n%2619a6e%2619a7s%2620d1m%2620d2o%2620d3n%2620d4t%2620d5a%2620d6g%2620d7e%2621a1l%2621a2a%2621a3p%2621a4w%2621a5o%2621a6r%2621a7k%2622d1o%2622d2i%2622d3l%2622d4s%2622d5k%2622d6i%2622d7n%2623a1b%2623a2o%2623a3n%2623a4y%2623d1b%2623d2a%2623d3s%2623d4i%2623d5e%2624a1b%2624a2a%2624a3m%2624a4b%2624a5o%2624a6o%2624a7z%2624a8l%2624a9e%2624a10d%2625d1b%2625d2i%2625d3f%2625d4f%2626d1z%2626d2e%2626d3n%2626d4o%2627a1s%2627a2e%2627a3a%2627a4w%2627a5e%2627a6e%2627a7d%2628a1f%2628a2r%2628a3e%2628a4c%2628a5k%2628a6l%2628a7e%2629a1e%2629a2y%2629a3e%2629a4t%2629a5o%2629a6e%2629a7y%2629a8e%2630a1h%2630a2y%2630a3e%2630a4n%2630a5a%2630a6s%261ai%264ai%2610ai%2611ai%2612ai%2613ai%2615ai%2617ai%2619ai%2621ai%2623ai%2624ai%2627ai%2628ai%2629ai%2630ai%261di%262di%263di%265di%266di%267di%268di%269di%2614di%2616di%2618di%2620di%2622di%2623di%2625di%2626di&#39;,
+ &#39;csrftoken&#39;: &#39;a3627e9ab43fe619cf6f713e09625d1e&#39;},
+META:{&#39;CSRF_COOKIE&#39;: &#39;a3627e9ab43fe619cf6f713e09625d1e&#39;,
+ &#39;DOCUMENT_ROOT&#39;: &#39;/var/www/xw/&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;ISO-8859-1,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;en-US,en;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;csrftoken=a3627e9ab43fe619cf6f713e09625d1e; crossword=csrfmiddlewaretoken%3Da3627e9ab43fe619cf6f713e09625d1e%26gridstr%3D15cAgCqqAQCqqACCurAQDquAQGrqCACqqAQCqqAIA%26format%3D1xsx2xsx3xsxbx4x5xsx6xsx7xsx8xesxbxsxbxsxbx9xbxsxbxsxbxsxbxsxe10xsxsxsxsxsxsxbx11xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe12xsxsxsxsxsxsxsxsxsxbx13xsxsxsxesxbxsxbxsxbxbxbxsxbx14xbxsxbxbxe15xsxsxsxsxsx16xbx17xsxsxsxsxsx18xesxbxbxbxsxbxsxbxsxbxsxbxbxbxsxe19xsx20xsxsxsxsxbx21xsxsxsx22xsxsxebxbxsxbxsxbxsxbxbxbxsxbxsxbxsxe23xsxsxsxbx24xsxsx25xsxsxsxsxsxsxesxbxsxbx26xbxsxbxsxbxsxbxsxbxsxe27xsxsxsxsxsxsxbx28xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe29xsxsxsxsxsxsxsxbx30xsxsxsxsxsxe%26title%3D%26author%3D%261a1m%261a2u%261a3s%261a4c%261a5a%261a6t%261d1m%261d2e%261d3s%261d4c%261d5a%261d6l%261d7i%261d8n%261d9e%262d1s%262d2a%262d3u%262d4s%262d5a%262d6g%262d7e%263d1a%263d2u%263d3g%263d4m%263d5e%263d6n%263d7t%263d8i%263d9n%263d10g%264a1a%264a2c%264a3r%264a4o%264a5n%264a6y%264a7m%264a8s%265d1c%265d2r%265d3y%265d4p%265d5t%265d6i%265d7c%265d8a%265d9l%266d1o%266d2a%266d3r%266d4s%267d1y%267d2u%267d3m%267d4m%267d5i%267d6e%267d7r%268d1s%268d2o%268d3n%268d4g%268d5s%269d1h%269d2e%269d3r%269d4e%2610a1s%2610a2n%2610a3u%2610a4g%2610a5g%2610a6l%2610a7e%2611a1y%2611a2a%2611a3r%2611a4d%2611a5m%2611a6a%2611a7n%2612a1a%2612a2b%2612a3a%2612a4s%2612a5e%2612a6m%2612a7e%2612a8n%2612a9t%2612a10s%2613a1f%2613a2i%2613a3g%2613a4s%2614d1l%2614d2a%2614d3m%2614d4p%2614d5o%2614d6o%2614d7n%2614d8e%2614d9r%2614d10y%2615a1i%2615a2d%2615a3e%2615a4a%2615a5t%2615a6e%2615a7d%2616d1d%2616d2a%2616d3s%2616d4t%2616d5a%2616d6r%2616d7d%2616d8l%2616d9y%2617a1c%2617a2h%2617a3a%2617a4g%2617a5r%2617a6i%2617a7n%2618d1n%2618d2a%2618d3k%2618d4e%2618d5d%2618d6n%2618d7e%2618d8s%2618d9s%2619a1e%2619a2r%2619a3m%2619a4i%2619a5n%2619a6e%2619a7s%2620d1m%2620d2o%2620d3n%2620d4t%2620d5a%2620d6g%2620d7e%2621a1l%2621a2a%2621a3p%2621a4w%2621a5o%2621a6r%2621a7k%2622d1o%2622d2i%2622d3l%2622d4s%2622d5k%2622d6i%2622d7n%2623a1b%2623a2o%2623a3n%2623a4y%2623d1b%2623d2a%2623d3s%2623d4i%2623d5e%2624a1b%2624a2a%2624a3m%2624a4b%2624a5o%2624a6o%2624a7z%2624a8l%2624a9e%2624a10d%2625d1b%2625d2i%2625d3f%2625d4f%2626d1z%2626d2e%2626d3n%2626d4o%2627a1s%2627a2e%2627a3a%2627a4w%2627a5e%2627a6e%2627a7d%2628a1f%2628a2r%2628a3e%2628a4c%2628a5k%2628a6l%2628a7e%2629a1e%2629a2y%2629a3e%2629a4t%2629a5o%2629a6e%2629a7y%2629a8e%2630a1h%2630a2y%2630a3e%2630a4n%2630a5a%2630a6s%261ai%264ai%2610ai%2611ai%2612ai%2613ai%2615ai%2617ai%2619ai%2621ai%2623ai%2624ai%2627ai%2628ai%2629ai%2630ai%261di%262di%263di%265di%266di%267di%268di%269di%2614di%2616di%2618di%2620di%2622di%2623di%2625di%2626di&#39;,
+ &#39;HTTP_HOST&#39;: &#39;crosswordcomposer.com&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_5_8) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1&#39;,
+ &#39;PATH&#39;: &#39;/usr/local/bin:/usr/bin:/bin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/toxpf/&#39;,
+ &#39;PATH_TRANSLATED&#39;: &#39;/home/bbundy/sites/xw/apache/django.wsgi/toxpf/&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;67.180.134.224&#39;,
+ &#39;REMOTE_PORT&#39;: &#39;46798&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;GET&#39;,
+ &#39;REQUEST_URI&#39;: &#39;/toxpf/&#39;,
+ &#39;SCRIPT_FILENAME&#39;: &#39;/home/bbundy/sites/xw/apache/django.wsgi&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_ADDR&#39;: &#39;209.20.67.125&#39;,
+ &#39;SERVER_ADMIN&#39;: &#39;info@crosswordcomposer.com&#39;,
+ &#39;SERVER_NAME&#39;: &#39;crosswordcomposer.com&#39;,
+ &#39;SERVER_PORT&#39;: &#39;80&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SIGNATURE&#39;: &#39;&lt;address&gt;Apache/2.2.8 (Ubuntu) mod_python/3.3.1 Python/2.5.2 PHP/5.2.4-2ubuntu5.7 with Suhosin-Patch mod_wsgi/1.3 Server at crosswordcomposer.com Port 80&lt;/address&gt;\n&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;Apache/2.2.8 (Ubuntu) mod_python/3.3.1 Python/2.5.2 PHP/5.2.4-2ubuntu5.7 with Suhosin-Patch mod_wsgi/1.3&#39;,
+ &#39;mod_wsgi.application_group&#39;: &#39;crosswordcomposer.com|&#39;,
+ &#39;mod_wsgi.callable_object&#39;: &#39;application&#39;,
+ &#39;mod_wsgi.case_sensitivity&#39;: &#39;1&#39;,
+ &#39;mod_wsgi.listener_host&#39;: &#39;&#39;,
+ &#39;mod_wsgi.listener_port&#39;: &#39;80&#39;,
+ &#39;mod_wsgi.output_buffering&#39;: &#39;0&#39;,
+ &#39;mod_wsgi.process_group&#39;: &#39;&#39;,
+ &#39;mod_wsgi.reload_mechanism&#39;: &#39;0&#39;,
+ &#39;mod_wsgi.script_reloading&#39;: &#39;1&#39;,
+ &#39;wsgi.errors&#39;: &lt;mod_wsgi.Log object at 0x182a330&gt;,
+ &#39;wsgi.input&#39;: &lt;mod_wsgi.Input object at 0x1827f70&gt;,
+ &#39;wsgi.multiprocess&#39;: True,
+ &#39;wsgi.multithread&#39;: False,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback</td>
+                    <td class="code"><pre>&lt;function download_xpf at 0x181b410&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver</td>
+                    <td class="code"><pre>&lt;RegexURLResolver xw.urls (None:None) ^/&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>urlresolvers</td>
+                    <td class="code"><pre>&lt;module &#39;django.core.urlresolvers&#39; from &#39;/usr/lib/python2.5/site-packages/django/core/urlresolvers.pyc&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>response</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>urlconf</td>
+                    <td class="code"><pre>&#39;xw.urls&#39;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/home/bbundy/sites/xwdevel/../xwdevel/views.py</code> in <code>download_xpf</code>
+
+          
+            <div class="context" id="c25369704">
+              
+                <ol start="80" class="pre-context" id="pre25369704"><li onclick="toggle('pre25369704', 'post25369704')"><pre>    t = get_template(&#39;print.html&#39;)</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>    p = Puzzle.fromPOST(request.POST)</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>    html = t.render(RequestContext(request, {&#39;puzzle&#39;: p}))</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>    return HttpResponse(html)</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre></pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>def download_xpf(request):</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>    t = get_template(&#39;xpf.xml&#39;)</pre></li></ol>
+              
+              <ol start="87" class="context-line"><li onclick="toggle('pre25369704', 'post25369704')"><pre>    p = Puzzle.fromPOST(request.POST)</pre> <span>...</span></li></ol>
+              
+                <ol start='88' class="post-context" id="post25369704"><li onclick="toggle('pre25369704', 'post25369704')"><pre>    html = t.render(RequestContext(request, {&#39;puzzle&#39;: p}))</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>    return HttpResponse(html, content_type=&#39;text/xml&#39;)</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre></pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>def from_xpf(request):</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>    t = get_template(&#39;puzzle.html&#39;)</pre></li><li onclick="toggle('pre25369704', 'post25369704')"><pre>    xml_handle = urlopen(request.POST[&quot;xpfurl&quot;])</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '25369704')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v25369704">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {}&gt;,
+COOKIES:{&#39;crossword&#39;: &#39;csrfmiddlewaretoken%3Da3627e9ab43fe619cf6f713e09625d1e%26gridstr%3D15cAgCqqAQCqqACCurAQDquAQGrqCACqqAQCqqAIA%26format%3D1xsx2xsx3xsxbx4x5xsx6xsx7xsx8xesxbxsxbxsxbx9xbxsxbxsxbxsxbxsxe10xsxsxsxsxsxsxbx11xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe12xsxsxsxsxsxsxsxsxsxbx13xsxsxsxesxbxsxbxsxbxbxbxsxbx14xbxsxbxbxe15xsxsxsxsxsx16xbx17xsxsxsxsxsx18xesxbxbxbxsxbxsxbxsxbxsxbxbxbxsxe19xsx20xsxsxsxsxbx21xsxsxsx22xsxsxebxbxsxbxsxbxsxbxbxbxsxbxsxbxsxe23xsxsxsxbx24xsxsx25xsxsxsxsxsxsxesxbxsxbx26xbxsxbxsxbxsxbxsxbxsxe27xsxsxsxsxsxsxbx28xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe29xsxsxsxsxsxsxsxbx30xsxsxsxsxsxe%26title%3D%26author%3D%261a1m%261a2u%261a3s%261a4c%261a5a%261a6t%261d1m%261d2e%261d3s%261d4c%261d5a%261d6l%261d7i%261d8n%261d9e%262d1s%262d2a%262d3u%262d4s%262d5a%262d6g%262d7e%263d1a%263d2u%263d3g%263d4m%263d5e%263d6n%263d7t%263d8i%263d9n%263d10g%264a1a%264a2c%264a3r%264a4o%264a5n%264a6y%264a7m%264a8s%265d1c%265d2r%265d3y%265d4p%265d5t%265d6i%265d7c%265d8a%265d9l%266d1o%266d2a%266d3r%266d4s%267d1y%267d2u%267d3m%267d4m%267d5i%267d6e%267d7r%268d1s%268d2o%268d3n%268d4g%268d5s%269d1h%269d2e%269d3r%269d4e%2610a1s%2610a2n%2610a3u%2610a4g%2610a5g%2610a6l%2610a7e%2611a1y%2611a2a%2611a3r%2611a4d%2611a5m%2611a6a%2611a7n%2612a1a%2612a2b%2612a3a%2612a4s%2612a5e%2612a6m%2612a7e%2612a8n%2612a9t%2612a10s%2613a1f%2613a2i%2613a3g%2613a4s%2614d1l%2614d2a%2614d3m%2614d4p%2614d5o%2614d6o%2614d7n%2614d8e%2614d9r%2614d10y%2615a1i%2615a2d%2615a3e%2615a4a%2615a5t%2615a6e%2615a7d%2616d1d%2616d2a%2616d3s%2616d4t%2616d5a%2616d6r%2616d7d%2616d8l%2616d9y%2617a1c%2617a2h%2617a3a%2617a4g%2617a5r%2617a6i%2617a7n%2618d1n%2618d2a%2618d3k%2618d4e%2618d5d%2618d6n%2618d7e%2618d8s%2618d9s%2619a1e%2619a2r%2619a3m%2619a4i%2619a5n%2619a6e%2619a7s%2620d1m%2620d2o%2620d3n%2620d4t%2620d5a%2620d6g%2620d7e%2621a1l%2621a2a%2621a3p%2621a4w%2621a5o%2621a6r%2621a7k%2622d1o%2622d2i%2622d3l%2622d4s%2622d5k%2622d6i%2622d7n%2623a1b%2623a2o%2623a3n%2623a4y%2623d1b%2623d2a%2623d3s%2623d4i%2623d5e%2624a1b%2624a2a%2624a3m%2624a4b%2624a5o%2624a6o%2624a7z%2624a8l%2624a9e%2624a10d%2625d1b%2625d2i%2625d3f%2625d4f%2626d1z%2626d2e%2626d3n%2626d4o%2627a1s%2627a2e%2627a3a%2627a4w%2627a5e%2627a6e%2627a7d%2628a1f%2628a2r%2628a3e%2628a4c%2628a5k%2628a6l%2628a7e%2629a1e%2629a2y%2629a3e%2629a4t%2629a5o%2629a6e%2629a7y%2629a8e%2630a1h%2630a2y%2630a3e%2630a4n%2630a5a%2630a6s%261ai%264ai%2610ai%2611ai%2612ai%2613ai%2615ai%2617ai%2619ai%2621ai%2623ai%2624ai%2627ai%2628ai%2629ai%2630ai%261di%262di%263di%265di%266di%267di%268di%269di%2614di%2616di%2618di%2620di%2622di%2623di%2625di%2626di&#39;,
+ &#39;csrftoken&#39;: &#39;a3627e9ab43fe619cf6f713e09625d1e&#39;},
+META:{&#39;CSRF_COOKIE&#39;: &#39;a3627e9ab43fe619cf6f713e09625d1e&#39;,
+ &#39;DOCUMENT_ROOT&#39;: &#39;/var/www/xw/&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;ISO-8859-1,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;en-US,en;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;csrftoken=a3627e9ab43fe619cf6f713e09625d1e; crossword=csrfmiddlewaretoken%3Da3627e9ab43fe619cf6f713e09625d1e%26gridstr%3D15cAgCqqAQCqqACCurAQDquAQGrqCACqqAQCqqAIA%26format%3D1xsx2xsx3xsxbx4x5xsx6xsx7xsx8xesxbxsxbxsxbx9xbxsxbxsxbxsxbxsxe10xsxsxsxsxsxsxbx11xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe12xsxsxsxsxsxsxsxsxsxbx13xsxsxsxesxbxsxbxsxbxbxbxsxbx14xbxsxbxbxe15xsxsxsxsxsx16xbx17xsxsxsxsxsx18xesxbxbxbxsxbxsxbxsxbxsxbxbxbxsxe19xsx20xsxsxsxsxbx21xsxsxsx22xsxsxebxbxsxbxsxbxsxbxbxbxsxbxsxbxsxe23xsxsxsxbx24xsxsx25xsxsxsxsxsxsxesxbxsxbx26xbxsxbxsxbxsxbxsxbxsxe27xsxsxsxsxsxsxbx28xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe29xsxsxsxsxsxsxsxbx30xsxsxsxsxsxe%26title%3D%26author%3D%261a1m%261a2u%261a3s%261a4c%261a5a%261a6t%261d1m%261d2e%261d3s%261d4c%261d5a%261d6l%261d7i%261d8n%261d9e%262d1s%262d2a%262d3u%262d4s%262d5a%262d6g%262d7e%263d1a%263d2u%263d3g%263d4m%263d5e%263d6n%263d7t%263d8i%263d9n%263d10g%264a1a%264a2c%264a3r%264a4o%264a5n%264a6y%264a7m%264a8s%265d1c%265d2r%265d3y%265d4p%265d5t%265d6i%265d7c%265d8a%265d9l%266d1o%266d2a%266d3r%266d4s%267d1y%267d2u%267d3m%267d4m%267d5i%267d6e%267d7r%268d1s%268d2o%268d3n%268d4g%268d5s%269d1h%269d2e%269d3r%269d4e%2610a1s%2610a2n%2610a3u%2610a4g%2610a5g%2610a6l%2610a7e%2611a1y%2611a2a%2611a3r%2611a4d%2611a5m%2611a6a%2611a7n%2612a1a%2612a2b%2612a3a%2612a4s%2612a5e%2612a6m%2612a7e%2612a8n%2612a9t%2612a10s%2613a1f%2613a2i%2613a3g%2613a4s%2614d1l%2614d2a%2614d3m%2614d4p%2614d5o%2614d6o%2614d7n%2614d8e%2614d9r%2614d10y%2615a1i%2615a2d%2615a3e%2615a4a%2615a5t%2615a6e%2615a7d%2616d1d%2616d2a%2616d3s%2616d4t%2616d5a%2616d6r%2616d7d%2616d8l%2616d9y%2617a1c%2617a2h%2617a3a%2617a4g%2617a5r%2617a6i%2617a7n%2618d1n%2618d2a%2618d3k%2618d4e%2618d5d%2618d6n%2618d7e%2618d8s%2618d9s%2619a1e%2619a2r%2619a3m%2619a4i%2619a5n%2619a6e%2619a7s%2620d1m%2620d2o%2620d3n%2620d4t%2620d5a%2620d6g%2620d7e%2621a1l%2621a2a%2621a3p%2621a4w%2621a5o%2621a6r%2621a7k%2622d1o%2622d2i%2622d3l%2622d4s%2622d5k%2622d6i%2622d7n%2623a1b%2623a2o%2623a3n%2623a4y%2623d1b%2623d2a%2623d3s%2623d4i%2623d5e%2624a1b%2624a2a%2624a3m%2624a4b%2624a5o%2624a6o%2624a7z%2624a8l%2624a9e%2624a10d%2625d1b%2625d2i%2625d3f%2625d4f%2626d1z%2626d2e%2626d3n%2626d4o%2627a1s%2627a2e%2627a3a%2627a4w%2627a5e%2627a6e%2627a7d%2628a1f%2628a2r%2628a3e%2628a4c%2628a5k%2628a6l%2628a7e%2629a1e%2629a2y%2629a3e%2629a4t%2629a5o%2629a6e%2629a7y%2629a8e%2630a1h%2630a2y%2630a3e%2630a4n%2630a5a%2630a6s%261ai%264ai%2610ai%2611ai%2612ai%2613ai%2615ai%2617ai%2619ai%2621ai%2623ai%2624ai%2627ai%2628ai%2629ai%2630ai%261di%262di%263di%265di%266di%267di%268di%269di%2614di%2616di%2618di%2620di%2622di%2623di%2625di%2626di&#39;,
+ &#39;HTTP_HOST&#39;: &#39;crosswordcomposer.com&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_5_8) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1&#39;,
+ &#39;PATH&#39;: &#39;/usr/local/bin:/usr/bin:/bin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/toxpf/&#39;,
+ &#39;PATH_TRANSLATED&#39;: &#39;/home/bbundy/sites/xw/apache/django.wsgi/toxpf/&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;67.180.134.224&#39;,
+ &#39;REMOTE_PORT&#39;: &#39;46798&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;GET&#39;,
+ &#39;REQUEST_URI&#39;: &#39;/toxpf/&#39;,
+ &#39;SCRIPT_FILENAME&#39;: &#39;/home/bbundy/sites/xw/apache/django.wsgi&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_ADDR&#39;: &#39;209.20.67.125&#39;,
+ &#39;SERVER_ADMIN&#39;: &#39;info@crosswordcomposer.com&#39;,
+ &#39;SERVER_NAME&#39;: &#39;crosswordcomposer.com&#39;,
+ &#39;SERVER_PORT&#39;: &#39;80&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SIGNATURE&#39;: &#39;&lt;address&gt;Apache/2.2.8 (Ubuntu) mod_python/3.3.1 Python/2.5.2 PHP/5.2.4-2ubuntu5.7 with Suhosin-Patch mod_wsgi/1.3 Server at crosswordcomposer.com Port 80&lt;/address&gt;\n&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;Apache/2.2.8 (Ubuntu) mod_python/3.3.1 Python/2.5.2 PHP/5.2.4-2ubuntu5.7 with Suhosin-Patch mod_wsgi/1.3&#39;,
+ &#39;mod_wsgi.application_group&#39;: &#39;crosswordcomposer.com|&#39;,
+ &#39;mod_wsgi.callable_object&#39;: &#39;application&#39;,
+ &#39;mod_wsgi.case_sensitivity&#39;: &#39;1&#39;,
+ &#39;mod_wsgi.listener_host&#39;: &#39;&#39;,
+ &#39;mod_wsgi.listener_port&#39;: &#39;80&#39;,
+ &#39;mod_wsgi.output_buffering&#39;: &#39;0&#39;,
+ &#39;mod_wsgi.process_group&#39;: &#39;&#39;,
+ &#39;mod_wsgi.reload_mechanism&#39;: &#39;0&#39;,
+ &#39;mod_wsgi.script_reloading&#39;: &#39;1&#39;,
+ &#39;wsgi.errors&#39;: &lt;mod_wsgi.Log object at 0x182a330&gt;,
+ &#39;wsgi.input&#39;: &lt;mod_wsgi.Input object at 0x1827f70&gt;,
+ &#39;wsgi.multiprocess&#39;: True,
+ &#39;wsgi.multithread&#39;: False,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>t</td>
+                    <td class="code"><pre>&lt;django.template.base.Template object at 0x1827e10&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/home/bbundy/sites/xwdevel/../xwdevel/xwcore.py</code> in <code>fromPOST</code>
+
+          
+            <div class="context" id="c25370496">
+              
+                <ol start="217" class="pre-context" id="pre25370496"><li onclick="toggle('pre25370496', 'post25370496')"><pre>            this.formatstr += &quot;e&quot;</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>                </pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>        return this</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre></pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>    @classmethod</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>    def fromPOST(cls, post):</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>        this = cls()</pre></li></ol>
+              
+              <ol start="224" class="context-line"><li onclick="toggle('pre25370496', 'post25370496')"><pre>        rows = post[&#39;format&#39;].split(&#39;e&#39;)</pre> <span>...</span></li></ol>
+              
+                <ol start='225' class="post-context" id="post25370496"><li onclick="toggle('pre25370496', 'post25370496')"><pre>        rows.pop()</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>        if post.has_key(&#39;title&#39;):</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>            this.title = post[&#39;title&#39;]</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>        if post.has_key(&#39;author&#39;):</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>            this.author = post[&#39;author&#39;]</pre></li><li onclick="toggle('pre25370496', 'post25370496')"><pre>        this.size = len(rows)</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '25370496')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v25370496">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>this</td>
+                    <td class="code"><pre>&lt;xwdevel.xwcore.Puzzle instance at 0x1831fc8&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>post</td>
+                    <td class="code"><pre>&lt;QueryDict: {}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>cls</td>
+                    <td class="code"><pre>&lt;class xwdevel.xwcore.Puzzle at 0x1818290&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/usr/lib/python2.5/site-packages/django/utils/datastructures.py</code> in <code>__getitem__</code>
+
+          
+            <div class="context" id="c25370352">
+              
+                <ol start="249" class="pre-context" id="pre25370352"><li onclick="toggle('pre25370352', 'post25370352')"><pre>        &quot;&quot;&quot;</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>        Returns the last data value for this key, or [] if it&#39;s an empty list;</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>        raises KeyError if not found.</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>        &quot;&quot;&quot;</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>        try:</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>            list_ = super(MultiValueDict, self).__getitem__(key)</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>        except KeyError:</pre></li></ol>
+              
+              <ol start="256" class="context-line"><li onclick="toggle('pre25370352', 'post25370352')"><pre>            raise MultiValueDictKeyError(&quot;Key %r not found in %r&quot; % (key, self))</pre> <span>...</span></li></ol>
+              
+                <ol start='257' class="post-context" id="post25370352"><li onclick="toggle('pre25370352', 'post25370352')"><pre>        try:</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>            return list_[-1]</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>        except IndexError:</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>            return []</pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre></pre></li><li onclick="toggle('pre25370352', 'post25370352')"><pre>    def __setitem__(self, key, value):</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '25370352')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v25370352">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;QueryDict: {}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>key</td>
+                    <td class="code"><pre>&#39;format&#39;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+    </ul>
+  </div>
+  
+  <form action="http://dpaste.com/" name="pasteform" id="pasteform" method="post">
+
+  <div id="pastebinTraceback" class="pastebin">
+    <input type="hidden" name="language" value="PythonConsole">
+    <input type="hidden" name="title" value="MultiValueDictKeyError at /toxpf/">
+    <input type="hidden" name="source" value="Django Dpaste Agent">
+    <input type="hidden" name="poster" value="Django">
+    <textarea name="content" id="traceback_area" cols="140" rows="25">
+Environment:
+
+
+Request Method: GET
+Request URL: http://crosswordcomposer.com/toxpf/
+
+Django Version: 1.3.1
+Python Version: 2.5.2
+Installed Applications:
+[&#39;django.contrib.auth&#39;,
+ &#39;django.contrib.contenttypes&#39;,
+ &#39;django.contrib.sessions&#39;,
+ &#39;django.contrib.sites&#39;,
+ &#39;django.contrib.messages&#39;,
+ &#39;django.contrib.staticfiles&#39;,
+ &#39;django.contrib.admin&#39;,
+ &#39;django.contrib.admindocs&#39;]
+Installed Middleware:
+(&#39;django.middleware.common.CommonMiddleware&#39;,
+ &#39;django.contrib.sessions.middleware.SessionMiddleware&#39;,
+ &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
+ &#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;,
+ &#39;django.contrib.messages.middleware.MessageMiddleware&#39;)
+
+
+Traceback:
+File "/usr/lib/python2.5/site-packages/django/core/handlers/base.py" in get_response
+  111.                         response = callback(request, *callback_args, **callback_kwargs)
+File "/home/bbundy/sites/xwdevel/../xwdevel/views.py" in download_xpf
+  87.     p = Puzzle.fromPOST(request.POST)
+File "/home/bbundy/sites/xwdevel/../xwdevel/xwcore.py" in fromPOST
+  224.         rows = post[&#39;format&#39;].split(&#39;e&#39;)
+File "/usr/lib/python2.5/site-packages/django/utils/datastructures.py" in __getitem__
+  256.             raise MultiValueDictKeyError(&quot;Key %r not found in %r&quot; % (key, self))
+
+Exception Type: MultiValueDictKeyError at /toxpf/
+Exception Value: &quot;Key &#39;format&#39; not found in &lt;QueryDict: {}&gt;&quot;
+</textarea>
+  <br><br>
+  <input type="submit" value="Share this traceback on a public Web site">
+  </div>
+</form>
+</div>
+
+
+
+<div id="requestinfo">
+  <h2>Request information</h2>
+
+
+  <h3 id="get-info">GET</h3>
+  
+    <p>No GET data</p>
+  
+
+  <h3 id="post-info">POST</h3>
+  
+    <p>No POST data</p>
+  
+  <h3 id="files-info">FILES</h3>
+  
+    <p>No FILES data</p>
+  
+
+
+  <h3 id="cookie-info">COOKIES</h3>
+  
+    <table class="req">
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td>csrftoken</td>
+            <td class="code"><pre>&#39;a3627e9ab43fe619cf6f713e09625d1e&#39;</pre></td>
+          </tr>
+        
+          <tr>
+            <td>crossword</td>
+            <td class="code"><pre>&#39;csrfmiddlewaretoken%3Da3627e9ab43fe619cf6f713e09625d1e%26gridstr%3D15cAgCqqAQCqqACCurAQDquAQGrqCACqqAQCqqAIA%26format%3D1xsx2xsx3xsxbx4x5xsx6xsx7xsx8xesxbxsxbxsxbx9xbxsxbxsxbxsxbxsxe10xsxsxsxsxsxsxbx11xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe12xsxsxsxsxsxsxsxsxsxbx13xsxsxsxesxbxsxbxsxbxbxbxsxbx14xbxsxbxbxe15xsxsxsxsxsx16xbx17xsxsxsxsxsx18xesxbxbxbxsxbxsxbxsxbxsxbxbxbxsxe19xsx20xsxsxsxsxbx21xsxsxsx22xsxsxebxbxsxbxsxbxsxbxbxbxsxbxsxbxsxe23xsxsxsxbx24xsxsx25xsxsxsxsxsxsxesxbxsxbx26xbxsxbxsxbxsxbxsxbxsxe27xsxsxsxsxsxsxbx28xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe29xsxsxsxsxsxsxsxbx30xsxsxsxsxsxe%26title%3D%26author%3D%261a1m%261a2u%261a3s%261a4c%261a5a%261a6t%261d1m%261d2e%261d3s%261d4c%261d5a%261d6l%261d7i%261d8n%261d9e%262d1s%262d2a%262d3u%262d4s%262d5a%262d6g%262d7e%263d1a%263d2u%263d3g%263d4m%263d5e%263d6n%263d7t%263d8i%263d9n%263d10g%264a1a%264a2c%264a3r%264a4o%264a5n%264a6y%264a7m%264a8s%265d1c%265d2r%265d3y%265d4p%265d5t%265d6i%265d7c%265d8a%265d9l%266d1o%266d2a%266d3r%266d4s%267d1y%267d2u%267d3m%267d4m%267d5i%267d6e%267d7r%268d1s%268d2o%268d3n%268d4g%268d5s%269d1h%269d2e%269d3r%269d4e%2610a1s%2610a2n%2610a3u%2610a4g%2610a5g%2610a6l%2610a7e%2611a1y%2611a2a%2611a3r%2611a4d%2611a5m%2611a6a%2611a7n%2612a1a%2612a2b%2612a3a%2612a4s%2612a5e%2612a6m%2612a7e%2612a8n%2612a9t%2612a10s%2613a1f%2613a2i%2613a3g%2613a4s%2614d1l%2614d2a%2614d3m%2614d4p%2614d5o%2614d6o%2614d7n%2614d8e%2614d9r%2614d10y%2615a1i%2615a2d%2615a3e%2615a4a%2615a5t%2615a6e%2615a7d%2616d1d%2616d2a%2616d3s%2616d4t%2616d5a%2616d6r%2616d7d%2616d8l%2616d9y%2617a1c%2617a2h%2617a3a%2617a4g%2617a5r%2617a6i%2617a7n%2618d1n%2618d2a%2618d3k%2618d4e%2618d5d%2618d6n%2618d7e%2618d8s%2618d9s%2619a1e%2619a2r%2619a3m%2619a4i%2619a5n%2619a6e%2619a7s%2620d1m%2620d2o%2620d3n%2620d4t%2620d5a%2620d6g%2620d7e%2621a1l%2621a2a%2621a3p%2621a4w%2621a5o%2621a6r%2621a7k%2622d1o%2622d2i%2622d3l%2622d4s%2622d5k%2622d6i%2622d7n%2623a1b%2623a2o%2623a3n%2623a4y%2623d1b%2623d2a%2623d3s%2623d4i%2623d5e%2624a1b%2624a2a%2624a3m%2624a4b%2624a5o%2624a6o%2624a7z%2624a8l%2624a9e%2624a10d%2625d1b%2625d2i%2625d3f%2625d4f%2626d1z%2626d2e%2626d3n%2626d4o%2627a1s%2627a2e%2627a3a%2627a4w%2627a5e%2627a6e%2627a7d%2628a1f%2628a2r%2628a3e%2628a4c%2628a5k%2628a6l%2628a7e%2629a1e%2629a2y%2629a3e%2629a4t%2629a5o%2629a6e%2629a7y%2629a8e%2630a1h%2630a2y%2630a3e%2630a4n%2630a5a%2630a6s%261ai%264ai%2610ai%2611ai%2612ai%2613ai%2615ai%2617ai%2619ai%2621ai%2623ai%2624ai%2627ai%2628ai%2629ai%2630ai%261di%262di%263di%265di%266di%267di%268di%269di%2614di%2616di%2618di%2620di%2622di%2623di%2625di%2626di&#39;</pre></td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  <h3 id="meta-info">META</h3>
+  <table class="req">
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr>
+          <td>mod_wsgi.reload_mechanism</td>
+          <td class="code"><pre>&#39;0&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.listener_port</td>
+          <td class="code"><pre>&#39;80&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_COOKIE</td>
+          <td class="code"><pre>&#39;csrftoken=a3627e9ab43fe619cf6f713e09625d1e; crossword=csrfmiddlewaretoken%3Da3627e9ab43fe619cf6f713e09625d1e%26gridstr%3D15cAgCqqAQCqqACCurAQDquAQGrqCACqqAQCqqAIA%26format%3D1xsx2xsx3xsxbx4x5xsx6xsx7xsx8xesxbxsxbxsxbx9xbxsxbxsxbxsxbxsxe10xsxsxsxsxsxsxbx11xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe12xsxsxsxsxsxsxsxsxsxbx13xsxsxsxesxbxsxbxsxbxbxbxsxbx14xbxsxbxbxe15xsxsxsxsxsx16xbx17xsxsxsxsxsx18xesxbxbxbxsxbxsxbxsxbxsxbxbxbxsxe19xsx20xsxsxsxsxbx21xsxsxsx22xsxsxebxbxsxbxsxbxsxbxbxbxsxbxsxbxsxe23xsxsxsxbx24xsxsx25xsxsxsxsxsxsxesxbxsxbx26xbxsxbxsxbxsxbxsxbxsxe27xsxsxsxsxsxsxbx28xsxsxsxsxsxsxesxbxsxbxsxbxsxbxsxbxsxbxsxbxsxe29xsxsxsxsxsxsxsxbx30xsxsxsxsxsxe%26title%3D%26author%3D%261a1m%261a2u%261a3s%261a4c%261a5a%261a6t%261d1m%261d2e%261d3s%261d4c%261d5a%261d6l%261d7i%261d8n%261d9e%262d1s%262d2a%262d3u%262d4s%262d5a%262d6g%262d7e%263d1a%263d2u%263d3g%263d4m%263d5e%263d6n%263d7t%263d8i%263d9n%263d10g%264a1a%264a2c%264a3r%264a4o%264a5n%264a6y%264a7m%264a8s%265d1c%265d2r%265d3y%265d4p%265d5t%265d6i%265d7c%265d8a%265d9l%266d1o%266d2a%266d3r%266d4s%267d1y%267d2u%267d3m%267d4m%267d5i%267d6e%267d7r%268d1s%268d2o%268d3n%268d4g%268d5s%269d1h%269d2e%269d3r%269d4e%2610a1s%2610a2n%2610a3u%2610a4g%2610a5g%2610a6l%2610a7e%2611a1y%2611a2a%2611a3r%2611a4d%2611a5m%2611a6a%2611a7n%2612a1a%2612a2b%2612a3a%2612a4s%2612a5e%2612a6m%2612a7e%2612a8n%2612a9t%2612a10s%2613a1f%2613a2i%2613a3g%2613a4s%2614d1l%2614d2a%2614d3m%2614d4p%2614d5o%2614d6o%2614d7n%2614d8e%2614d9r%2614d10y%2615a1i%2615a2d%2615a3e%2615a4a%2615a5t%2615a6e%2615a7d%2616d1d%2616d2a%2616d3s%2616d4t%2616d5a%2616d6r%2616d7d%2616d8l%2616d9y%2617a1c%2617a2h%2617a3a%2617a4g%2617a5r%2617a6i%2617a7n%2618d1n%2618d2a%2618d3k%2618d4e%2618d5d%2618d6n%2618d7e%2618d8s%2618d9s%2619a1e%2619a2r%2619a3m%2619a4i%2619a5n%2619a6e%2619a7s%2620d1m%2620d2o%2620d3n%2620d4t%2620d5a%2620d6g%2620d7e%2621a1l%2621a2a%2621a3p%2621a4w%2621a5o%2621a6r%2621a7k%2622d1o%2622d2i%2622d3l%2622d4s%2622d5k%2622d6i%2622d7n%2623a1b%2623a2o%2623a3n%2623a4y%2623d1b%2623d2a%2623d3s%2623d4i%2623d5e%2624a1b%2624a2a%2624a3m%2624a4b%2624a5o%2624a6o%2624a7z%2624a8l%2624a9e%2624a10d%2625d1b%2625d2i%2625d3f%2625d4f%2626d1z%2626d2e%2626d3n%2626d4o%2627a1s%2627a2e%2627a3a%2627a4w%2627a5e%2627a6e%2627a7d%2628a1f%2628a2r%2628a3e%2628a4c%2628a5k%2628a6l%2628a7e%2629a1e%2629a2y%2629a3e%2629a4t%2629a5o%2629a6e%2629a7y%2629a8e%2630a1h%2630a2y%2630a3e%2630a4n%2630a5a%2630a6s%261ai%264ai%2610ai%2611ai%2612ai%2613ai%2615ai%2617ai%2619ai%2621ai%2623ai%2624ai%2627ai%2628ai%2629ai%2630ai%261di%262di%263di%265di%266di%267di%268di%269di%2614di%2616di%2618di%2620di%2622di%2623di%2625di%2626di&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.listener_host</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_SOFTWARE</td>
+          <td class="code"><pre>&#39;Apache/2.2.8 (Ubuntu) mod_python/3.3.1 Python/2.5.2 PHP/5.2.4-2ubuntu5.7 with Suhosin-Patch mod_wsgi/1.3&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SCRIPT_NAME</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_SIGNATURE</td>
+          <td class="code"><pre>&#39;&lt;address&gt;Apache/2.2.8 (Ubuntu) mod_python/3.3.1 Python/2.5.2 PHP/5.2.4-2ubuntu5.7 with Suhosin-Patch mod_wsgi/1.3 Server at crosswordcomposer.com Port 80&lt;/address&gt;\n&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REQUEST_METHOD</td>
+          <td class="code"><pre>&#39;GET&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PATH_INFO</td>
+          <td class="code"><pre>u&#39;/toxpf/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_PROTOCOL</td>
+          <td class="code"><pre>&#39;HTTP/1.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>QUERY_STRING</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PATH</td>
+          <td class="code"><pre>&#39;/usr/local/bin:/usr/bin:/bin&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT_CHARSET</td>
+          <td class="code"><pre>&#39;ISO-8859-1,utf-8;q=0.7,*;q=0.3&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_USER_AGENT</td>
+          <td class="code"><pre>&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_5_8) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_CONNECTION</td>
+          <td class="code"><pre>&#39;keep-alive&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_NAME</td>
+          <td class="code"><pre>&#39;crosswordcomposer.com&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REMOTE_ADDR</td>
+          <td class="code"><pre>&#39;67.180.134.224&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.url_scheme</td>
+          <td class="code"><pre>&#39;http&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.output_buffering</td>
+          <td class="code"><pre>&#39;0&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PATH_TRANSLATED</td>
+          <td class="code"><pre>&#39;/home/bbundy/sites/xw/apache/django.wsgi/toxpf/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_PORT</td>
+          <td class="code"><pre>&#39;80&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.multiprocess</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_ADDR</td>
+          <td class="code"><pre>&#39;209.20.67.125&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DOCUMENT_ROOT</td>
+          <td class="code"><pre>&#39;/var/www/xw/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.process_group</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SCRIPT_FILENAME</td>
+          <td class="code"><pre>&#39;/home/bbundy/sites/xw/apache/django.wsgi&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_ADMIN</td>
+          <td class="code"><pre>&#39;info@crosswordcomposer.com&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.input</td>
+          <td class="code"><pre>&lt;mod_wsgi.Input object at 0x1827f70&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_HOST</td>
+          <td class="code"><pre>&#39;crosswordcomposer.com&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.multithread</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.callable_object</td>
+          <td class="code"><pre>&#39;application&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REQUEST_URI</td>
+          <td class="code"><pre>&#39;/toxpf/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.version</td>
+          <td class="code"><pre>(1, 0)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>GATEWAY_INTERFACE</td>
+          <td class="code"><pre>&#39;CGI/1.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.case_sensitivity</td>
+          <td class="code"><pre>&#39;1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.errors</td>
+          <td class="code"><pre>&lt;mod_wsgi.Log object at 0x182a330&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REMOTE_PORT</td>
+          <td class="code"><pre>&#39;46798&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT_LANGUAGE</td>
+          <td class="code"><pre>&#39;en-US,en;q=0.8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.run_once</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.application_group</td>
+          <td class="code"><pre>&#39;crosswordcomposer.com|&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>mod_wsgi.script_reloading</td>
+          <td class="code"><pre>&#39;1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE</td>
+          <td class="code"><pre>&#39;a3627e9ab43fe619cf6f713e09625d1e&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT_ENCODING</td>
+          <td class="code"><pre>&#39;gzip,deflate,sdch&#39;</pre></td>
+        </tr>
+      
+    </tbody>
+  </table>
+
+
+  <h3 id="settings-info">Settings</h3>
+  <h4>Using settings module <code>xw.settings</code></h4>
+  <table class="req">
+    <thead>
+      <tr>
+        <th>Setting</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr>
+          <td>USE_L10N</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_THOUSAND_SEPARATOR</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_CODE</td>
+          <td class="code"><pre>&#39;en-us&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ROOT_URLCONF</td>
+          <td class="code"><pre>&#39;xw.urls&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MANAGERS</td>
+          <td class="code"><pre>((&#39;Bruce Bundy&#39;, &#39;brbundy@gmail.com&#39;),)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_CHARSET</td>
+          <td class="code"><pre>&#39;utf-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATIC_ROOT</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_DATABASE_CHARSET</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MESSAGE_STORAGE</td>
+          <td class="code"><pre>&#39;django.contrib.messages.storage.user_messages.LegacyFallbackStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_HOST</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>IGNORABLE_404_STARTS</td>
+          <td class="code"><pre>(&#39;/cgi-bin/&#39;, &#39;/_vti_bin&#39;, &#39;/_vti_inf&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEND_BROKEN_LINK_EMAILS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>URL_VALIDATOR_USER_AGENT</td>
+          <td class="code"><pre>&#39;Django/1.3.1 (http://www.djangoproject.com)&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_FINDERS</td>
+          <td class="code"><pre>(&#39;django.contrib.staticfiles.finders.FileSystemFinder&#39;,
+ &#39;django.contrib.staticfiles.finders.AppDirectoriesFinder&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_DOMAIN</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_NAME</td>
+          <td class="code"><pre>&#39;sessionid&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_MODERATORS_GROUP</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_INPUT_FORMATS</td>
+          <td class="code"><pre>(&#39;%H:%M:%S&#39;, &#39;%H:%M&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASES</td>
+          <td class="code"><pre>{&#39;default&#39;: {&#39;ENGINE&#39;: &#39;django.db.backends.mysql&#39;,
+             &#39;HOST&#39;: &#39;/var/run/mysqld/mysqld.sock&#39;,
+             &#39;NAME&#39;: &#39;xword&#39;,
+             &#39;OPTIONS&#39;: {},
+             &#39;PASSWORD&#39;: &#39;********************&#39;,
+             &#39;PORT&#39;: &#39;&#39;,
+             &#39;TEST_CHARSET&#39;: None,
+             &#39;TEST_COLLATION&#39;: None,
+             &#39;TEST_MIRROR&#39;: None,
+             &#39;TEST_NAME&#39;: None,
+             &#39;TIME_ZONE&#39;: &#39;America/Los_Angeles&#39;,
+             &#39;USER&#39;: &#39;bbundy&#39;}}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_DATABASE_NAME</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_PERMISSIONS</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_HANDLERS</td>
+          <td class="code"><pre>(&#39;django.core.files.uploadhandler.MemoryFileUploadHandler&#39;,
+ &#39;django.core.files.uploadhandler.TemporaryFileUploadHandler&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_CONTENT_TYPE</td>
+          <td class="code"><pre>&#39;text/html&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>APPEND_SLASH</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FIRST_DAY_OF_WEEK</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_ROUTERS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>YEAR_MONTH_FORMAT</td>
+          <td class="code"><pre>&#39;F Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_STORAGE</td>
+          <td class="code"><pre>&#39;django.contrib.staticfiles.storage.StaticFilesStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHES</td>
+          <td class="code"><pre>{&#39;default&#39;: {&#39;BACKEND&#39;: &#39;django.core.cache.backends.locmem.LocMemCache&#39;,
+             &#39;LOCATION&#39;: &#39;&#39;}}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_EMAIL</td>
+          <td class="code"><pre>&#39;root@localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_PATH</td>
+          <td class="code"><pre>&#39;/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_X_FORWARDED_HOST</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>IGNORABLE_404_ENDS</td>
+          <td class="code"><pre>(&#39;mail.pl&#39;, &#39;mailform.pl&#39;, &#39;mail.cgi&#39;, &#39;mailform.cgi&#39;, &#39;favicon.ico&#39;, &#39;.php&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MIDDLEWARE_CLASSES</td>
+          <td class="code"><pre>(&#39;django.middleware.common.CommonMiddleware&#39;,
+ &#39;django.contrib.sessions.middleware.SessionMiddleware&#39;,
+ &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
+ &#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;,
+ &#39;django.contrib.messages.middleware.MessageMiddleware&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_I18N</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THOUSAND_SEPARATOR</td>
+          <td class="code"><pre>&#39;,&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECRET_KEY</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_COOKIE_NAME</td>
+          <td class="code"><pre>&#39;django_language&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_TEMP_DIR</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TRANSACTIONS_MANAGED</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGGING_CONFIG</td>
+          <td class="code"><pre>&#39;django.utils.log.dictConfig&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_LOADERS</td>
+          <td class="code"><pre>(&#39;django.template.loaders.filesystem.Loader&#39;,
+ &#39;django.template.loaders.app_directories.Loader&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_DEBUG</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AUTHENTICATION_BACKENDS</td>
+          <td class="code"><pre>(&#39;django.contrib.auth.backends.ModelBackend&#39;,)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_DATABASE_COLLATION</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORCE_SCRIPT_NAME</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_BACKEND</td>
+          <td class="code"><pre>&#39;locmem://&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_SECURE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_DOMAIN</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_CHARSET</td>
+          <td class="code"><pre>&#39;utf-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEBUG</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_FILE_PATH</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_FILE_STORAGE</td>
+          <td class="code"><pre>&#39;django.core.files.storage.FileSystemStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INSTALLED_APPS</td>
+          <td class="code"><pre>[&#39;django.contrib.auth&#39;,
+ &#39;django.contrib.contenttypes&#39;,
+ &#39;django.contrib.sessions&#39;,
+ &#39;django.contrib.sites&#39;,
+ &#39;django.contrib.messages&#39;,
+ &#39;django.contrib.staticfiles&#39;,
+ &#39;django.contrib.admin&#39;,
+ &#39;django.contrib.admindocs&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGES</td>
+          <td class="code"><pre>((&#39;ar&#39;, &#39;Arabic&#39;),
+ (&#39;az&#39;, &#39;Azerbaijani&#39;),
+ (&#39;bg&#39;, &#39;Bulgarian&#39;),
+ (&#39;bn&#39;, &#39;Bengali&#39;),
+ (&#39;bs&#39;, &#39;Bosnian&#39;),
+ (&#39;ca&#39;, &#39;Catalan&#39;),
+ (&#39;cs&#39;, &#39;Czech&#39;),
+ (&#39;cy&#39;, &#39;Welsh&#39;),
+ (&#39;da&#39;, &#39;Danish&#39;),
+ (&#39;de&#39;, &#39;German&#39;),
+ (&#39;el&#39;, &#39;Greek&#39;),
+ (&#39;en&#39;, &#39;English&#39;),
+ (&#39;en-gb&#39;, &#39;British English&#39;),
+ (&#39;es&#39;, &#39;Spanish&#39;),
+ (&#39;es-ar&#39;, &#39;Argentinian Spanish&#39;),
+ (&#39;es-mx&#39;, &#39;Mexican Spanish&#39;),
+ (&#39;es-ni&#39;, &#39;Nicaraguan Spanish&#39;),
+ (&#39;et&#39;, &#39;Estonian&#39;),
+ (&#39;eu&#39;, &#39;Basque&#39;),
+ (&#39;fa&#39;, &#39;Persian&#39;),
+ (&#39;fi&#39;, &#39;Finnish&#39;),
+ (&#39;fr&#39;, &#39;French&#39;),
+ (&#39;fy-nl&#39;, &#39;Frisian&#39;),
+ (&#39;ga&#39;, &#39;Irish&#39;),
+ (&#39;gl&#39;, &#39;Galician&#39;),
+ (&#39;he&#39;, &#39;Hebrew&#39;),
+ (&#39;hi&#39;, &#39;Hindi&#39;),
+ (&#39;hr&#39;, &#39;Croatian&#39;),
+ (&#39;hu&#39;, &#39;Hungarian&#39;),
+ (&#39;id&#39;, &#39;Indonesian&#39;),
+ (&#39;is&#39;, &#39;Icelandic&#39;),
+ (&#39;it&#39;, &#39;Italian&#39;),
+ (&#39;ja&#39;, &#39;Japanese&#39;),
+ (&#39;ka&#39;, &#39;Georgian&#39;),
+ (&#39;km&#39;, &#39;Khmer&#39;),
+ (&#39;kn&#39;, &#39;Kannada&#39;),
+ (&#39;ko&#39;, &#39;Korean&#39;),
+ (&#39;lt&#39;, &#39;Lithuanian&#39;),
+ (&#39;lv&#39;, &#39;Latvian&#39;),
+ (&#39;mk&#39;, &#39;Macedonian&#39;),
+ (&#39;ml&#39;, &#39;Malayalam&#39;),
+ (&#39;mn&#39;, &#39;Mongolian&#39;),
+ (&#39;nl&#39;, &#39;Dutch&#39;),
+ (&#39;no&#39;, &#39;Norwegian&#39;),
+ (&#39;nb&#39;, &#39;Norwegian Bokmal&#39;),
+ (&#39;nn&#39;, &#39;Norwegian Nynorsk&#39;),
+ (&#39;pa&#39;, &#39;Punjabi&#39;),
+ (&#39;pl&#39;, &#39;Polish&#39;),
+ (&#39;pt&#39;, &#39;Portuguese&#39;),
+ (&#39;pt-br&#39;, &#39;Brazilian Portuguese&#39;),
+ (&#39;ro&#39;, &#39;Romanian&#39;),
+ (&#39;ru&#39;, &#39;Russian&#39;),
+ (&#39;sk&#39;, &#39;Slovak&#39;),
+ (&#39;sl&#39;, &#39;Slovenian&#39;),
+ (&#39;sq&#39;, &#39;Albanian&#39;),
+ (&#39;sr&#39;, &#39;Serbian&#39;),
+ (&#39;sr-latn&#39;, &#39;Serbian Latin&#39;),
+ (&#39;sv&#39;, &#39;Swedish&#39;),
+ (&#39;ta&#39;, &#39;Tamil&#39;),
+ (&#39;te&#39;, &#39;Telugu&#39;),
+ (&#39;th&#39;, &#39;Thai&#39;),
+ (&#39;tr&#39;, &#39;Turkish&#39;),
+ (&#39;uk&#39;, &#39;Ukrainian&#39;),
+ (&#39;ur&#39;, &#39;Urdu&#39;),
+ (&#39;vi&#39;, &#39;Vietnamese&#39;),
+ (&#39;zh-cn&#39;, &#39;Simplified Chinese&#39;),
+ (&#39;zh-tw&#39;, &#39;Traditional Chinese&#39;))</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_ENGINE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_NAME</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_FIRST_FEW</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PREPEND_WWW</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_HTTPONLY</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_PORT</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEBUG_PROPAGATE_EXCEPTIONS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MONTH_DAY_FORMAT</td>
+          <td class="code"><pre>&#39;F j&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_URL</td>
+          <td class="code"><pre>&#39;/accounts/login/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_EXPIRE_AT_BROWSER_CLOSE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_FORMAT</td>
+          <td class="code"><pre>&#39;P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATE_INPUT_FORMATS</td>
+          <td class="code"><pre>(&#39;%Y-%m-%d&#39;,
+ &#39;%m/%d/%Y&#39;,
+ &#39;%m/%d/%y&#39;,
+ &#39;%b %d %Y&#39;,
+ &#39;%b %d, %Y&#39;,
+ &#39;%d %b %Y&#39;,
+ &#39;%d %b, %Y&#39;,
+ &#39;%B %d %Y&#39;,
+ &#39;%B %d, %Y&#39;,
+ &#39;%d %B %Y&#39;,
+ &#39;%d %B, %Y&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_NAME</td>
+          <td class="code"><pre>&#39;csrftoken&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST_PASSWORD</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PASSWORD_RESET_TIMEOUT_DAYS</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_ALIAS</td>
+          <td class="code"><pre>&#39;default&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_SAVE_EVERY_REQUEST</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADMIN_MEDIA_PREFIX</td>
+          <td class="code"><pre>&#39;/static/admin/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>NUMBER_GROUPING</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_ENGINE</td>
+          <td class="code"><pre>&#39;django.contrib.sessions.backends.db&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_FAILURE_VIEW</td>
+          <td class="code"><pre>&#39;django.views.csrf.csrf_failure&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_SKETCHY_USERS_GROUP</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_REDIRECT_URL</td>
+          <td class="code"><pre>&#39;/accounts/profile/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGGING</td>
+          <td class="code"><pre>{&#39;disable_existing_loggers&#39;: False,
+ &#39;handlers&#39;: {&#39;mail_admins&#39;: {&#39;class&#39;: &#39;django.utils.log.AdminEmailHandler&#39;,
+                              &#39;level&#39;: &#39;ERROR&#39;}},
+ &#39;loggers&#39;: {&#39;django.request&#39;: {&#39;handlers&#39;: [&#39;mail_admins&#39;],
+                                &#39;level&#39;: &#39;ERROR&#39;,
+                                &#39;propagate&#39;: True}},
+ &#39;version&#39;: 1}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_KEY_PREFIX</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOCALE_PATHS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_STRING_IF_INVALID</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_ALLOW_PROFANITIES</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGOUT_URL</td>
+          <td class="code"><pre>&#39;/accounts/logout/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_USE_TLS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_DIRS</td>
+          <td class="code"><pre>(&#39;/home/bbundy/sites/xw/templates&#39;,)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FIXTURE_DIRS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST</td>
+          <td class="code"><pre>&#39;localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATE_FORMAT</td>
+          <td class="code"><pre>&#39;N j, Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MEDIA_ROOT</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADMINS</td>
+          <td class="code"><pre>((&#39;Bruce Bundy&#39;, &#39;brbundy@gmail.com&#39;),)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORMAT_MODULE_PATH</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_FROM_EMAIL</td>
+          <td class="code"><pre>&#39;webmaster@localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_DIRS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MEDIA_URL</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATETIME_FORMAT</td>
+          <td class="code"><pre>&#39;N j, Y, P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_SUBJECT_PREFIX</td>
+          <td class="code"><pre>&#39;[Django] &#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_ID</td>
+          <td class="code"><pre>1</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DISALLOWED_USER_AGENTS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ALLOWED_INCLUDE_ROOTS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DECIMAL_SEPARATOR</td>
+          <td class="code"><pre>&#39;.&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHORT_DATE_FORMAT</td>
+          <td class="code"><pre>&#39;m/d/Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_USER</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_RUNNER</td>
+          <td class="code"><pre>&#39;django.test.simple.DjangoTestSuiteRunner&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_ZONE</td>
+          <td class="code"><pre>&#39;America/Los_Angeles&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_MAX_MEMORY_SIZE</td>
+          <td class="code"><pre>2621440</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_BACKEND</td>
+          <td class="code"><pre>&#39;django.core.mail.backends.smtp.EmailBackend&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_TABLESPACE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_CONTEXT_PROCESSORS</td>
+          <td class="code"><pre>(&#39;django.contrib.auth.context_processors.auth&#39;,
+ &#39;django.core.context_processors.debug&#39;,
+ &#39;django.core.context_processors.i18n&#39;,
+ &#39;django.core.context_processors.media&#39;,
+ &#39;django.core.context_processors.static&#39;,
+ &#39;django.contrib.messages.context_processors.messages&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_AGE</td>
+          <td class="code"><pre>1209600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SETTINGS_MODULE</td>
+          <td class="code"><pre>&#39;xw.settings&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_ETAGS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGES_BIDI</td>
+          <td class="code"><pre>(&#39;he&#39;, &#39;ar&#39;, &#39;fa&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_INDEX_TABLESPACE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INTERNAL_IPS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATIC_URL</td>
+          <td class="code"><pre>&#39;/static/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_PORT</td>
+          <td class="code"><pre>25</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHORT_DATETIME_FORMAT</td>
+          <td class="code"><pre>&#39;m/d/Y P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ABSOLUTE_URL_OVERRIDES</td>
+          <td class="code"><pre>{}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_OPTIONS</td>
+          <td class="code"><pre>{}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_SECONDS</td>
+          <td class="code"><pre>600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>BANNED_IPS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATETIME_INPUT_FORMATS</td>
+          <td class="code"><pre>(&#39;%Y-%m-%d %H:%M:%S&#39;,
+ &#39;%Y-%m-%d %H:%M&#39;,
+ &#39;%Y-%m-%d&#39;,
+ &#39;%m/%d/%Y %H:%M:%S&#39;,
+ &#39;%m/%d/%Y %H:%M&#39;,
+ &#39;%m/%d/%Y&#39;,
+ &#39;%m/%d/%y %H:%M:%S&#39;,
+ &#39;%m/%d/%y %H:%M&#39;,
+ &#39;%m/%d/%y&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_PASSWORD</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADMIN_FOR</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_BANNED_USERS_GROUP</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST_USER</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PROFANITIES_LIST</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+    </tbody>
+  </table>
+
+</div>
+
+  <div id="explanation">
+    <p>
+      You're seeing this error because you have <code>DEBUG = True</code> in your
+      Django settings file. Change that to <code>False</code>, and Django will
+      display a standard 500 page.
+    </p>
+  </div>
+
+</body>
+</html>

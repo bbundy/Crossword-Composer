@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--XPF document for the Sunday, October 02, 2011 New York Times crossword.-->
+<!--Conforms to Universal Crossword Puzzle Format XPF. See www.xwordinfo.com/XPF for details and licensing information.-->
+<Puzzles Version="1.0">
+  <Puzzle>
+    <Type>cryptic</Type>
+    <Title>New Puzzle</Title>
+    <Author>Unknown</Author>
+    <Editor>Unknown</Editor>
+    <Publisher></Publisher>
+    <Date>01/01/2000</Date>
+    <Size>
+      <Rows>15</Rows>
+      <Cols>15</Cols>
+    </Size>
+    <Grid>
+      <Row>____.__________</Row>
+      <Row>_._..._._._._._</Row>
+      <Row>____.__________</Row>
+      <Row>_._._._._._._._</Row>
+      <Row>____________...</Row>
+      <Row>_._._..._._._._</Row>
+      <Row>_________._____</Row>
+      <Row>_._._._._._._._</Row>
+      <Row>_____._________</Row>
+      <Row>_._._._..._._._</Row>
+      <Row>...____________</Row>
+      <Row>_._._._._._._._</Row>
+      <Row>__________.____</Row>
+      <Row>_._._._._..._._</Row>
+      <Row>__________.____</Row>
+    </Grid>
+    <Clues>
+      <Clue Row="1" Col="1" Num="1" Dir="Across" Ans="    ">.</Clue>
+      <Clue Row="1" Col="6" Num="3" Dir="Across" Ans="          ">.</Clue>
+      <Clue Row="3" Col="1" Num="9" Dir="Across" Ans="    ">.</Clue>
+      <Clue Row="3" Col="6" Num="10" Dir="Across" Ans="          ">.</Clue>
+      <Clue Row="5" Col="1" Num="12" Dir="Across" Ans="            ">.</Clue>
+      <Clue Row="7" Col="1" Num="15" Dir="Across" Ans="         ">.</Clue>
+      <Clue Row="7" Col="11" Num="17" Dir="Across" Ans="     ">.</Clue>
+      <Clue Row="9" Col="1" Num="18" Dir="Across" Ans="     ">.</Clue>
+      <Clue Row="9" Col="7" Num="19" Dir="Across" Ans="         ">.</Clue>
+      <Clue Row="11" Col="4" Num="20" Dir="Across" Ans="            ">.</Clue>
+      <Clue Row="13" Col="1" Num="24" Dir="Across" Ans="          ">.</Clue>
+      <Clue Row="13" Col="12" Num="25" Dir="Across" Ans="    ">.</Clue>
+      <Clue Row="15" Col="1" Num="26" Dir="Across" Ans="          ">.</Clue>
+      <Clue Row="15" Col="12" Num="27" Dir="Across" Ans="    ">.</Clue>
+      <Clue Row="1" Col="1" Num="1" Dir="Down" Ans="          ">.</Clue>
+      <Clue Row="1" Col="3" Num="2" Dir="Down" Ans="          ">.</Clue>
+      <Clue Row="1" Col="7" Num="4" Dir="Down" Ans="     ">.</Clue>
+      <Clue Row="1" Col="9" Num="5" Dir="Down" Ans="         ">.</Clue>
+      <Clue Row="1" Col="11" Num="6" Dir="Down" Ans="            ">.</Clue>
+      <Clue Row="1" Col="13" Num="7" Dir="Down" Ans="    ">.</Clue>
+      <Clue Row="1" Col="15" Num="8" Dir="Down" Ans="    ">.</Clue>
+      <Clue Row="4" Col="5" Num="11" Dir="Down" Ans="            ">.</Clue>
+      <Clue Row="6" Col="13" Num="13" Dir="Down" Ans="          ">.</Clue>
+      <Clue Row="6" Col="15" Num="14" Dir="Down" Ans="          ">.</Clue>
+      <Clue Row="7" Col="7" Num="16" Dir="Down" Ans="         ">.</Clue>
+      <Clue Row="11" Col="9" Num="21" Dir="Down" Ans="     ">.</Clue>
+      <Clue Row="12" Col="1" Num="22" Dir="Down" Ans="    ">.</Clue>
+      <Clue Row="12" Col="3" Num="23" Dir="Down" Ans="    ">.</Clue>
+    </Clues>
+  </Puzzle>
+</Puzzles>

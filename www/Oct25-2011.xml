@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--XPF document for the Tuesday, October 25, 2011 New York Times crossword.-->
+<!--Conforms to Universal Crossword Puzzle Format XPF. See www.xwordinfo.com/XPF for details and licensing information.-->
+<Puzzles Version="1.0">
+  <Puzzle>
+    <Title>NY Times, Tue, Oct 25, 2011</Title>
+    <Author>C. W. Stewart</Author>
+    <Editor>Will Shortz</Editor>
+    <Publisher>The New York Times</Publisher>
+    <Date>10/25/2011</Date>
+    <Size>
+      <Rows>15</Rows>
+      <Cols>15</Cols>
+    </Size>
+    <Grid>
+      <Row>SIPS.HUSH.INFER</Row>
+      <Row>COAL.OHIO.NEIGH</Row>
+      <Row>ANNA.NOLO.FARGO</Row>
+      <Row>MIDNIGHTHOUR...</Row>
+      <Row>SCATS...ATT.SHA</Row>
+      <Row>....MATTHOUSTON</Row>
+      <Row>MAMA.ROO..ROAST</Row>
+      <Row>APARTMENTHOUSES</Row>
+      <Row>MINCE..TAE.SHAY</Row>
+      <Row>BASSETHOUND....</Row>
+      <Row>ONE.SHE...OUTDO</Row>
+      <Row>...WHEREARTTHOU</Row>
+      <Row>CAPRI.BLUE.URNS</Row>
+      <Row>SWEAR.ASKS.ROUT</Row>
+      <Row>INAPT.LEST.NETS</Row>
+    </Grid>
+    <Clues>
+      <Clue Row="1" Col="1" Num="1" Dir="Across" Ans="SIPS">Nurses at the bar</Clue>
+      <Clue Row="1" Col="6" Num="5" Dir="Across" Ans="HUSH">"Pipe down!"</Clue>
+      <Clue Row="1" Col="11" Num="9" Dir="Across" Ans="INFER">Derive logically</Clue>
+      <Clue Row="2" Col="1" Num="14" Dir="Across" Ans="COAL">Bad child's stocking filler</Clue>
+      <Clue Row="2" Col="6" Num="15" Dir="Across" Ans="OHIO">Indiana/Kentucky border river</Clue>
+      <Clue Row="2" Col="11" Num="16" Dir="Across" Ans="NEIGH">Sound from a stable</Clue>
+      <Clue Row="3" Col="1" Num="17" Dir="Across" Ans="ANNA">Kendrick of "Up in the Air"</Clue>
+      <Clue Row="3" Col="6" Num="18" Dir="Across" Ans="NOLO">___ contendere</Clue>
+      <Clue Row="3" Col="11" Num="19" Dir="Across" Ans="FARGO">North Dakota city</Clue>
+      <Clue Row="4" Col="1" Num="20" Dir="Across" Ans="MIDNIGHTHOUR">Time in the title of a 1965 Wilson Pickett hit</Clue>
+      <Clue Row="5" Col="1" Num="23" Dir="Across" Ans="SCATS">Skedaddles</Clue>
+      <Clue Row="5" Col="9" Num="24" Dir="Across" Ans="ATT">Trial fig.</Clue>
+      <Clue Row="5" Col="13" Num="25" Dir="Across" Ans="SHA">Doo-woppers ___ Na Na</Clue>
+      <Clue Row="6" Col="5" Num="28" Dir="Across" Ans="MATTHOUSTON">TV oilman-turned-private eye</Clue>
+      <Clue Row="7" Col="1" Num="33" Dir="Across" Ans="MAMA">Doll's cry</Clue>
+      <Clue Row="7" Col="6" Num="37" Dir="Across" Ans="ROO">Aussie bounder</Clue>
+      <Clue Row="7" Col="11" Num="38" Dir="Across" Ans="ROAST">Friars Club event</Clue>
+      <Clue Row="8" Col="1" Num="39" Dir="Across" Ans="APARTMENTHOUSES">Multiple-dwelling buildings</Clue>
+      <Clue Row="9" Col="1" Num="43" Dir="Across" Ans="MINCE">Chop finely</Clue>
+      <Clue Row="9" Col="8" Num="44" Dir="Across" Ans="TAE">Light bulb inventor's inits.</Clue>
+      <Clue Row="9" Col="12" Num="45" Dir="Across" Ans="SHAY">Light carriage</Clue>
+      <Clue Row="10" Col="1" Num="46" Dir="Across" Ans="BASSETHOUND">Droopy-eared dog</Clue>
+      <Clue Row="11" Col="1" Num="50" Dir="Across" Ans="ONE">Small bill</Clue>
+      <Clue Row="11" Col="5" Num="51" Dir="Across" Ans="SHE">___-wolf</Clue>
+      <Clue Row="11" Col="11" Num="52" Dir="Across" Ans="OUTDO">Perform better than</Clue>
+      <Clue Row="12" Col="4" Num="57" Dir="Across" Ans="WHEREARTTHOU">Question that follows "O Brother" in film ... and a hint to this puzzle's theme</Clue>
+      <Clue Row="13" Col="1" Num="61" Dir="Across" Ans="CAPRI">Grotto isle of Italy</Clue>
+      <Clue Row="13" Col="7" Num="64" Dir="Across" Ans="BLUE">Grotto color at 61-Across</Clue>
+      <Clue Row="13" Col="12" Num="65" Dir="Across" Ans="URNS">Java servers</Clue>
+      <Clue Row="14" Col="1" Num="66" Dir="Across" Ans="SWEAR">Say "#%@!"</Clue>
+      <Clue Row="14" Col="7" Num="67" Dir="Across" Ans="ASKS">Calls upon</Clue>
+      <Clue Row="14" Col="12" Num="68" Dir="Across" Ans="ROUT">20-0 baseball score, say</Clue>
+      <Clue Row="15" Col="1" Num="69" Dir="Across" Ans="INAPT">Ill-suited</Clue>
+      <Clue Row="15" Col="7" Num="70" Dir="Across" Ans="LEST">"___ we forget ..."</Clue>
+      <Clue Row="15" Col="12" Num="71" Dir="Across" Ans="NETS">Keeps after taxes</Clue>
+      <Clue Row="1" Col="1" Num="1" Dir="Down" Ans="SCAMS">Con jobs</Clue>
+      <Clue Row="1" Col="2" Num="2" Dir="Down" Ans="IONIC">Greek column style</Clue>
+      <Clue Row="1" Col="3" Num="3" Dir="Down" Ans="PANDA">Bamboo-munching critter</Clue>
+      <Clue Row="1" Col="4" Num="4" Dir="Down" Ans="SLANT">Way of looking at things</Clue>
+      <Clue Row="1" Col="6" Num="5" Dir="Down" Ans="HONG">___ Kong</Clue>
+      <Clue Row="1" Col="7" Num="6" Dir="Down" Ans="UHOH">"We're in trouble!"</Clue>
+      <Clue Row="1" Col="8" Num="7" Dir="Down" Ans="SILT">Delta deposit</Clue>
+      <Clue Row="1" Col="9" Num="8" Dir="Down" Ans="HOOHAH">Commotion</Clue>
+      <Clue Row="1" Col="11" Num="9" Dir="Down" Ans="INFUTURO">Yet to happen, at law</Clue>
+      <Clue Row="1" Col="12" Num="10" Dir="Down" Ans="NEAR">In the vicinity</Clue>
+      <Clue Row="1" Col="13" Num="11" Dir="Down" Ans="FIR">Douglas ___</Clue>
+      <Clue Row="1" Col="14" Num="12" Dir="Down" Ans="EGG">Cadbury confection</Clue>
+      <Clue Row="1" Col="15" Num="13" Dir="Down" Ans="RHO">Letter before sigma</Clue>
+      <Clue Row="4" Col="5" Num="21" Dir="Down" Ans="ISM">Suffix in poli sci</Clue>
+      <Clue Row="4" Col="10" Num="22" Dir="Down" Ans="OTO">Ear-related prefix</Clue>
+      <Clue Row="5" Col="13" Num="25" Dir="Down" Ans="STASH">Squirrel away</Clue>
+      <Clue Row="5" Col="14" Num="26" Dir="Down" Ans="HOSEA">Minor prophet of the Old Testament</Clue>
+      <Clue Row="5" Col="15" Num="27" Dir="Down" Ans="ANTSY">Prone to fidgeting</Clue>
+      <Clue Row="6" Col="6" Num="29" Dir="Down" Ans="ARM">Prepare for combat</Clue>
+      <Clue Row="6" Col="7" Num="30" Dir="Down" Ans="TOE">Tip of a boot</Clue>
+      <Clue Row="6" Col="8" Num="31" Dir="Down" Ans="TONTO">Scout's rider of early TV</Clue>
+      <Clue Row="6" Col="12" Num="32" Dir="Down" Ans="SOUS">___-chef (kitchen's number two)</Clue>
+      <Clue Row="7" Col="1" Num="33" Dir="Down" Ans="MAMBO">Cuban musical form</Clue>
+      <Clue Row="7" Col="2" Num="34" Dir="Down" Ans="APIAN">Bee-related</Clue>
+      <Clue Row="7" Col="3" Num="35" Dir="Down" Ans="MANSE">Parson's home</Clue>
+      <Clue Row="7" Col="4" Num="36" Dir="Down" Ans="ARCS">Circle segments</Clue>
+      <Clue Row="8" Col="5" Num="40" Dir="Down" Ans="TEESHIRT">Vacation souvenir wear</Clue>
+      <Clue Row="8" Col="9" Num="41" Dir="Down" Ans="TAU">Letter after sigma</Clue>
+      <Clue Row="8" Col="10" Num="42" Dir="Down" Ans="HEN">Old biddy</Clue>
+      <Clue Row="10" Col="6" Num="47" Dir="Down" Ans="THE">Everyday article</Clue>
+      <Clue Row="10" Col="7" Num="48" Dir="Down" Ans="HERBAL">Like some teas</Clue>
+      <Clue Row="10" Col="11" Num="49" Dir="Down" Ans="DOT">Part of a pointillist painting</Clue>
+      <Clue Row="11" Col="12" Num="53" Dir="Down" Ans="UTURN">Driver's one-eighty</Clue>
+      <Clue Row="11" Col="13" Num="54" Dir="Down" Ans="THROE">Severe pang</Clue>
+      <Clue Row="11" Col="14" Num="55" Dir="Down" Ans="DONUT">Glazed or powdered item</Clue>
+      <Clue Row="11" Col="15" Num="56" Dir="Down" Ans="OUSTS">Gives the boot</Clue>
+      <Clue Row="12" Col="4" Num="57" Dir="Down" Ans="WRAP">Cylindrical sandwich</Clue>
+      <Clue Row="12" Col="8" Num="58" Dir="Down" Ans="ELSE">Threat-ending word</Clue>
+      <Clue Row="12" Col="9" Num="59" Dir="Down" Ans="AUKS">Razor-billed birds</Clue>
+      <Clue Row="12" Col="10" Num="60" Dir="Down" Ans="REST">Take five</Clue>
+      <Clue Row="13" Col="1" Num="61" Dir="Down" Ans="CSI">CBS drama with DNA testing</Clue>
+      <Clue Row="13" Col="2" Num="62" Dir="Down" Ans="AWN">Bristle on barley</Clue>
+      <Clue Row="13" Col="3" Num="63" Dir="Down" Ans="PEA">Split ___</Clue>
+    </Clues>
+  </Puzzle>
+</Puzzles>

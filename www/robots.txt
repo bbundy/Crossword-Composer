@@ -1,0 +1,12 @@
+# robots.txt file created at http://www.searchenginepromotionhelp.com/
+# Fri, 07 Oct 2011 00:26:34 +0000
+
+# Exclude Files From All Robots:
+
+User-agent: *
+Disallow: /
+
+
+
+
+# End robots.txt file

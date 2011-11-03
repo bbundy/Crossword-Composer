@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--XPF document for the Saturday, October 22, 2011 New York Times crossword.-->
+<!--Conforms to Universal Crossword Puzzle Format XPF. See www.xwordinfo.com/XPF for details and licensing information.-->
+<Puzzles Version="1.0">
+  <Puzzle>
+    <Title>NY Times, Sat, Oct 22, 2011</Title>
+    <Author>Patrick Berry</Author>
+    <Editor>Will Shortz</Editor>
+    <Publisher>The New York Times</Publisher>
+    <Date>10/22/2011</Date>
+    <Size>
+      <Rows>15</Rows>
+      <Cols>15</Cols>
+    </Size>
+    <Grid>
+      <Row>USSR..ARAB.PAPA</Row>
+      <Row>NATE.AMANA.ABED</Row>
+      <Row>AROD.FAINT.IOTA</Row>
+      <Row>PANELIST.TANDEM</Row>
+      <Row>THEFIRSTLETTERS</Row>
+      <Row>..WIFE..ARMS...</Row>
+      <Row>SLANT.PINES.DJS</Row>
+      <Row>PALE.SHOED.BEAK</Row>
+      <Row>AWL.SPANS.WELBY</Row>
+      <Row>...GUYS..AAAA..</Row>
+      <Row>FILLEVERYCIRCLE</Row>
+      <Row>ALEUTS.AIRFARES</Row>
+      <Row>RIOT.SPREE.BOAT</Row>
+      <Row>SANE.PEELS.LIVE</Row>
+      <Row>IDES.YARD..EXES</Row>
+    </Grid>
+    <Clues>
+      <Clue Row="1" Col="1" Num="1" Dir="Across" Ans="USSR">Treaty signer with Ger. in 1939</Clue>
+      <Clue Row="1" Col="7" Num="5" Dir="Across" Ans="ARAB">Horse of a sort</Clue>
+      <Clue Row="1" Col="12" Num="9" Dir="Across" Ans="PAPA">Eddie Fisher's "Oh! My ___"</Clue>
+      <Clue Row="2" Col="1" Num="13" Dir="Across" Ans="NATE">Campaign/election analyst ___ Silver</Clue>
+      <Clue Row="2" Col="6" Num="14" Dir="Across" Ans="AMANA">Oven brand</Clue>
+      <Clue Row="2" Col="12" Num="15" Dir="Across" Ans="ABED">Resting, say</Clue>
+      <Clue Row="3" Col="1" Num="16" Dir="Across" Ans="AROD">Nickname since 1999</Clue>
+      <Clue Row="3" Col="6" Num="17" Dir="Across" Ans="FAINT">Exceedingly hard to see</Clue>
+      <Clue Row="3" Col="12" Num="18" Dir="Across" Ans="IOTA">Really small amount</Clue>
+      <Clue Row="4" Col="1" Num="19" Dir="Across" Ans="PANELIST">Stage-sharing speaker</Clue>
+      <Clue Row="4" Col="10" Num="21" Dir="Across" Ans="TANDEM">Oxen might be put in it</Clue>
+      <Clue Row="5" Col="1" Num="23" Dir="Across" Ans="THEFIRSTLETTERS">Find contest's meta-answer by reading ___ of these clues</Clue>
+      <Clue Row="6" Col="3" Num="25" Dir="Across" Ans="WIFE">Tenth Commandment word</Clue>
+      <Clue Row="6" Col="9" Num="26" Dir="Across" Ans="ARMS">Heraldic drawing</Clue>
+      <Clue Row="7" Col="1" Num="27" Dir="Across" Ans="SLANT">Incline</Clue>
+      <Clue Row="7" Col="7" Num="29" Dir="Across" Ans="PINES">Seven ___ (Civil War battle site)</Clue>
+      <Clue Row="7" Col="13" Num="31" Dir="Across" Ans="DJS">Workers who play?</Clue>
+      <Clue Row="8" Col="1" Num="34" Dir="Across" Ans="PALE">Enclosing fence</Clue>
+      <Clue Row="8" Col="6" Num="35" Dir="Across" Ans="SHOED">Equipped for a ride, perhaps</Clue>
+      <Clue Row="8" Col="12" Num="36" Dir="Across" Ans="BEAK">Kite part</Clue>
+      <Clue Row="9" Col="1" Num="37" Dir="Across" Ans="AWL">Saddler's aid</Clue>
+      <Clue Row="9" Col="5" Num="38" Dir="Across" Ans="SPANS">Goes across</Clue>
+      <Clue Row="9" Col="11" Num="39" Dir="Across" Ans="WELBY">Role for Young</Clue>
+      <Clue Row="10" Col="4" Num="40" Dir="Across" Ans="GUYS">Insults playfully</Clue>
+      <Clue Row="10" Col="10" Num="41" Dir="Across" Ans="AAAA">Diminutive battery size</Clue>
+      <Clue Row="11" Col="1" Num="42" Dir="Across" Ans="FILLEVERYCIRCLE">Solvers must ___ in the grids to determine the grids' proper order</Clue>
+      <Clue Row="12" Col="1" Num="49" Dir="Across" Ans="ALEUTS">Rat Island natives</Clue>
+      <Clue Row="12" Col="8" Num="50" Dir="Across" Ans="AIRFARES">Expenses for globetrotters</Clue>
+      <Clue Row="13" Col="1" Num="51" Dir="Across" Ans="RIOT">Anarchy</Clue>
+      <Clue Row="13" Col="6" Num="52" Dir="Across" Ans="SPREE">Drunken jag</Clue>
+      <Clue Row="13" Col="12" Num="54" Dir="Across" Ans="BOAT">Islander's need, maybe</Clue>
+      <Clue Row="14" Col="1" Num="55" Dir="Across" Ans="SANE">Not mad</Clue>
+      <Clue Row="14" Col="6" Num="56" Dir="Across" Ans="PEELS">Outer parts</Clue>
+      <Clue Row="14" Col="12" Num="57" Dir="Across" Ans="LIVE">Real-time</Clue>
+      <Clue Row="15" Col="1" Num="58" Dir="Across" Ans="IDES">Day on old calendars</Clue>
+      <Clue Row="15" Col="6" Num="59" Dir="Across" Ans="YARD">Exterior area</Clue>
+      <Clue Row="15" Col="12" Num="60" Dir="Across" Ans="EXES">Ruptured couple</Clue>
+      <Clue Row="1" Col="1" Num="1" Dir="Down" Ans="UNAPT">Suitable's opposite</Clue>
+      <Clue Row="1" Col="2" Num="2" Dir="Down" Ans="SARAH">"Princess" in its Hebrew translation</Clue>
+      <Clue Row="1" Col="3" Num="3" Dir="Down" Ans="STONEWALL">Evade while being questioned</Clue>
+      <Clue Row="1" Col="4" Num="4" Dir="Down" Ans="REDEFINE">Label anew</Clue>
+      <Clue Row="1" Col="7" Num="5" Dir="Down" Ans="AMASS">Lay up</Clue>
+      <Clue Row="1" Col="8" Num="6" Dir="Down" Ans="RAITT">Activist/singer Bonnie</Clue>
+      <Clue Row="1" Col="9" Num="7" Dir="Down" Ans="ANN">Former Texas governor Richards</Clue>
+      <Clue Row="1" Col="10" Num="8" Dir="Down" Ans="BATTERED">Assaulted, in a way</Clue>
+      <Clue Row="1" Col="12" Num="9" Dir="Down" Ans="PAINTS">Muralists' needs</Clue>
+      <Clue Row="1" Col="13" Num="10" Dir="Down" Ans="ABODE">One that might be humble</Clue>
+      <Clue Row="1" Col="14" Num="11" Dir="Down" Ans="PETER">Ustinov of "Topkapi"</Clue>
+      <Clue Row="1" Col="15" Num="12" Dir="Down" Ans="ADAMS">Second or sixth in a series</Clue>
+      <Clue Row="2" Col="6" Num="14" Dir="Down" Ans="AFIRE">Lighted</Clue>
+      <Clue Row="4" Col="5" Num="20" Dir="Down" Ans="LIFT">Elevate</Clue>
+      <Clue Row="4" Col="11" Num="22" Dir="Down" Ans="ATMS">Accepters of deposits</Clue>
+      <Clue Row="5" Col="9" Num="24" Dir="Down" Ans="LANES">Driving divisions</Clue>
+      <Clue Row="7" Col="1" Num="27" Dir="Down" Ans="SPA">Évian, for one</Clue>
+      <Clue Row="7" Col="2" Num="28" Dir="Down" Ans="LAW">Regulation</Clue>
+      <Clue Row="7" Col="7" Num="29" Dir="Down" Ans="PHASE">Astronomical appearance</Clue>
+      <Clue Row="7" Col="8" Num="30" Dir="Down" Ans="ION">Nonneutral particle</Clue>
+      <Clue Row="7" Col="13" Num="31" Dir="Down" Ans="DELACROIX">"Death of Sardanapalus" painter Eugène</Clue>
+      <Clue Row="7" Col="14" Num="32" Dir="Down" Ans="JAB">Hit that begins a one-two</Clue>
+      <Clue Row="7" Col="15" Num="33" Dir="Down" Ans="SKY">It's what's up</Clue>
+      <Clue Row="8" Col="6" Num="35" Dir="Down" Ans="SPYVSSPY">Strip since 1961 that's printed in black and white</Clue>
+      <Clue Row="8" Col="12" Num="36" Dir="Down" Ans="BEARABLE">Causing only minor irritation, say</Clue>
+      <Clue Row="9" Col="5" Num="38" Dir="Down" Ans="SUET">Raw beef fat</Clue>
+      <Clue Row="9" Col="11" Num="39" Dir="Down" Ans="WAIF">Oliver Twist, e.g.</Clue>
+      <Clue Row="10" Col="4" Num="40" Dir="Down" Ans="GLUTES">Seat cushions?</Clue>
+      <Clue Row="10" Col="10" Num="41" Dir="Down" Ans="ACRES">Spread</Clue>
+      <Clue Row="11" Col="1" Num="42" Dir="Down" Ans="FARSI">Iranian tongue</Clue>
+      <Clue Row="11" Col="2" Num="43" Dir="Down" Ans="ILIAD">Narrative set in the Bronze Age</Clue>
+      <Clue Row="11" Col="3" Num="44" Dir="Down" Ans="LEONE">Genre film director Sergio</Clue>
+      <Clue Row="11" Col="8" Num="45" Dir="Down" Ans="RARER">Worth more to collectors, say</Clue>
+      <Clue Row="11" Col="9" Num="46" Dir="Down" Ans="YIELD">Output</Clue>
+      <Clue Row="11" Col="14" Num="47" Dir="Down" Ans="LEAVE">Run along</Clue>
+      <Clue Row="11" Col="15" Num="48" Dir="Down" Ans="ESTES">Democratic senator Kefauver</Clue>
+      <Clue Row="13" Col="7" Num="53" Dir="Down" Ans="PEA">Shepherd's pie tidbit</Clue>
+    </Clues>
+    <Notepad><![CDATA["CROSS" WORDS CONTEST<br />All the puzzles this week, from Monday to Saturday, have been created by one person, Patrick Berry. Have your solutions handy, because today's puzzle conceals a meta-challenge involving the solution grids of all six. When you have the answer to the meta-challenge, mail it to: crossword@nytimes.com. Twenty-five correct solvers, chosen at random, whose entries are received by 6:00 p.m. E.T. Sunday, Oct. 23, will receive copies of "Will Shortz Picks His Favorite Puzzles: 101 of the Top Crosswords From The New York Times." Only one entry per person, please. The answer and winners' names will appear on Friday, Oct. 28, at http://www.nytimes.com/wordplay. <br />]]></Notepad>
+  </Puzzle>
+</Puzzles>
