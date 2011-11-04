@@ -61,7 +61,7 @@ def suggest_words(request):
 
 def main_landing(request):
     logger = logging.getLogger('xw.access')
-    logger.info(" request from %s : %s" % (request.META['REMOTE_ADDR'], request.META['QUERY_STRING']));
+    logger.info(" main page request from %s : %s" % (request.META['REMOTE_ADDR'], request.META['QUERY_STRING']));
     t = get_template('puzzle.html')
     p = None
     try:
@@ -98,6 +98,8 @@ def print_cw(request):
     return HttpResponse(html)
 
 def save(request):
+    logger = logging.getLogger('xw.access')
+    logger.info(" save  request from %s" % (request.META['REMOTE_ADDR']));
     p = Puzzle.fromPOST(request.POST)
     t = get_template('xpf.xml')
     html = t.render(RequestContext(request, {'puzzle': p}))
@@ -119,6 +121,8 @@ def save(request):
     return HttpResponse(html, content_type='text/xml')
 
 def retrieve(request):
+    logger = logging.getLogger('xw.access')
+    logger.info(" retrieve  request from %s" % (request.META['REMOTE_ADDR']));
     author=request.POST["author"]
     title=request.POST["title"]
     atname = author + "-" + title
