@@ -44,6 +44,8 @@ def thanks(request):
     return HttpResponse(html)
 
 def suggest_words(request):
+    logger = logging.getLogger('xw.access')
+    logger.info(" words  request from %s for %s" % (request.META['REMOTE_ADDR'], request.GET["pattern"]));
     pattern = request.GET["pattern"]
     pattern = pattern.replace('0','\\w[ \\-]*') + '.'
     words = open('/var/www/xw/UKACD17.TXT')

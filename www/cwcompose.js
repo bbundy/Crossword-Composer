@@ -376,7 +376,7 @@ function get_pattern(inputs) {
     var pattern = '';
     inputs.each(function() {
 	    var square = $(this);
-	    if (square.val() === '') {
+	    if (square.val() === '' || square.val() === ' ') {
 		pattern = pattern.concat('0');
 	    } else {
 		pattern = pattern.concat(square.val());

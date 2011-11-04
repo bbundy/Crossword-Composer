@@ -275,7 +275,7 @@ class Puzzle:
             while True:
                 if post.has_key("%d-across-%d" % (clue.num, i)):
                     c = post["%d-across-%d" % (clue.num, i)]
-                    if len(c) == 0:
+                    if len(c) == 0 or c == ' ':
                         letter = "?"
                     else: 
                         letter = c[0:1].lower()
@@ -294,7 +294,7 @@ class Puzzle:
             while True:
                 if post.has_key("%d-down-%d" % (clue.num, i)):
                     c = post["%d-down-%d" % (clue.num, i)]
-                    if len(c) == 0:
+                    if len(c) == 0 or c == ' ':
                         letter = "?"
                     else: 
                         letter = c[0:1].lower()
