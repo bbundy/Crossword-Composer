@@ -13,6 +13,7 @@ from urllib import urlopen
 from xword.models import Grid, RawPuzzles
 from random import randrange
 from django.db.models import Q
+import logging
 
 class ContactForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
@@ -59,6 +60,8 @@ def suggest_words(request):
     return HttpResponse(resp)
 
 def main_landing(request):
+    logger = logging.getLogger('xw.access')
+    logger.info(" request from %s : %s" % (request.META['REMOTE_ADDR'], request.META['QUERY_STRING']));
     t = get_template('puzzle.html')
     p = None
     try:
