@@ -9,11 +9,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
 from subprocess import Popen, PIPE
 from xwcore import Puzzle
-from urllib import urlopen
 from xword.models import Grid, RawPuzzles
 from random import randrange
 from django.db.models import Q
 import logging
+import urllib
 
 class ContactForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
@@ -77,6 +77,8 @@ def main_landing(request):
         puz = RawPuzzles.objects.filter(author_title=atname)
         if len(puz) > 0:
             p = Puzzle.fromXML(puz[0].contents)
+            if p.size > 18:
+                t = get_template('puz21.html')
     except:
         pass
 
@@ -127,24 +129,7 @@ def retrieve(request):
     logger.info(" retrieve  request from %s" % (request.META['REMOTE_ADDR']));
     author=request.POST["author"]
     title=request.POST["title"]
-    atname = author + "-" + title
-    atname = atname.replace('/','_')
-    atname = atname.replace('.','_')
-    atname = atname.replace(' ','_')
-    atname = atname.lower()
-    puz = RawPuzzles.objects.filter(author_title=atname)
-    if len(puz) > 0:
-        try :
-            p = Puzzle.fromXML(puz[0].contents)
-            if p.size < 18:
-                t = get_template('puzzle.html')
-            else:
-                t = get_template('puz21.html')
-            html = t.render(RequestContext(request, {'puzzle': p}))
-            return HttpResponse(html)
-        except Exception:
-            return HttpResponseRedirect('/')
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',author),('title',title))))
     
 def download_xpf(request):
     p = Puzzle.fromPOST(request.POST)
@@ -153,7 +138,7 @@ def download_xpf(request):
     return HttpResponse(html, content_type='text/xml')
 
 def from_xpf(request):
-    xml_handle = urlopen(request.POST["xpfurl"])
+    xml_handle = urllib.urlopen(request.POST["xpfurl"])
     p = Puzzle.fromXML(xml_handle.read())
     if p.size < 18:
         t = get_template('puzzle.html')
@@ -170,7 +155,7 @@ def download_puz(request):
 
 def from_puz(request):
     t = get_template('puzzle.html')
-    puz_handle = urlopen(request.POST["puzurl"])
+    puz_handle = urllib.urlopen(request.POST["puzurl"])
     p = Puzzle.fromPUZ(puz_handle.read())
     html = t.render(RequestContext(request, {'puzzle': p}))
     return HttpResponse(html)
