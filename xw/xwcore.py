@@ -404,6 +404,29 @@ class Puzzle:
                 this.down.append(clue)
         return this
 
+    @classmethod
+    def fromGridPOST(cls, post):
+        this = cls()
+        this.size = 15
+        this.row=[]
+        blocks=[]
+        for i in range(this.size):
+            blocks.append([])
+            for j in range(this.size):
+                blocks[i].append('?')
+        for k,v in post.items():
+            if v == 'x':
+                m = re.match("col-(\d+)-(\d+)", k)
+                r = int(m.group(1))
+                c = int(m.group(2))
+                blocks[r-1][c-1] = '.'
+        for r in range(this.size):
+            this.row.append("")
+            for c in blocks[r]:
+                this.row[r] += c
+        this = Puzzle.getFromRows(this)
+        return this
+
     def getFromRows(this):
         this.format = []
         this.across = []

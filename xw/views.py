@@ -103,10 +103,18 @@ def main_landing(request):
     html = t.render(RequestContext(request, {'puzzle': p}))
     return HttpResponse(html)
 
-def sample2(request):
+def gridedit(request):
+    t = get_template('grid.html')
+    try:
+        p = Puzzle.fromPOST(request.POST)
+    except:
+        p = Puzzle.fromGrid("15uAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    html = t.render(RequestContext(request, {'puzzle': p}))
+    return HttpResponse(html)
+
+def usegrid(request):
     t = get_template('puzzle.html')
-    gridstr = Grid.objects.filter(type=1)[0].format
-    p = Puzzle.fromGrid(gridstr)
+    p = Puzzle.fromGridPOST(request.POST)
     html = t.render(RequestContext(request, {'puzzle': p}))
     return HttpResponse(html)
 
