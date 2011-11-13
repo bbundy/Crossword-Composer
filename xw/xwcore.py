@@ -1,6 +1,8 @@
 import xml.parsers.expat
 import urllib
 import puz
+import re
+from django.utils.encoding import smart_unicode
 #from pyx import *
 #text.set(mode="latex")
 #text.preamble(r"\usepackage{times}")
@@ -128,6 +130,35 @@ class Puzzle:
         p.StartElementHandler = this.start_element
         p.EndElementHandler = this.end_element
         p.CharacterDataHandler = this.char_data
+        puzzle_xml = re.sub(unichr(0xc0), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xc1), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xc2), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xc3), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xc4), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xc5), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xc6), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe0), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe1), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe2), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe3), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe4), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe5), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe6), 'a', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xf0), 'o', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xf1), 'o', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xf2), 'o', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xf3), 'o', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xf4), 'o', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xf5), 'o', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xf6), 'o', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe8), 'e', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xe9), 'e', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xea), 'e', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xeb), 'e', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xec), 'i', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xed), 'i', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xee), 'i', puzzle_xml)
+        puzzle_xml = re.sub(unichr(0xef), 'i', puzzle_xml)
         p.Parse(puzzle_xml)
         this.size = len(this.row)
         this.format = []

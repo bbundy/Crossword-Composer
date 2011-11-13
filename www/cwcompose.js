@@ -158,6 +158,10 @@ function init_cw() {
 
     $('#save').bind('click', function(e) {
 	    do_save();
+	    var form = $(this).closest('form');
+	    form.attr('action','/retrieve/');
+	    form.attr('target','_self');
+	    form.submit();
 	});
     
     $('#clear').bind('click', function(e) {
@@ -167,6 +171,21 @@ function init_cw() {
     
     $('#retrieve').bind('click', function(e) {
 	    var form = $(this).closest('form');
+	    form.attr('action','/retrieve/');
+	    form.attr('target','_self');
+	    form.submit();
+	});
+
+    $('#solve').bind('click', function(e) {
+	    var form = $(this).closest('form');
+	    form.attr('action','/solve/');
+	    form.attr('target','_self');
+	    form.submit();
+	});
+
+    $('#show').bind('click', function(e) {
+	    var form = $(this).closest('form');
+	    $("#buttons-horizontal").empty();
 	    form.attr('action','/retrieve/');
 	    form.attr('target','_self');
 	    form.submit();
@@ -185,8 +204,18 @@ function init_cw() {
 	    form.submit();
 	});
 
+    $('#printall').bind('click', function(e) {
+	    do_save();
+	    var form = $(this).closest('form');
+	    $("#buttons-horizontal").append('<input id="printall" name="printall" type="hidden" value="true">');
+	    form.attr('action','/print/');
+	    form.attr('target','_blank');
+	    form.submit();
+	});
+
     $('#toxpf').bind('click', function(e) {
 	    var form = $(this).closest('form');
+	    $("#word-suggestions").empty();
 	    form.attr('action','/toxpf/');
 	    form.attr('target','_blank');
 	    form.submit();

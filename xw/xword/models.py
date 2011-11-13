@@ -44,4 +44,12 @@ class User(models.Model):
 
 class RawPuzzles(models.Model):
     author_title = models.CharField(max_length=255, unique=True, db_index=True)
+    created = models.DateTimeField(auto_now=True)
+    modified = models.DateTimeField(auto_now_add=True)
+    contents=models.CharField(max_length=32000)
+
+class SolvePuzzles(models.Model):
+    author_title = models.CharField(max_length=255, unique=True, db_index=True)
+    created = models.DateTimeField(auto_now=True)
+    modified = models.DateTimeField(auto_now_add=True)
     contents=models.CharField(max_length=32000)

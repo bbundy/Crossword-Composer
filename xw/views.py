@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
 from subprocess import Popen, PIPE
 from xwcore import Puzzle
-from xword.models import Grid, RawPuzzles
+from xword.models import Grid, RawPuzzles, SolvePuzzles
 from random import randrange
 from django.db.models import Q
 import logging
@@ -66,6 +66,7 @@ def main_landing(request):
     logger.info(" main page request from %s : %s" % (request.META['REMOTE_ADDR'], request.META['QUERY_STRING']));
     t = get_template('puzzle.html')
     p = None
+    solver = None
     try:
         author = request.GET['author']
         title = request.GET['title']
@@ -74,17 +75,31 @@ def main_landing(request):
         atname = atname.replace('.','_')
         atname = atname.replace(' ','_')
         atname = atname.lower()
-        puz = RawPuzzles.objects.filter(author_title=atname)
+        table = RawPuzzles
+        if request.GET.has_key('solve') or request.GET.has_key('solver'):
+            t = get_template('solve.html')
+            if request.GET.has_key('solver'):
+                t = get_template('solver.html')
+                solver = request.GET['solver']
+                atname = solver + '-' + atname
+                table = SolvePuzzles
+        puz = table.objects.filter(author_title=atname)
         if len(puz) > 0:
             p = Puzzle.fromXML(puz[0].contents)
             if p.size > 18:
                 t = get_template('puz21.html')
+        if request.GET.has_key('print'):
+            t = get_template('print.html') 
+        if request.GET.has_key('printall'):
+            t = get_template('printall.html') 
     except:
         pass
 
     if p == None: 
         gridstrs = Grid.objects.filter(Q(format__startswith='15u'))
         p = Puzzle.fromGrid(gridstrs[randrange(len(gridstrs))].format)
+    if solver:
+        p.solver = solver
     html = t.render(RequestContext(request, {'puzzle': p}))
     return HttpResponse(html)
 
@@ -96,14 +111,13 @@ def sample2(request):
     return HttpResponse(html)
 
 def print_cw(request):
-    t = get_template('print.html')
     p = Puzzle.fromPOST(request.POST)
-    html = t.render(RequestContext(request, {'puzzle': p}))
-    return HttpResponse(html)
+    if request.POST.has_key("printall"):
+        return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',p.author),('title',p.title),('printall','true'))))
+    else:
+        return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',p.author),('title',p.title),('print','true'))))
 
 def save(request):
-    logger = logging.getLogger('xw.access')
-    logger.info(" save  request from %s" % (request.META['REMOTE_ADDR']));
     p = Puzzle.fromPOST(request.POST)
     t = get_template('xpf.xml')
     html = t.render(RequestContext(request, {'puzzle': p}))
@@ -113,23 +127,45 @@ def save(request):
         atname = atname.replace('.','_')
         atname = atname.replace(' ','_')
         atname = atname.lower()
+        author = p.author
     else:
-        atname = request.REMOTE_ADDR
-    puzzles = RawPuzzles.objects.filter(author_title=atname)
+        atname = request.META['REMOTE_ADDR']
+        author = atname
+    title = p.title
+    if request.POST.has_key('solver'):
+        table = SolvePuzzles
+        atname = request.POST['solver'] + '-' + atname
+    else:
+        table = RawPuzzles
+    puzzles = table.objects.filter(author_title=atname)
     if len(puzzles) == 0:
-        puz = RawPuzzles(author_title=atname)
+        puz = table(author_title=atname)
     else:
         puz = puzzles[0]
     puz.contents = html
     puz.save()
-    return HttpResponse(html, content_type='text/xml')
+    logger = logging.getLogger('xw.access')
+    logger.info(" save request from %s for %s" % (request.META['REMOTE_ADDR'], atname));
+    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',author),('title',title))))
 
 def retrieve(request):
-    logger = logging.getLogger('xw.access')
-    logger.info(" retrieve  request from %s" % (request.META['REMOTE_ADDR']));
     author=request.POST["author"]
     title=request.POST["title"]
-    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',author),('title',title))))
+    logger = logging.getLogger('xw.access')
+    if request.POST.has_key('solver'):
+        solver = request.POST['solver']
+        logger.info(" retrieve request from %s for Author: %s, Title: %s Solver: %s" % (request.META['REMOTE_ADDR'], author, title, solver));
+        return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',author),('title',title),('solver',solver))))
+    else:
+        logger.info(" retrieve request from %s for Author: %s, Title: %s" % (request.META['REMOTE_ADDR'], author, title));
+        return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',author),('title',title))))
+    
+def solve(request):
+    author=request.POST["author"]
+    title=request.POST["title"]
+    logger = logging.getLogger('xw.access')
+    logger.info(" solve request from %s for Author: %s, Title: %s" % (request.META['REMOTE_ADDR'], author, title));
+    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',author),('title',title),('solve','true'))))
     
 def download_xpf(request):
     p = Puzzle.fromPOST(request.POST)
