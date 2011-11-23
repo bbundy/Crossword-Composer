@@ -126,39 +126,10 @@ class Puzzle:
         this.row = []
         this.clue = []
         this.grid_only = grid_only
-        p = xml.parsers.expat.ParserCreate()
+        p = xml.parsers.expat.ParserCreate(encoding="utf-8")
         p.StartElementHandler = this.start_element
         p.EndElementHandler = this.end_element
         p.CharacterDataHandler = this.char_data
-        puzzle_xml = re.sub(unichr(0xc0), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xc1), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xc2), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xc3), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xc4), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xc5), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xc6), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe0), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe1), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe2), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe3), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe4), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe5), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe6), 'a', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xf0), 'o', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xf1), 'o', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xf2), 'o', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xf3), 'o', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xf4), 'o', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xf5), 'o', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xf6), 'o', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe8), 'e', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xe9), 'e', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xea), 'e', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xeb), 'e', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xec), 'i', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xed), 'i', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xee), 'i', puzzle_xml)
-        puzzle_xml = re.sub(unichr(0xef), 'i', puzzle_xml)
         p.Parse(puzzle_xml)
         this.size = len(this.row)
         this.format = []
@@ -262,6 +233,9 @@ class Puzzle:
         this.format = []
         this.across = []
         this.down = []
+        this.intersections = []
+        this.down_intersections = {}
+        this.across_intersections = {}
         rnum = 0
         for r in rows:
             cols = r.split('x')
@@ -318,6 +292,7 @@ class Puzzle:
                 ans += letter
                 i += 1
             clue.ans = ans.upper()
+            clue.length = len(ans)
                 
         for clue in this.down:
             ans = ""
@@ -337,6 +312,7 @@ class Puzzle:
                 ans += letter
                 i += 1
             clue.ans = ans.upper()
+            clue.length = len(ans)
         this.row = []
         for i in range(this.size):
             this.row.append([])
@@ -347,6 +323,23 @@ class Puzzle:
                 else:
                     letter = '.'
                 this.row[i] += letter
+
+        for clue in this.across:
+            for down in this.down:
+                if (down.col >= clue.col) and (down.col < clue.col + clue.length) and (clue.row >= down.row) and (clue.row < down.row + down.length):
+                    this.across_intersections["%d-across-%d" % (clue.num, down.col - clue.col + 1)] = "%d-down-%d" % (down.num, clue.row - down.row + 1)
+
+        for clue in this.down:
+            for across in this.across:
+                if (across.row >= clue.row) and (across.row < clue.row + clue.length) and (clue.col >= across.col) and (clue.col < across.col + across.length):
+                    this.down_intersections["%d-down-%d" % (clue.num, across.row - clue.row + 1)] = "%d-across-%d" % (across.num, clue.col - across.col + 1)
+
+        for k in sorted(this.across_intersections.keys()):
+            this.intersections.append((k,this.across_intersections[k]))
+
+        for k in sorted(this.down_intersections.keys()):
+            this.intersections.append((k,this.down_intersections[k]))
+
         return this
 
     @classmethod
@@ -506,6 +499,40 @@ class Puzzle:
                     this.formatstr += "%dx" % sq.val
             this.formatstr += "e"
         return this
+
+    def clue_from_str(self, n1, ad):
+        clue = None
+        if ad == "across":
+            for cl in self.across:
+                if int(n1) == cl.num:
+                    clue = cl
+                    break
+        else:
+            for cl in self.down:
+                if int(n1) == cl.num:
+                    clue = cl
+                    break
+        return clue
+
+    def clue_xings(self, clue):
+        xing = []
+        for i in range(clue.length):
+            xing.append(None)
+        ad = clue.dir
+        clue_str = "%d-%s" % (clue.num, ad)
+        if ad == 'across':
+            for inter in self.across_intersections.keys():
+                if re.match(clue_str + ".*", inter):
+                    (n1,ad,pos) = self.across_intersections[inter].split('-')
+                    xing_clue = self.clue_from_str(n1, ad)
+                    xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length)
+        else:
+            for inter in self.down_intersections.keys():
+                if re.match(clue_str + ".*", inter):
+                    (n1,ad,pos) = self.down_intersections[inter].split('-')
+                    xing_clue = self.clue_from_str(n1, ad)
+                    xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length)
+        return xing
 
 #    def savePDF(self):
 #        c = canvas.canvas()

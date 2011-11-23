@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
-from xw.views import main_landing, member_request, thanks, suggest_words, print_cw, mobile_find, usegrid, gridedit
+from xw.views import main_landing, member_request, thanks, suggest_words, print_cw, mobile_find, usegrid, gridedit, ranked_words
 from xw.views import download_xpf, from_xpf, doc, newus, newcryptic, download_puz, from_puz, save, retrieve, solve
 
 admin.autodiscover()
@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^member-request/', member_request),
     url(r'^thanks/', thanks),
     url(r'^words/', suggest_words),
+    url(r'^rankedwords/', ranked_words),
     url(r'^mxwf/', mobile_find),
     url(r'^print/', print_cw),
     url(r'^toxpf/', download_xpf),

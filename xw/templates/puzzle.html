@@ -41,7 +41,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<ol>
 {% for dig, let in clue.sq %}	  
 	  <li>
-	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" " value="{{ let }}"/>
+	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" " value="{{ let }}" autocomplete="off"/>
 	  </li>
 {% endfor %}
 	</ol>
@@ -69,7 +69,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
       <input id="save" type="button" value="Save" style="background-color:#ee8888"/>
     </div>
     <div id="buttons-horizontal">
-      <input id="words" type="button" value="Words" />
+      <input id="rankedwords" type="button" value="Words" />
       <input id="clues" type="button" value="Clues" />
       <input id="print" type="button" value="Print" />
       <input id="printall" type="button" value="Print All" />

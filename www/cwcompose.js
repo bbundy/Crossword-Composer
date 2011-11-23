@@ -134,13 +134,16 @@ function init_cw() {
 	return (selection() && selection().toString() != '') || (range() && range().text != '')
 	    }
 
-    function do_save() {
+    function do_save(req_change) {
 	$("#word-suggestions").empty();
 	var form_values = $('form').serialize();
 	var saved_state = form_values.replace(/(\d+)-across-(\d+)=/g, '$1a$2').replace(/(\d+)-down-(\d+)=/g, '$1d$2').replace(/(\d+)-across-input=/g, '$1ai').replace(/(\d+)-down-input=/g, '$1di');
 	$.cookie('crossword', saved_state, { expires: 365 });
 	if (window.XMLHttpRequest) {
 	    req = new XMLHttpRequest();
+	    if (req_change) {
+		req.onreadystatechange = req_change;
+	    }
 	    req.open("POST", "/save/", true);
 	    req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	    req.send(form_values);
@@ -157,11 +160,7 @@ function init_cw() {
 	});    
 
     $('#save').bind('click', function(e) {
-	    do_save();
-	    var form = $(this).closest('form');
-	    form.attr('action','/retrieve/');
-	    form.attr('target','_self');
-	    form.submit();
+	    do_save(saveReqChange);
 	});
     
     $('#clear').bind('click', function(e) {
@@ -191,13 +190,23 @@ function init_cw() {
 	    form.submit();
 	});
 
+    $('#rankedwords').bind('click', function(e) {
+	    $("#word-suggestions").empty();
+	    if (active_words[0]) {
+		active = $(active_words[0]).find('input:first').attr('id');
+		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		var form = $(this).closest('form');
+		loadXMLPost('/rankedwords/', form.serialize());
+	    }
+	});
+
     $('#words').bind('click', function(e) {
 	    var pattern = get_pattern(active_words[0].find('input'));
 	    loadXMLDoc('/words/?pattern=' + pattern);
 	});
 
     $('#print').bind('click', function(e) {
-	    do_save();
+	    do_save(null);
 	    var form = $(this).closest('form');
 	    form.attr('action','/print/');
 	    form.attr('target','_blank');
@@ -205,7 +214,7 @@ function init_cw() {
 	});
 
     $('#printall').bind('click', function(e) {
-	    do_save();
+	    do_save(null);
 	    var form = $(this).closest('form');
 	    $("#buttons-horizontal").append('<input id="printall" name="printall" type="hidden" value="true">');
 	    form.attr('action','/print/');
@@ -222,9 +231,16 @@ function init_cw() {
 	});
 
     $('#doc').bind('click', function(e) {
-	    do_save();
+	    do_save(null);
 	    var form = $(this).closest('form');
 	    form.attr('action','/doc/');
+	    form.attr('target','_blank');
+	    form.submit();
+	});
+
+    $('#gridedit').bind('click', function(e) {
+	    var form = $(this).closest('form');
+	    form.attr('action','/gridedit/');
 	    form.attr('target','_blank');
 	    form.submit();
 	});
@@ -435,6 +451,16 @@ function loadXMLDoc(url)
     }
 }
 
+function loadXMLPost(url, body) 
+{
+    if (window.XMLHttpRequest) {
+        req = new XMLHttpRequest();
+        req.onreadystatechange = processReqChange;
+        req.open("POST", url, true);
+        req.send(body);
+    }
+}
+
 function processReqChange() 
 {
     // only if req shows "complete"
@@ -452,6 +478,22 @@ function processReqChange()
 	    $("#word-suggestions").show();
         } else {
             alert("There was a problem retrieving the XML data:\n" + req.statusText);
+        }
+    }
+}
+
+function saveReqChange()
+{
+    // only if req shows "complete"
+    if (req.readyState == 4) {
+        // only if "OK"
+        if (req.status == 200) {
+	    var form = $(this).closest('form');
+	    form.attr('action','/retrieve/');
+	    form.attr('target','_self');
+	    form.submit();
+        } else {
+            alert("There was a problem saving your puzzle:\n" + req.statusText);
         }
     }
 }
