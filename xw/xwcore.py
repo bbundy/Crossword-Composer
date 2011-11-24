@@ -229,6 +229,10 @@ class Puzzle:
             this.title = post['title']
         if post.has_key('author'):
             this.author = post['author']
+        this.type = 'cryptic'
+        if post.has_key('gridstr'):
+            if post['gridstr'][2:3] == 'u':
+                this.type = 'us'
         this.size = len(rows)
         this.format = []
         this.across = []
@@ -514,6 +518,13 @@ class Puzzle:
                     break
         return clue
 
+    def filled_count(self, clue):
+        count = 0
+        for i in range(clue.length):
+            if not clue.ans[i:i+1] == '?':
+                count += 1
+        return count
+
     def clue_xings(self, clue):
         xing = []
         for i in range(clue.length):
@@ -525,13 +536,19 @@ class Puzzle:
                 if re.match(clue_str + ".*", inter):
                     (n1,ad,pos) = self.across_intersections[inter].split('-')
                     xing_clue = self.clue_from_str(n1, ad)
-                    xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length)
+                    if self.filled_count(clue) > 0:
+                        xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length, xing_clue.ans)
+                    else:
+                        xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length)
         else:
             for inter in self.down_intersections.keys():
                 if re.match(clue_str + ".*", inter):
                     (n1,ad,pos) = self.down_intersections[inter].split('-')
                     xing_clue = self.clue_from_str(n1, ad)
-                    xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length)
+                    if self.filled_count(clue) > 0:
+                        xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length, xing_clue.ans)
+                    else:
+                        xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length)
         return xing
 
 #    def savePDF(self):

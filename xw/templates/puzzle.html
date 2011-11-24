@@ -23,7 +23,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 {% endfor %}
 </script>
 <form id="crossword" method="post"> {% csrf_token %}
-<input id="gridstr" type="hidden" name="gridstr" value = "{{ puzzle.gridstr }}"/>
+<input id="gridstr" type="hidden" name="gridstr" value = "{{ puzzle.dbgridstr }}"/>
 <input id="format" type="hidden" name="format" value ="{{ puzzle.formatstr }}"/>
 
 <table border=5 bordercolor=#333399>
@@ -69,13 +69,11 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
       <input id="save" type="button" value="Save" style="background-color:#ee8888"/>
     </div>
     <div id="buttons-horizontal">
-      <input id="rankedwords" type="button" value="Words" />
-      <input id="clues" type="button" value="Clues" />
+      <input id="rankedwords" type="button" value="Find Words" />
       <input id="print" type="button" value="Print" />
       <input id="printall" type="button" value="Print All" />
       <input id="toxpf" type="button" value="To XPF" />
       <input id="fromxpf" type="button" value="From XPF" />
-      <input id="topuz" type="button" value="To .puz" />
       <input id="frompuz" type="button" value="From .puz" />
       <div id="file-load"></div>
     </td></tr>

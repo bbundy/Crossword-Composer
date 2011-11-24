@@ -84,15 +84,20 @@ with open("/var/www/xw/wl/scores.txt") as sc:
 
 def score(word, xings):
     score = 1.0
-    word = word.replace(" ","")
-    word = word.replace("-","")
-    word = word.replace("'","")
-    word = word.replace(",","")
-    word = word.lower()
     length = len(word)
     for i in range(length):
-        if xings[i][1] <= 11:
-            score = score * float(scores[xings[i][1]][xings[i][0] - 1][word[i:i+1]])
+        if len(xings[i]) == 2:
+            if xings[i][1] <= 11:
+                score = score * float(scores[xings[i][1]][xings[i][0] - 1][word[i:i+1]])
+        else:
+            pattern = xings[i][2][0:xings[i][0] - 1] + word[i:i+1] + xings[i][2][xings[i][0]:] 
+            pattern = pattern.lower().replace('?','\\w[ \\-\',]*') + '.'
+            words = open('/var/www/xw/wl/%d' % xings[i][1])
+            p1 = Popen(["grep", "-c", "^%s$" % pattern], stdin=words, stdout=PIPE)
+            for line in p1.stdout:
+                score = score * (0.1 + float(line.strip()))
+                break;
+            words.close()
     return score
     
 def ranked_words(request):
@@ -111,13 +116,20 @@ def ranked_words(request):
         pattern = pattern.lower().replace('?','\\w[ \\-\',]*') + '.'
         words = open('/var/www/xw/wl/%d' % length)
         p1 = Popen(["grep", "^%s$" % pattern], stdin=words, stdout=PIPE)
+        scores = {}
         for line in p1.stdout:
             display_str = line.strip()
             sort_str = display_str.lower().replace(' ',"").replace("'","").replace("-","").replace(",","")
             word_matches.append((display_str, sort_str))
         words.close()
-        word_matches.sort(lambda x,y: cmp(score(y[1],xings), score(x[1],xings)))
-        resp = '&'.join(x[0] for x in word_matches)
+        if len(word_matches)*length > 1500:
+            resp = 'toomanymatches'
+        else:
+            if not p.type == 'cryptic':
+                for match_item in word_matches:
+                    scores[match_item[1]] = score(match_item[1], xings)
+                word_matches.sort(lambda x,y: cmp(scores[y[1]], scores[x[1]]))
+            resp = '&'.join(x[0] for x in word_matches)
     return HttpResponse(resp)
 
 def main_landing(request):

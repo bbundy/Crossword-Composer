@@ -192,6 +192,7 @@ function init_cw() {
 
     $('#rankedwords').bind('click', function(e) {
 	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").hide();
 	    if (active_words[0]) {
 		active = $(active_words[0]).find('input:first').attr('id');
 		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
@@ -201,6 +202,8 @@ function init_cw() {
 	});
 
     $('#words').bind('click', function(e) {
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").hide();
 	    var pattern = get_pattern(active_words[0].find('input'));
 	    loadXMLDoc('/words/?pattern=' + pattern);
 	});
@@ -469,16 +472,21 @@ function processReqChange()
         if (req.status == 200) {
 	    var words = req.response.split('&');
 	    $("#word-suggestions").empty();
-	    for (i=0; i<words.length; i++) {
-		$("#word-suggestions").append('<input id="iw' + i + '" type=button value="' + words[i] + '"/>');
-		$('#iw' + i).bind('click', function(e) {
-			set_word(active_words[0].find('input'), $(e.target).attr('value'));
-		});
+	    if(words[0] == "toomanymatches") {
+		alert("Too many words match this query. Try working on a part of the puzzle with longer words or more filled squares\n");
+	    } else {
+		for (i=0; i<words.length; i++) {
+		    $("#word-suggestions").append('<input id="iw' + i + '" type=button value="' + words[i] + '"/>');
+		    $('#iw' + i).bind('click', function(e) {
+			    set_word(active_words[0].find('input'), $(e.target).attr('value'));
+			});
+		}
 	    }
 	    $("#word-suggestions").show();
         } else {
             alert("There was a problem retrieving the XML data:\n" + req.statusText);
         }
+	$("#buttons-horizontal").show();
     }
 }
 
