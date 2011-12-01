@@ -233,6 +233,7 @@ class Puzzle:
         if post.has_key('gridstr'):
             if post['gridstr'][2:3] == 'u':
                 this.type = 'us'
+            this.dbgridstr = post['gridstr']
         this.size = len(rows)
         this.format = []
         this.across = []
@@ -349,7 +350,7 @@ class Puzzle:
     @classmethod
     def fromGrid(cls, gridstr):
         this = cls()
-        this.gridstr = gridstr
+        this.dbgridstr = gridstr
         this.size = int(gridstr[0:2])
         if gridstr[2:3] == 'u':
             this.type = "us"
@@ -536,19 +537,13 @@ class Puzzle:
                 if re.match(clue_str + ".*", inter):
                     (n1,ad,pos) = self.across_intersections[inter].split('-')
                     xing_clue = self.clue_from_str(n1, ad)
-                    if self.filled_count(clue) > 0:
-                        xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length, xing_clue.ans)
-                    else:
-                        xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length)
+                    xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length, xing_clue.ans)
         else:
             for inter in self.down_intersections.keys():
                 if re.match(clue_str + ".*", inter):
                     (n1,ad,pos) = self.down_intersections[inter].split('-')
                     xing_clue = self.clue_from_str(n1, ad)
-                    if self.filled_count(clue) > 0:
-                        xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length, xing_clue.ans)
-                    else:
-                        xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length)
+                    xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length, xing_clue.ans)
         return xing
 
 #    def savePDF(self):

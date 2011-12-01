@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from django import forms
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_protect
+from django.utils.encoding import smart_unicode, smart_str
 from django.template import RequestContext
 from subprocess import Popen, PIPE
 from xwcore import Puzzle
@@ -16,6 +17,7 @@ from django.db.models import Q
 import logging
 import urllib
 import re
+import patterns
 
 class ContactForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
@@ -48,15 +50,12 @@ def thanks(request):
 def suggest_words(request):
     logger = logging.getLogger('xw.access')
     logger.info(" words  request from %s for %s" % (request.META['REMOTE_ADDR'], request.GET["pattern"]));
-    pattern = request.GET["pattern"]
-    length = len(pattern)
-    pattern = pattern.replace('0','\\w[ \\-\',]*') + '.'
-    words = open('/var/www/xw/wl/%d' % length)
-    p1 = Popen(["grep", "^%s$" % pattern], stdin=words, stdout=PIPE)
-    lines = 0
+    pat = request.GET["pattern"]
+    length = len(pat)
     resp = ''
-    for line in p1.stdout:
-        resp = resp + line.strip() + "&"
+    pat = pat.replace('0','.')
+    for wd in patterns.words(pat):
+        resp = resp + wd + "&"
         if lines > 10:
             break
 
@@ -66,38 +65,13 @@ def suggest_words(request):
 
 alph = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
-scores = [None,None,None]
-for length in range(3,11):
-    scores.append([])
-    for pos in range(length):
-        scores[length].append({})
-        for let in alph:
-            scores[length][pos][let] = 0
-
-with open("/var/www/xw/wl/scores.txt") as sc:
-    for line in sc:
-        (length,pos,let,score) = line.split(',')
-        length = int(length)
-        pos = int(pos)
-        score = int(score)
-        scores[length][pos][let] = score
-
 def score(word, xings):
     score = 1.0
     length = len(word)
     for i in range(length):
-        if len(xings[i]) == 2:
-            if xings[i][1] <= 11:
-                score = score * float(scores[xings[i][1]][xings[i][0] - 1][word[i:i+1]])
-        else:
-            pattern = xings[i][2][0:xings[i][0] - 1] + word[i:i+1] + xings[i][2][xings[i][0]:] 
-            pattern = pattern.lower().replace('?','\\w[ \\-\',]*') + '.'
-            words = open('/var/www/xw/wl/%d' % xings[i][1])
-            p1 = Popen(["grep", "-c", "^%s$" % pattern], stdin=words, stdout=PIPE)
-            for line in p1.stdout:
-                score = score * (0.1 + float(line.strip()))
-                break;
-            words.close()
+        pattern = xings[i][2][0:xings[i][0] - 1] + word[i:i+1] + xings[i][2][xings[i][0]:] 
+        pattern = pattern.lower().replace('?','.')
+        score = score * patterns.patcount(pattern)
     return score
     
 def ranked_words(request):
@@ -111,25 +85,17 @@ def ranked_words(request):
     if active_clue:
         word_matches = []
         xings = p.clue_xings(active_clue)
-        pattern = active_clue.ans
-        length = len(pattern)
-        pattern = pattern.lower().replace('?','\\w[ \\-\',]*') + '.'
-        words = open('/var/www/xw/wl/%d' % length)
-        p1 = Popen(["grep", "^%s$" % pattern], stdin=words, stdout=PIPE)
+        pat = active_clue.ans
+        length = len(pat)
+        pat = pat.lower().replace('?','.')
         scores = {}
-        for line in p1.stdout:
-            display_str = line.strip()
-            sort_str = display_str.lower().replace(' ',"").replace("'","").replace("-","").replace(",","")
-            word_matches.append((display_str, sort_str))
-        words.close()
-        if len(word_matches)*length > 1500:
-            resp = 'toomanymatches'
-        else:
-            if not p.type == 'cryptic':
-                for match_item in word_matches:
-                    scores[match_item[1]] = score(match_item[1], xings)
-                word_matches.sort(lambda x,y: cmp(scores[y[1]], scores[x[1]]))
-            resp = '&'.join(x[0] for x in word_matches)
+        for wd in patterns.words(pat):
+            word_matches.append((patterns.wds[length-3][wd], wd))
+        if not p.type == 'cryptic':
+            for match_item in word_matches:
+                scores[match_item[1]] = score(match_item[1], xings)
+            word_matches.sort(lambda x,y: cmp(scores[y[1]], scores[x[1]]))
+        resp = '&'.join(x[0] for x in word_matches)
     return HttpResponse(resp)
 
 def main_landing(request):
@@ -156,7 +122,7 @@ def main_landing(request):
                 table = SolvePuzzles
         puz = table.objects.filter(author_title=atname)
         if len(puz) > 0:
-            p = Puzzle.fromXML(puz[0].contents)
+            p = Puzzle.fromXML(smart_str(puz[0].contents))
             if p.size > 18:
                 t = get_template('puz21.html')
         if request.GET.has_key('print'):
