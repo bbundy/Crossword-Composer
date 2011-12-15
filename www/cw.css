@@ -79,6 +79,14 @@ body
 	padding-left: 10px;
 	float: left;
 	width: 135px;
+	font-size: 12px;
+	font-family: arial, sans-serif;
+}
+
+.crossword #word-suggestions
+{
+	font-size: 12px;
+	font-family: arial, sans-serif;
 }
 
 .crossword #buttons-horizontal

@@ -93,7 +93,7 @@ def words(pat):
     return list
 
 def patcount(pat):
-    count = 0.00001
+    count = 0
     patindex = len(pat) - 4
     if patindex >= 0 and patindex < 6:
         try:

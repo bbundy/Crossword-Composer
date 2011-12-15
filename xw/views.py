@@ -17,7 +17,15 @@ from django.db.models import Q
 import logging
 import urllib
 import re
-import patterns
+# from wordnik import Wordnik
+import sys
+sys.path.append("/usr/local/src/wordnik")
+sys.path.append("/usr/local/src/wordnik/api")
+from APIClient import APIClient
+from WordAPI import WordAPI
+from WordsAPI import WordsAPI
+import model
+import time
 
 class ContactForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
@@ -47,36 +55,15 @@ def thanks(request):
     html = t.render(Context({}))
     return HttpResponse(html)
 
-def suggest_words(request):
-    logger = logging.getLogger('xw.access')
-    logger.info(" words  request from %s for %s" % (request.META['REMOTE_ADDR'], request.GET["pattern"]));
-    pat = request.GET["pattern"]
-    length = len(pat)
-    resp = ''
-    pat = pat.replace('0','.')
-    for wd in patterns.words(pat):
-        resp = resp + wd + "&"
-        if lines > 10:
-            break
-
-    resp = resp.rstrip('&')
-    words.close()
-    return HttpResponse(resp)
-
-alph = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-
-def score(word, xings):
-    score = 1.0
-    length = len(word)
-    for i in range(length):
-        pattern = xings[i][2][0:xings[i][0] - 1] + word[i:i+1] + xings[i][2][xings[i][0]:] 
-        pattern = pattern.lower().replace('?','.')
-        score = score * patterns.patcount(pattern)
-    return score
     
+apiKey="2e17a1567a9f6bc3792010e8e16057aa32d96f10e55d58b52"
+# wdnk = Wordnik(api_key=apiKey, username="bbundy", password="rbb2wdnk")
+client = APIClient(apiKey, 'http://api.wordnik.com/v4')
+wdnk_words = WordsAPI(client)
+wdnk_word = WordAPI(client)
+
 def ranked_words(request):
-    logger = logging.getLogger('xw.access')
-    logger.info(" ranked words  request from %s for %s" % (request.META['REMOTE_ADDR'], request.POST["active"]));
+    start_time = time.time()
     resp = ''
     clue = request.POST['active'] 
     (n1,ad,pos) = clue.split('-')
@@ -87,15 +74,40 @@ def ranked_words(request):
         xings = p.clue_xings(active_clue)
         pat = active_clue.ans
         length = len(pat)
-        pat = pat.lower().replace('?','.')
+        pat = pat.lower()
         scores = {}
-        for wd in patterns.words(pat):
-            word_matches.append((patterns.wds[length-3][wd], wd))
-        if not p.type == 'cryptic':
-            for match_item in word_matches:
-                scores[match_item[1]] = score(match_item[1], xings)
-            word_matches.sort(lambda x,y: cmp(scores[y[1]], scores[x[1]]))
-        resp = '&'.join(x[0] for x in word_matches)
+        wi = model.WordsSearchInput.WordsSearchInput()
+        wi.query = pat
+        wi.caseSensitive = False
+        wi.limit = 100
+        wi.minLength = length
+        wi.maxLength = length
+        res = wdnk_words.searchWords(wi)
+        logger = logging.getLogger('xw.access')
+        logger.info(" ranked words  request from %s for %s (%s) took %f seconds" % (request.META['REMOTE_ADDR'], request.POST["active"], pat, time.time() - start_time));
+        if res:
+            for r in res:
+                word_matches.append((r.wordstring, r.wordstring))
+    resp = '&'.join(x[0] for x in word_matches)
+    return HttpResponse(resp)
+
+def definition(request):
+    resp = ''
+    clue = request.POST['active'] 
+    (n1,ad,pos) = clue.split('-')
+    p = Puzzle.fromPOST(request.POST)
+    active_clue = p.clue_from_str(n1, ad)
+    if active_clue:
+        wd = model.WordDefinitionsInput.WordDefinitionsInput()
+        wd.word = active_clue.ans.lower()
+        res = wdnk_word.getDefinitions(wd)
+        if res:
+            for r in res:
+                resp += "%s<br>%s<br>--------<br>" % (r.text, r.attributionText)
+    logger = logging.getLogger('xw.access')
+    logger.info(" definition request from %s for %s: %s" % (request.META['REMOTE_ADDR'], request.POST["active"], active_clue.ans));
+    if resp == '':
+        resp = "No definitions found for '%s'" % wd.word
     return HttpResponse(resp)
 
 def main_landing(request):

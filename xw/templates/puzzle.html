@@ -6,12 +6,12 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <div class="crossword">
 
 <style>            
-  @import "http://bundy.org/xw/cw.css";
+  @import "http://67.207.128.158/xw/cw.css";
 </style>
   
-<script src="http://bundy.org/xw/jquery.hotkeys-0.7.9.js"></script>
-<script src="http://bundy.org/xw/jquery.cookie.js"></script>
-<script src="http://bundy.org/xw/cwcompose.js"></script>
+<script src="http://67.207.128.158/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://67.207.128.158/xw/jquery.cookie.js"></script>
+<script src="http://67.207.128.158/xw/cwcompose.js"></script>
 <script>		
   var intersections = {};
   var words_for_clue = {};
@@ -30,7 +30,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   <tr><td valign=top>
   <table noborder><tr><td>
   <div id="grid" style="width: 525px; height: 525px;">
-    <img src="http://bundy.org/xw/gif/print-background.gif" alt="" id="print-background"  style="width: 525px; height: 525px;" />
+    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: 525px; height: 525px;" />
 {% for clue in puzzle.clue %}
 
     <span style="left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir}}"> {{ clue.num }}</span>
@@ -39,9 +39,9 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
       <fieldset>
 	<legend>{{ clue.num }} {{ clue.dir }}</legend>
 	<ol>
-{% for dig, let in clue.sq %}	  
+{% for dig, let, style in clue.sq %}	  
 	  <li>
-	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" " value="{{ let }}" autocomplete="off"/>
+	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" " value="{{ let }}" autocomplete="off" {{ style }} />
 	  </li>
 {% endfor %}
 	</ol>
@@ -70,6 +70,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     </div>
     <div id="buttons-horizontal">
       <input id="rankedwords" type="button" value="Find Words" />
+      <input id="definition" type="button" value="Definition" />
       <input id="print" type="button" value="Print" />
       <input id="printall" type="button" value="Print All" />
       <input id="toxpf" type="button" value="To XPF" />

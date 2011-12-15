@@ -1,17 +1,16 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
-from xw.views import main_landing, member_request, thanks, suggest_words, print_cw, mobile_find, usegrid, gridedit, ranked_words
-from xw.views import download_xpf, from_xpf, doc, newus, newcryptic, download_puz, from_puz, save, retrieve, solve
-
+from xwdevel.views import main_landing, member_request, thanks, print_cw, mobile_find, usegrid, ranked_words, definition
+from xwdevel.views import download_xpf, from_xpf, doc, newus, newcryptic, download_puz, from_puz, save, retrieve, solve, gridedit
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'xw.views.main_landing', name='home'),
+    url(r'^$', 'xwdevel.views.main_landing', name='home'),
     url(r'^/', main_landing),
     url(r'^member-request/', member_request),
     url(r'^thanks/', thanks),
-    url(r'^words/', suggest_words),
     url(r'^rankedwords/', ranked_words),
+    url(r'^definition/', definition),
     url(r'^mxwf/', mobile_find),
     url(r'^print/', print_cw),
     url(r'^toxpf/', download_xpf),
@@ -21,11 +20,11 @@ urlpatterns = patterns('',
     url(r'^doc/', doc),
     url(r'^save/', save),
     url(r'^retrieve/', retrieve),
+    url(r'^newcryptic/', newcryptic),
     url(r'^newus/', newus),
     url(r'^solve/', solve),
     url(r'^gridedit/', gridedit),
     url(r'^usegrid/', usegrid),
-    url(r'^newcryptic/', newcryptic),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -52,6 +52,7 @@ function init_cw() {
 		$(e.target).val(String.fromCharCode(key).toLowerCase());
 		copyChangeToIntersectingLetter($(e.target));
 		focusOnNextInput($(e.target));
+		adjust_find_define()
 	    }
 	});
 
@@ -90,7 +91,8 @@ function init_cw() {
     inputs.bind('keyup', 'backspace', function(e) {
 	    copyChangeToIntersectingLetter($(e.target));
 	    focusOnPreviousInput($(e.target));
-	});
+	    adjust_find_define();
+        });
     inputs.bind('keyup', 'del', function(e) {
 	    copyChangeToIntersectingLetter($(e.target));
 	    return false;
@@ -131,8 +133,19 @@ function init_cw() {
 	});
     
     function text_is_highlighted() {
-	return (selection() && selection().toString() != '') || (range() && range().text != '')
-	    }
+	return (selection() && selection().toString() != '') || (range() && range().text != '');
+    }
+
+    function adjust_find_define() {
+	var pattern = get_pattern(active_words[0].find('input'));
+	if (pattern.indexOf("0") == -1) {
+	    $('#definition').show();
+	    $('#rankedwords').hide();
+	} else {
+	    $('#definition').hide();
+	    $('#rankedwords').show();
+	}
+    }
 
     function do_save(req_change) {
 	$("#word-suggestions").empty();
@@ -160,7 +173,10 @@ function init_cw() {
 	});    
 
     $('#save').bind('click', function(e) {
+	    $("#buttons-horizontal").hide();
 	    do_save(saveReqChange);
+	    $("#word-suggestions").append("Saving puzzle...");
+	    $("#word-suggestions").show();
 	});
     
     $('#clear').bind('click', function(e) {
@@ -196,8 +212,23 @@ function init_cw() {
 	    if (active_words[0]) {
 		active = $(active_words[0]).find('input:first').attr('id');
 		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		$("#word-suggestions").append("Looking for matches...");
+		$("#word-suggestions").show();
 		var form = $(this).closest('form');
-		loadXMLPost('/rankedwords/', form.serialize());
+		loadXMLPost('/rankedwords/', form.serialize(), processReqChange);
+	    }
+	});
+
+    $('#definition').bind('click', function(e) {
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").hide();
+	    if (active_words[0]) {
+		active = $(active_words[0]).find('input:first').attr('id');
+		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		$("#word-suggestions").append("Looking for definitions...");
+		$("#word-suggestions").show();
+		var form = $(this).closest('form');
+		loadXMLPost('/definition/', form.serialize(), defReqChange);
 	    }
 	});
 
@@ -282,6 +313,8 @@ function init_cw() {
 
     $('#active-clue-edit:not(.no-number)').hide();    
     $('#word-suggestions').hide();    
+    $('#definition').hide();
+    $('#rankedwords').hide();
 
     $('#active-clue-edit:not(.no-number)').bind('keyup', function(e) {
 	    if (e.keyCode === 13) {
@@ -392,6 +425,14 @@ function activate_word(letter) {
 		clue_for(this).addClass('active');
 	    }
 	});
+    var pattern = get_pattern(active_words[0].find('input'));
+    if (pattern.indexOf("0") == -1) {
+	$('#definition').show();
+	$('#rankedwords').hide();
+    } else {
+	$('#definition').hide();
+	$('#rankedwords').show();
+    }
     $('#active-clue:not(.no-number)').append(clue_for(active_words[0]).contents().clone());
     $('#active-clue-edit:not(.no-number)').find('input:first').attr('value', clue_for(active_words[0]).text());
     $('#active-clue-edit:not(.no-number)').show();    
@@ -418,6 +459,8 @@ function deactivate_word() {
     $('#active-clue-edit:not(.no-number)').hide();    
     $("#word-suggestions").empty();
     $("#word-suggestions").hide();
+    $('#definition').hide();
+    $('#rankedwords').hide();
 }
 
 function get_pattern(inputs) {
@@ -454,11 +497,11 @@ function loadXMLDoc(url)
     }
 }
 
-function loadXMLPost(url, body) 
+function loadXMLPost(url, body, reqChange) 
 {
     if (window.XMLHttpRequest) {
         req = new XMLHttpRequest();
-        req.onreadystatechange = processReqChange;
+        req.onreadystatechange = reqChange;
         req.open("POST", url, true);
         req.send(body);
     }
@@ -479,9 +522,27 @@ function processReqChange()
 		    $("#word-suggestions").append('<input id="iw' + i + '" type=button value="' + words[i] + '"/>');
 		    $('#iw' + i).bind('click', function(e) {
 			    set_word(active_words[0].find('input'), $(e.target).attr('value'));
+			$('#definition').show();
+			$('#rankedwords').hide();
 			});
 		}
 	    }
+	    $("#word-suggestions").show();
+        } else {
+            alert("There was a problem retrieving the XML data:\n" + req.statusText);
+        }
+	$("#buttons-horizontal").show();
+    }
+}
+
+function defReqChange() 
+{
+    // only if req shows "complete"
+    if (req.readyState == 4) {
+        // only if "OK"
+        if (req.status == 200) {
+	    $("#word-suggestions").empty();
+	    $("#word-suggestions").append(req.response);
 	    $("#word-suggestions").show();
         } else {
             alert("There was a problem retrieving the XML data:\n" + req.statusText);
@@ -496,12 +557,12 @@ function saveReqChange()
     if (req.readyState == 4) {
         // only if "OK"
         if (req.status == 200) {
-	    var form = $(this).closest('form');
-	    form.attr('action','/retrieve/');
-	    form.attr('target','_self');
-	    form.submit();
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").show();
         } else {
             alert("There was a problem saving your puzzle:\n" + req.statusText);
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").show();
         }
     }
 }

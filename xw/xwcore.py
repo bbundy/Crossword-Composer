@@ -9,7 +9,7 @@ from django.utils.encoding import smart_unicode
 #text.size(-4)
 
 class Clue:
-    def __init__(self, attrs, data, grid_only = False):
+    def __init__(self, attrs, data, rebus, grid_only = False):
         self.row = int(attrs["Row"])
         self.col = int(attrs["Col"])
         self.num = int(attrs["Num"])
@@ -23,11 +23,30 @@ class Clue:
             self.clue = data
         self.length = len(self.ans)
         self.sq = []
+        length = self.length
         for i in range(self.length):
-            if self.ans[i:i+1] == '?' or self.ans[i:i+1] == ' ' or grid_only:
-                self.sq.append((i+1, ""))
-            else:
-                self.sq.append((i+1, self.ans[i:i+1].lower()))
+            rb = None
+            if i > length:
+                break
+            if self.dir == 'across':
+                if rebus and rebus.has_key("%d-%d" % (self.row, self.col + i)):
+                    rb = rebus["%d-%d" % (self.row, self.col + i)]
+                    self.ans = self.ans.replace(rb.data, rb.short)
+                    self.sq.append((i+1, rb.data.lower(), 'style=font-size:0.7em'))
+                    length -= len(rb.data)
+                    continue
+            if self.dir == 'down':
+                if rebus and rebus.has_key("%d-%d" % (self.row + i, self.col)):
+                    rb = rebus["%d-%d" % (self.row + i, self.col)]
+                    self.ans = self.ans.replace(rb.data, rb.short)
+                    self.sq.append((i+1, rb.data.lower(), 'style=font-size:0.7em'))
+                    length -= len(rb.data)
+                    continue
+            if rb == None:
+                if self.ans[i:i+1] == '?' or self.ans[i:i+1] == ' ' or grid_only:
+                    self.sq.append((i+1, "", ""))
+                else:
+                    self.sq.append((i+1, self.ans[i:i+1].lower(), ""))
         self.cr = 11 + 35 * (int(self.row) - 1)
         self.cc = 11 + 35 * (int(self.col) - 1)
         self.is_across = (self.dir == "across")
@@ -59,6 +78,13 @@ class Square:
     def setLetter(self,val):
         self.isletter = True
         self.letter = val[0:1].lower()
+
+class Rebus:
+    def __init__(self, attrs, data):
+        self.row = int(attrs["Row"])
+        self.col = int(attrs["Col"])
+        self.short = attrs["Short"]
+        self.data = data
 
 # <Puzzles Version="1.0">
 #   <Puzzle>
@@ -93,7 +119,10 @@ class Puzzle:
         if self.element == "Row":
             self.row.append(self.data)
         if self.element == "Clue":
-            self.clue.append(Clue(self.attrs, self.data, self.grid_only))
+            self.clue.append(Clue(self.attrs, self.data, self.rebus, self.grid_only))
+            self.attrs = {}
+        if self.element == "Rebus":
+            self.rebus["%s-%s" % (self.attrs["Row"], self.attrs["Col"])] = Rebus(self.attrs, self.data)
             self.attrs = {}
         if self.element == "Title":
             self.title = self.data
@@ -125,6 +154,7 @@ class Puzzle:
         this.element = ""
         this.row = []
         this.clue = []
+        this.rebus = {}
         this.grid_only = grid_only
         p = xml.parsers.expat.ParserCreate(encoding="utf-8")
         p.StartElementHandler = this.start_element
@@ -238,6 +268,7 @@ class Puzzle:
         this.format = []
         this.across = []
         this.down = []
+        this.rebus={}
         this.intersections = []
         this.down_intersections = {}
         this.across_intersections = {}
@@ -268,13 +299,13 @@ class Puzzle:
                                 cl = post["%s-across-input" % c]
                                 dir = "across"
                                 attrs["Dir"] = dir
-                                clue = Clue(attrs, cl)
+                                clue = Clue(attrs, cl, None)
                                 this.across.append(clue)
                             if post.has_key("%s-down-input" % c):
                                 cl = post["%s-down-input" % c]
                                 dir = "down"
                                 attrs["Dir"] = dir
-                                clue = Clue(attrs, cl)
+                                clue = Clue(attrs, cl, None)
                                 this.down.append(clue)
                     cnum += 1
             rnum += 1
@@ -454,8 +485,8 @@ class Puzzle:
                             attrs["Col"] = j
                             attrs["Ans"] = cl
                             attrs["Dir"] = "across"
-                            this.across.append(Clue(attrs,""))
-                            this.clue.append(Clue(attrs,""))
+                            this.across.append(Clue(attrs,"", None))
+                            this.clue.append(Clue(attrs,"", None))
                             this.format[i-1][j-1].setVal(clue_num)
 
                     if i == 1 or this.row[i-2][j-1:j] == '.':  # beginning of vertical clue
@@ -471,8 +502,8 @@ class Puzzle:
                             attrs["Col"] = j
                             attrs["Ans"] = cl
                             attrs["Dir"] = "down"
-                            this.down.append(Clue(attrs,""))
-                            this.clue.append(Clue(attrs,""))
+                            this.down.append(Clue(attrs,"", None))
+                            this.clue.append(Clue(attrs,"", None))
                             this.format[i-1][j-1].setVal(clue_num)
                 if this.format[i-1][j-1].num:
                     clue_num += 1
