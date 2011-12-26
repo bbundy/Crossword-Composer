@@ -17,7 +17,7 @@ from django.db.models import Q
 import logging
 import urllib
 import re
-# from wordnik import Wordnik
+from wordnik import Wordnik
 import sys
 sys.path.append("/usr/local/src/wordnik")
 sys.path.append("/usr/local/src/wordnik/api")
@@ -57,10 +57,10 @@ def thanks(request):
 
     
 apiKey="2e17a1567a9f6bc3792010e8e16057aa32d96f10e55d58b52"
-# wdnk = Wordnik(api_key=apiKey, username="bbundy", password="rbb2wdnk")
-client = APIClient(apiKey, 'http://api.wordnik.com/v4')
-wdnk_words = WordsAPI(client)
-wdnk_word = WordAPI(client)
+wdnk_oldclient = Wordnik(api_key=apiKey, username="bbundy", password="rbb2wdnk")
+wdnk_client = APIClient(apiKey, 'http://api.wordnik.com/v4')
+wdnk_words = WordsAPI(wdnk_client)
+wdnk_word = WordAPI(wdnk_client)
 
 def ranked_words(request):
     start_time = time.time()
@@ -79,7 +79,7 @@ def ranked_words(request):
         wi = model.WordsSearchInput.WordsSearchInput()
         wi.query = pat
         wi.caseSensitive = False
-        wi.limit = 100
+        wi.limit = 300
         wi.minLength = length
         wi.maxLength = length
         res = wdnk_words.searchWords(wi)
@@ -91,6 +91,8 @@ def ranked_words(request):
     resp = '&'.join(x[0] for x in word_matches)
     return HttpResponse(resp)
 
+swagger = True
+
 def definition(request):
     resp = ''
     clue = request.POST['active'] 
@@ -98,16 +100,68 @@ def definition(request):
     p = Puzzle.fromPOST(request.POST)
     active_clue = p.clue_from_str(n1, ad)
     if active_clue:
-        wd = model.WordDefinitionsInput.WordDefinitionsInput()
-        wd.word = active_clue.ans.lower()
-        res = wdnk_word.getDefinitions(wd)
-        if res:
-            for r in res:
-                resp += "%s<br>%s<br>--------<br>" % (r.text, r.attributionText)
+        if swagger:
+            wd = model.WordDefinitionsInput.WordDefinitionsInput()
+            wd.word = active_clue.ans.lower()
+            word = wd.word
+            wd.sourceDictionaries = "all"
+            wd.useCanonical = True
+            wd.includeRelated = True
+            res = wdnk_word.getDefinitions(wd)
+            if res:
+                for r in res:
+                    resp += "<b>%s</b> <i>(%s)</i> - %s<br><i> - %s</i><br>--------<br>" % (r.word, r.partOfSpeech, r.text, r.attributionText)
+        else:
+            word = active_clue.ans.lower()
+            res = wdnk_oldclient.word_get_definitions(word, useCanonical=True)
+            if res and res.has_key("definitions"):
+                for r in res["definitions"]:
+                    resp += "<b>%s</b> - %s<br><i> - %s</i><br>--------<br>" % (word, r['text'], r['attributionText'])
     logger = logging.getLogger('xw.access')
     logger.info(" definition request from %s for %s: %s" % (request.META['REMOTE_ADDR'], request.POST["active"], active_clue.ans));
     if resp == '':
-        resp = "No definitions found for '%s'" % wd.word
+        resp = "No definitions found for '%s'" % word
+    return HttpResponse(resp)
+
+def examples(request):
+    resp = ''
+    clue = request.POST['active'] 
+    (n1,ad,pos) = clue.split('-')
+    p = Puzzle.fromPOST(request.POST)
+    active_clue = p.clue_from_str(n1, ad)
+    if active_clue:
+        if swagger:
+            wd = model.WordExamplesInput.WordExamplesInput()
+            wd.word = active_clue.ans.lower()
+            word = wd.word
+            wd.useCanonical = True
+            wd.limit = 20
+            res = wdnk_word.getExamples(wd)
+            if res and res.examples:
+                for r in res.examples:
+                    if not hasattr(r,"year") or r.year == None:
+                        r.year = ""
+                    text = r.text.replace(word,"<font color=red>%s</font>" % word)
+                    if r.url:
+                        url = "<a href='%s' target=_blank>%s</a>" % (r.url, r.title)
+                    else:
+                        url = r.title
+                    resp += "%s<br>%s - %s<br>--------<br>" % (text, r.year, url)
+        else:
+            word = active_clue.ans.lower()
+            res = wdnk_oldclient.word_get_examples(word, useCanonical=True)
+            if res and res.has_key("examples"):
+                for r in res["examples"]:
+                    text = r['text'].replace(word,"<font color=red>%s</font>" % word)
+                    if r.has_key('year'):
+                        year = r["year"]
+                    else:
+                        year = ""
+                    resp += "%s<br>%s - <a href='%s' target=_blank>%s</a><br>--------<br>" % (text, year, r['url'], r['title'])
+    logger = logging.getLogger('xw.access')
+    logger.info(" examples request from %s for %s: %s" % (request.META['REMOTE_ADDR'], request.POST["active"], active_clue.ans));
+    if resp == '':
+        resp = "No examples found for '%s'" % word
     return HttpResponse(resp)
 
 def main_landing(request):
@@ -135,12 +189,12 @@ def main_landing(request):
         puz = table.objects.filter(author_title=atname)
         if len(puz) > 0:
             p = Puzzle.fromXML(smart_str(puz[0].contents))
-            if p.size > 18:
-                t = get_template('puz21.html')
         if request.GET.has_key('print'):
             t = get_template('print.html') 
         if request.GET.has_key('printall'):
             t = get_template('printall.html') 
+        if request.GET.has_key('xpf'):
+            t = get_template('xpf.xml') 
     except:
         pass
 
@@ -150,7 +204,10 @@ def main_landing(request):
     if solver:
         p.solver = solver
     html = t.render(RequestContext(request, {'puzzle': p}))
-    return HttpResponse(html)
+    if request.GET.has_key('xpf'):
+        return HttpResponse(html, content_type='text/xml')
+    else:
+        return HttpResponse(html)
 
 def gridedit(request):
     t = get_template('grid.html')
@@ -167,15 +224,7 @@ def usegrid(request):
     html = t.render(RequestContext(request, {'puzzle': p}))
     return HttpResponse(html)
 
-def print_cw(request):
-    p = Puzzle.fromPOST(request.POST)
-    if request.POST.has_key("printall"):
-        return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',p.author),('title',p.title),('printall','true'))))
-    else:
-        return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',p.author),('title',p.title),('print','true'))))
-
-def save(request):
-    p = Puzzle.fromPOST(request.POST)
+def do_save(p, request):
     t = get_template('xpf.xml')
     html = t.render(RequestContext(request, {'puzzle': p}))
     if p.author != "":
@@ -201,9 +250,27 @@ def save(request):
         puz = puzzles[0]
     puz.contents = html
     puz.save()
+
+def print_cw(request):
+    p = Puzzle.fromPOST(request.POST)
+    do_save(p, request)
     logger = logging.getLogger('xw.access')
-    logger.info(" save request from %s for %s" % (request.META['REMOTE_ADDR'], atname));
-    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',author),('title',title))))
+    logger.info(" print request from %s for '%s' by '%s'" % (request.META['REMOTE_ADDR'], p.title, p.author));
+    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',p.author),('title',p.title),('print','true'))))
+
+def print_cw_all(request):
+    p = Puzzle.fromPOST(request.POST)
+    do_save(p, request)
+    logger = logging.getLogger('xw.access')
+    logger.info(" printall request from %s for '%s' by '%s'" % (request.META['REMOTE_ADDR'], p.title, p.author));
+    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',p.author),('title',p.title),('printall','true'))))
+
+def save(request):
+    p = Puzzle.fromPOST(request.POST)
+    do_save(p, request)
+    logger = logging.getLogger('xw.access')
+    logger.info(" save request from %s for '%s' by '%s'" % (request.META['REMOTE_ADDR'], p.title, p.author));
+    return HttpResponseRedirect('/?%s' % urllib.urlencode((('author',p.author),('title',p.title))))
 
 def retrieve(request):
     author=request.POST["author"]
@@ -226,26 +293,29 @@ def solve(request):
     
 def download_xpf(request):
     p = Puzzle.fromPOST(request.POST)
-    t = get_template('xpf.xml')
-    html = t.render(RequestContext(request, {'puzzle': p}))
-    return HttpResponse(html, content_type='text/xml')
+    do_save(p, request)
+    logger = logging.getLogger('xw.access')
+    logger.info(" xpf request from %s for '%s' by '%s'" % (request.META['REMOTE_ADDR'], p.title, p.author));
+    return HttpResponseRedirect('/?%s&xpf=true' % urllib.urlencode((('author',p.author),('title',p.title))))
 
 def from_xpf(request):
     xml_handle = urllib.urlopen(request.POST["xpfurl"])
     xmldata = xml_handle.read()
     p = Puzzle.fromXML(xmldata)
-    if p.size < 18:
-        t = get_template('puzzle.html')
-    else:
-        t = get_template('puz21.html')
+    t = get_template('puzzle.html')
     html = t.render(RequestContext(request, {'puzzle': p}))
     return HttpResponse(html)
 
 def download_puz(request):
-    t = get_template('puz.bin')
     p = Puzzle.fromPOST(request.POST)
-    html = t.render(RequestContext(request, {'puzzle': p}))
-    return HttpResponse(html, content_type='text/file')
+    do_save(p, request)
+    logger = logging.getLogger('xw.access')
+    logger.info(" puz request from %s for '%s' by '%s'" % (request.META['REMOTE_ADDR'], p.title, p.author));
+    pz = p.toPUZ()
+    s = pz.tostring()
+    response = HttpResponse(s, content_type='application/x-crossword')
+    response['Content-Disposition'] = 'attachment; filename="%s.puz"' % p.title.replace(" ", "_")
+    return response
 
 def from_puz(request):
     t = get_template('puzzle.html')

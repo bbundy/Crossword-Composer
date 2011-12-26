@@ -140,9 +140,11 @@ function init_cw() {
 	var pattern = get_pattern(active_words[0].find('input'));
 	if (pattern.indexOf("0") == -1) {
 	    $('#definition').show();
+	    $('#examples').show();
 	    $('#rankedwords').hide();
 	} else {
 	    $('#definition').hide();
+	    $('#examples').hide();
 	    $('#rankedwords').show();
 	}
     }
@@ -173,15 +175,30 @@ function init_cw() {
 	});    
 
     $('#save').bind('click', function(e) {
-	    $("#buttons-horizontal").hide();
 	    do_save(saveReqChange);
-	    $("#word-suggestions").append("Saving puzzle...");
-	    $("#word-suggestions").show();
+	    $("#save-progress").show();
 	});
     
     $('#clear').bind('click', function(e) {
 	    deleteAllCookies();
 	    window.location='/';
+	});
+    
+    $('#clearwd').bind('click', function(e) {
+	$("#word-intro").hide();
+	inputs = active_words[0].find('input');
+	$.each(inputs, function() {
+	    var letter = $(this);
+	    var intersecting_letter = getIntersectingLetter(letter);
+	    var intersecting_word = words_for_letter(intersecting_letter);
+	    var pattern = get_pattern(intersecting_word[0].find('input'));
+	    if (pattern.indexOf("0") != -1) {
+		letter.attr('value', '');
+		intersecting_letter.attr('value', '');
+	    }
+	});
+	inputs[0].focus();
+	adjust_find_define();
 	});
     
     $('#retrieve').bind('click', function(e) {
@@ -194,7 +211,7 @@ function init_cw() {
     $('#solve').bind('click', function(e) {
 	    var form = $(this).closest('form');
 	    form.attr('action','/solve/');
-	    form.attr('target','_self');
+	    form.attr('target','_blank');
 	    form.submit();
 	});
 
@@ -207,6 +224,7 @@ function init_cw() {
 	});
 
     $('#rankedwords').bind('click', function(e) {
+	    $("#word-intro").hide();
 	    $("#word-suggestions").empty();
 	    $("#buttons-horizontal").hide();
 	    if (active_words[0]) {
@@ -220,6 +238,7 @@ function init_cw() {
 	});
 
     $('#definition').bind('click', function(e) {
+	    $("#word-intro").hide();
 	    $("#word-suggestions").empty();
 	    $("#buttons-horizontal").hide();
 	    if (active_words[0]) {
@@ -232,6 +251,20 @@ function init_cw() {
 	    }
 	});
 
+    $('#examples').bind('click', function(e) {
+	    $("#word-intro").hide();
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").hide();
+	    if (active_words[0]) {
+		active = $(active_words[0]).find('input:first').attr('id');
+		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		$("#word-suggestions").append("Looking for examples...");
+		$("#word-suggestions").show();
+		var form = $(this).closest('form');
+		loadXMLPost('/examples/', form.serialize(), defReqChange);
+	    }
+	});
+
     $('#words').bind('click', function(e) {
 	    $("#word-suggestions").empty();
 	    $("#buttons-horizontal").hide();
@@ -240,7 +273,6 @@ function init_cw() {
 	});
 
     $('#print').bind('click', function(e) {
-	    do_save(null);
 	    var form = $(this).closest('form');
 	    form.attr('action','/print/');
 	    form.attr('target','_blank');
@@ -248,27 +280,25 @@ function init_cw() {
 	});
 
     $('#printall').bind('click', function(e) {
-	    do_save(null);
+	    do_save(saveReqChange);
+	    $("#save-progress").show();
 	    var form = $(this).closest('form');
-	    $("#buttons-horizontal").append('<input id="printall" name="printall" type="hidden" value="true">');
-	    form.attr('action','/print/');
+	    form.attr('action','/printall/');
 	    form.attr('target','_blank');
 	    form.submit();
 	});
 
     $('#toxpf').bind('click', function(e) {
 	    var form = $(this).closest('form');
-	    $("#word-suggestions").empty();
 	    form.attr('action','/toxpf/');
 	    form.attr('target','_blank');
 	    form.submit();
 	});
 
-    $('#doc').bind('click', function(e) {
-	    do_save(null);
+    $('#topuz').bind('click', function(e) {
 	    var form = $(this).closest('form');
-	    form.attr('action','/doc/');
-	    form.attr('target','_blank');
+	    form.attr('action','/topuz/');
+	    form.attr('target','_self');
 	    form.submit();
 	});
 
@@ -277,6 +307,132 @@ function init_cw() {
 	    form.attr('action','/gridedit/');
 	    form.attr('target','_blank');
 	    form.submit();
+	});
+
+    $('#file-tab').bind('click', function(e) {
+	setActionTab('file');
+	});
+
+    $('#word-tab').bind('click', function(e) {
+	setActionTab('word');
+	});
+
+    $('#clue-tab').bind('click', function(e) {
+	setActionTab('clue');
+	});
+
+    $('#wl-tab').bind('click', function(e) {
+	setActionTab('wl');
+	});
+
+    $('#stat-tab').bind('click', function(e) {
+	setActionTab('stat');
+	});
+
+    $('#rebus-tab').bind('click', function(e) {
+	setActionTab('rebus');
+	});
+
+    $('#fill-tab').bind('click', function(e) {
+	setActionTab('fill');
+	});
+
+    $('#help-tab').bind('click', function(e) {
+	setActionTab('help');
+	});
+
+    $('#forum-tab').bind('click', function(e) {
+	window.open('http://groups.google.com/group/crosswordcomposer');
+	});
+
+    $('#file-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#word-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#clue-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#wl-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#stat-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#rebus-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#fill-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#help-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#forum-tab').bind('mouseover', function(e) {
+	$(e.target).attr('style', 'background-color: #222288;color: white');
+	});
+
+    $('#file-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#word-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#clue-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#wl-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#stat-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#rebus-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#fill-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#help-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
+    $('#forum-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
 	});
 
     $('#newus').bind('click', function(e) {
@@ -311,10 +467,11 @@ function init_cw() {
 		});
 	});
 
-    $('#active-clue-edit:not(.no-number)').hide();    
     $('#word-suggestions').hide();    
     $('#definition').hide();
+    $('#examples').hide();
     $('#rankedwords').hide();
+    $('#clearwd').hide();
 
     $('#active-clue-edit:not(.no-number)').bind('keyup', function(e) {
 	    if (e.keyCode === 13) {
@@ -325,6 +482,32 @@ function init_cw() {
 		$(active_words[0]).find('input:first').focus();
 	    }
 	});
+    $('#grid').find('input:first').focus();
+    setActionTab('file');
+}
+
+function setActionTab(tabname) {
+    setTabInactive('file');
+    setTabInactive('word');
+    setTabInactive('clue');
+    setTabInactive('wl');
+    setTabInactive('rebus');
+    setTabInactive('fill');
+    setTabInactive('help');
+    setTabInactive('stat');
+    setTabActive(tabname);
+}
+
+function setTabInactive(ctl) {
+    $('#' + ctl + '-content').hide();
+    $('#' + ctl + '-tab').attr('style', 'background-color: #eeeeff;color: black');
+    $('#' + ctl + '-tab').attr('active', 'false');
+}
+
+function setTabActive(ctl) {
+    $('#' + ctl + '-content').show();
+    $('#' + ctl + '-tab').attr('style', 'background-color: #222288; color: white');
+    $('#' + ctl + '-tab').attr('active', 'true');
 }
 
 function deleteAllCookies() {
@@ -428,11 +611,14 @@ function activate_word(letter) {
     var pattern = get_pattern(active_words[0].find('input'));
     if (pattern.indexOf("0") == -1) {
 	$('#definition').show();
+	$('#examples').show();
 	$('#rankedwords').hide();
     } else {
 	$('#definition').hide();
+	$('#examples').hide();
 	$('#rankedwords').show();
     }
+    $('#clearwd').show();
     $('#active-clue:not(.no-number)').append(clue_for(active_words[0]).contents().clone());
     $('#active-clue-edit:not(.no-number)').find('input:first').attr('value', clue_for(active_words[0]).text());
     $('#active-clue-edit:not(.no-number)').show();    
@@ -460,7 +646,9 @@ function deactivate_word() {
     $("#word-suggestions").empty();
     $("#word-suggestions").hide();
     $('#definition').hide();
+    $('#examples').hide();
     $('#rankedwords').hide();
+    $('#clearword').hide();
 }
 
 function get_pattern(inputs) {
@@ -523,6 +711,7 @@ function processReqChange()
 		    $('#iw' + i).bind('click', function(e) {
 			    set_word(active_words[0].find('input'), $(e.target).attr('value'));
 			$('#definition').show();
+			$('#examples').show();
 			$('#rankedwords').hide();
 			});
 		}
@@ -557,12 +746,10 @@ function saveReqChange()
     if (req.readyState == 4) {
         // only if "OK"
         if (req.status == 200) {
-	    $("#word-suggestions").empty();
-	    $("#buttons-horizontal").show();
+	    $("#save-progress").hide();
         } else {
             alert("There was a problem saving your puzzle:\n" + req.statusText);
-	    $("#word-suggestions").empty();
-	    $("#buttons-horizontal").show();
+	    $("#save-progress").hide();
         }
     }
 }

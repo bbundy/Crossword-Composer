@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load expr %}
 {% block title %}Crossword Composer{% endblock %}
 {% block content %}
 <script type="text/javascript"
@@ -29,8 +30,9 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <table border=5 bordercolor=#333399>
   <tr><td valign=top>
   <table noborder><tr><td>
-  <div id="grid" style="width: 525px; height: 525px;">
-    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: 525px; height: 525px;" />
+  {% expr 35*puzzle.size as pxsize %}
+  <div id="grid" style="width: {{ pxsize }}px; height: {{ pxsize }}px;">
+    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: {{ pxsize }}px; height: {{ pxsize }}px;" />
 {% for clue in puzzle.clue %}
 
     <span style="left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir}}"> {{ clue.num }}</span>
@@ -60,34 +62,78 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   </td></tr>
 </table>
   </td><td valign="top">
-  <table border=5 bordercolor=#993333 bgcolor=white><tr><td>
-    <div id="author-title">
-      Author:<input type="text" name="author" size=20 value="{{ puzzle.author }}"/>
-      Title:<input type="text" name="title" size=40 value="{{ puzzle.title }}"/>
-      <input id="retrieve" type="button" value="Retrieve" />
-      <input id="solve" type="button" value="Solve" />
-      <input id="save" type="button" value="Save" style="background-color:#ee8888"/>
+  <table border=5 bordercolor=#993333 bgcolor=white>
+    <div id="action-tabs">
+      <tr><td>
+      <table border=1 cellspacing=0>
+      <tr>
+	<td>
+	  <div id="file-tab"> File </div>
+	</td>
+	<td>
+	  <div id="word-tab"> Words </div>
+	</td>
+	<td>
+	  <div id="clue-tab"> Clues </div>
+	</td>
+	<td>
+	  <div id="stat-tab"> Statistics </div>
+	</td>
+	<td>
+	  <div id="wl-tab"> WordLists </div>
+	</td>
+	<td>
+	  <div id="rebus-tab"> Rebus </div>
+	</td>
+	<td>
+	  <div id="fill-tab"> Fill </div>
+	</td>
+	<td>
+	  <div id="help-tab"> Help </div>
+	</td>
+	<td>
+	  <div id="forum-tab"> Forum </div>
+	</td>
+      </tr>
+      </table>
+      </td></tr>
     </div>
-    <div id="buttons-horizontal">
-      <input id="rankedwords" type="button" value="Find Words" />
-      <input id="definition" type="button" value="Definition" />
-      <input id="print" type="button" value="Print" />
-      <input id="printall" type="button" value="Print All" />
-      <input id="toxpf" type="button" value="To XPF" />
-      <input id="fromxpf" type="button" value="From XPF" />
-      <input id="frompuz" type="button" value="From .puz" />
-      <div id="file-load"></div>
-    </td></tr>
-<tr><td>
-<div id="word-suggestions"></div>
-<div id="active-clue-edit">
-  <input type="text" name="clue" size=128 value=""/>
-  <input id="update-clue" type="button" value="Update Clue" />
-</div>
-</td></tr>
-  <tr><td>
-  <div id="clues">
-    <div class="clues-col">
+    <tr><td>
+    <div id="file-content">
+      Author:<input type="text" name="author" size=20 value="{{ puzzle.author }}"/><br>
+      Title:<input type="text" name="title" size=40 value="{{ puzzle.title }}"/>
+      <input id="retrieve" type="button" value="Retrieve" /><br>
+      <input id="solve" type="button" value="Solve" /> (Opens the current puzzle in solution mode in a new tab)<br>
+      <input id="save" type="button" value="Save" style="background-color:#ee8888"/> (Careful, this will overwrite existing Title by this Author, unless a password has been set for that Author/Title)<br>
+      <div id="save-progress"> Saving.... </div>
+      <input id="print" type="button" value="Print Without Solutions" /> (Opens printable page in a new tab)<br>
+      <input id="printall" type="button" value="Print With Solutions" /><br>
+      <input id="toxpf" type="button" value="Render as XPF for Export" /> (Opens XPF rendering in a new tab)<br>
+      <input id="fromxpf" type="button" value="Load XPF puzzle from URL" /><br>
+      <input id="frompuz" type="button" value="Load .puz (Across Lite) from URL" /></br>
+      <input id="topuz" type="button" value="Save in .puz (Across Lite) format" /></br>
+    <div id="file-load"></div>
+    </div>
+    <div id="word-content">
+      <div id="word-intro">
+      "Find Words" will attempt to the yellow highlighted space, using any existing letters, by searching the configured dictionaries along with any 
+      user-loaded word lists. For completed words, "Definitions" will look up in all configured dictionaries, and "Examples" will look for recent
+      usage with high readership.<br>--------------------<br>
+      </div>
+	  <input id="rankedwords" type="button" value="Find Words" />
+	  <input id="definition" type="button" value="Definition" />
+	  <input id="examples" type="button" value="Examples" />
+	  <input id="clearwd" type="button" value="Clear Word" />
+	  <br>--------------------<br>
+	  <div id="word-suggestions"></div>
+    </div>
+    <div id="clue-content">
+      <div id="active-clue-edit">
+	<input type="text" name="clue" size=128 value=""/>
+	<input id="update-clue" type="button" value="Update Clue" />
+      </div>
+      <div id="clues">
+	<div class="clues-col">
       <h4>Across</h4>
       <ol>
 {% for clue in puzzle.across %}
@@ -111,7 +157,108 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 {% endfor %}
 	</ol>
     </div>
-  </div></td></tr>
+  </div>
+  </div>
+  <div id="stat-content">
+	<h4> Statistics </h4>
+  </div>
+  <div id="rebus-content">
+	<h4> Rebus </h4>
+	Text: <input type="text" id="rebus1" name="rebus1" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus1abbr" name="rebus1abbr" size=1 /> 
+	<input type="button" id="use_rebus1" name="use_rebus1" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus2" name="rebus2" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus2abbr" name="rebus2abbr" size=1 /> 
+	<input type="button" id="use_rebus2" name="use_rebus2" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus2" name="rebus2" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus2abbr" name="rebus2abbr" size=1 /> 
+	<input type="button" id="use_rebus2" name="use_rebus2" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus3" name="rebus3" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus3abbr" name="rebus3abbr" size=1 /> 
+	<input type="button" id="use_rebus3" name="use_rebus3" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus4" name="rebus4" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus4abbr" name="rebus4abbr" size=1 /> 
+	<input type="button" id="use_rebus4" name="use_rebus4" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus5" name="rebus5" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus5abbr" name="rebus5abbr" size=1 /> 
+	<input type="button" id="use_rebus5" name="use_rebus5" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus6" name="rebus6" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus6abbr" name="rebus6abbr" size=1 /> 
+	<input type="button" id="use_rebus6" name="use_rebus6" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus7" name="rebus7" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus7abbr" name="rebus7abbr" size=1 /> 
+	<input type="button" id="use_rebus7" name="use_rebus7" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus8" name="rebus8" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus8abbr" name="rebus8abbr" size=1 /> 
+	<input type="button" id="use_rebus8" name="use_rebus8" value="Use" /><br>
+	
+  </div>
+  <div id="wl-content">
+	Word Lists are supported using <a href="http://www.wordnik.com"> Wordnik </a> You can <a href="http://http://www.wordnik.com/lists/new">
+      create a new list </a> (You may tag words with "rank: val" where "val" is a number from 0 to 100) or load an existing list:<br><br>
+	List Name: <input type="text" id="wdnk-word-list" name="wdnk-word-list" length=30 /> <input type="button" id="load-wl" value="Load" />
+	
+  </div>
+  <div id="fill-content">
+	Grid Auto-Fill will attempt to fill the current grid using the selected dictionaries and custom word lists.<br>
+	<input type="button" id="auto-fill" name="auto-fill" value="Start Fill"/> 
+	<input type="button" id="stop-fill" name="stop-fill" value="Stop Fill"/> 
+  </div>
+  <div id="help-content">
+<h4>Getting Started</h4>
+Crossword Composer supports the creation, editing, and sharing of two puzzle types, the US type that you might see in, say, the New York Times, and the
+Cryptic variety that you might see in the Guardian or the Independent, or many other UK newspapers.  You may select a grid by clicking on "New US Grid" 
+or "New Cryptic Grid".  Keep clicking until you see a grid you like.  Once you have selected a grid, type your name and a title for your puzzle in the 
+upper left of the screen.  Remember what you typed, because these fields will be used to save and retrieve the puzzle as you work on it.
+If you click on any open square in the grid, you will see a yellow bar highlighting the active answer space.
+Start typing the answer, and as you finish, the focus will
+shift to the clue entry box, where you can type in the clue for the answer that you put in the grid.
+
+<h4>Saving and Retrieving</h4>
+Once your puzzle has an Author and Title assigned to it, you may save it at any time.  You may share your puzzle with others by giving them the Author and Title 
+fields that you selected.  Anyone can retrieve a puzzle by typing in the author and title associated with it. Alternatively, whenever you save or retrieve, the URL in
+the location bar of your browser may be copied and shared with others via chat or email in order to provide them with a reusable link to your puzzle.  All saved puzzles,
+whether composing or solving, are saved on the server and not on the computer you are using, so you can go back to the site from any computer and access your
+saved puzzles (or other people's public saved puzzles) much as you would with web-based email such as gmail or Yahoo mail.
+
+<h4>Printing</h4>
+Pressing the "Print" button will open a printable page in a separate tab in your browser.  This is available in either Compose or Solve mode.
+
+<h4>Solving</h4>
+If you press the "Solve" button, you will enter a mode with the answers hidden.  You may enter a solver name and fill in the answer squares. The "Save" button will save
+your solution attempt.  It's a good idea to copy or bookmark the URL of a saved solution attempt so you can get back to it easily.
+
+<h4>Grid Design</h4>
+Many valid grids are available simply by clicking on "New Cryptic Grid" or "New US Grid".  You may also design your own grid by clicking "Customize Grid". This
+will put you in a Grid Design mode which will enforce standard symmetry rules for you.  When you are happy with the result, click "Use Grid" and you will be returned to 
+compose mode with the grid you have created.
+
+<h4>Import and Export</h4>
+"From XPF" and "From .puz" will accept a URL and will try to load the file from that URL. This must be a publicly available site with no password required.  If the file
+is local to your computer, use a "file://" url to access it.  You may also save the file to an XPF (XML) or .puz (Across Lite) file using the "To XPF" or "To .puz"
+button.
+
+<h4>Word Lookup</h4>
+Often in the process of answer entry it becomes difficult to find words given the constraints imposed by answers already constructed in the puzzle.  If the yellow bar
+encompasses one or more letters in such a thorny situation, the "Words" button may be used to look up possibilities.  Alternatives will
+appear beneath the puzzle in the form of buttons which, if clicked, will autofill the answer space.  The dictionary used for this is the UK Advanced 
+Cryptics Dictionary currently, and new dictionaries and custom word lists are added as they become available.
+
+<h4>Clue Lookup</h4>
+The "Clue" button will look up any existing clues for the selected answer in the database of saved puzzles.
+
+<h4>Questions and Comments</h4>
+Please join the <a href="http://groups.google.com/group/crosswordcomposer"> Discussion Group </a> if you have word lists to contribute, or questions about the service.  Have Fun!
+  </div>
+  </td></tr>
 </table>
 </td></tr>
 </table>

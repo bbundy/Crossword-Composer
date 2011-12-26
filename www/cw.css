@@ -1,6 +1,6 @@
 body
 {
-	background-image:url('bg.jpg');
+    background-image:url('bg.jpg');
 }
 
 /* HEADER */
@@ -14,7 +14,7 @@ body
     width:111px;
     height:41px;
     position:absolute;
-    left:500px;
+    left:330px;
     bottom:10px;
 }
 
@@ -45,48 +45,95 @@ body
 
 .crossword
 {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 .crossword td {
-	bgcolor: #ffffff;
-	background-image: none;
+    bgcolor: #ffffff;
+    background-image: none;
 }
 .crossword #active-clue
 {
-	float: left;
-	width: 125px;
-	font-size: 14px;
+    float: left;
+    width: 125px;
+    font-size: 14px;
 }
 
 .crossword #grid *
 {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .crossword #content
 {
-	position: relative;
-	width: 620px !important;
+    position: relative;
+    width: 1200px !important;
 }
 
 .crossword #buttons,
 .crossword #buttons-horizontal
 {
-	background-color: #F3F3F3;
-	margin-bottom: 10px;
-	padding-left: 10px;
-	float: left;
-	width: 135px;
-	font-size: 12px;
-	font-family: arial, sans-serif;
+    background-color: #F3F3F3;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    float: left;
+    width: 135px;
+    font-size: 12px;
+    font-family: arial, sans-serif;
 }
 
 .crossword #word-suggestions
 {
-	font-size: 12px;
-	font-family: arial, sans-serif;
+    font-size: 14px;
+    font-family: arial, sans-serif;
+}
+
+.crossword #file-tab,
+.crossword #clue-tab,
+.crossword #word-tab,
+.crossword #wl-tab,
+.crossword #rebus-tab,
+.crossword #fill-tab,
+.crossword #help-tab,
+.crossword #forum-tab,
+.crossword #stat-tab
+{
+    font-size: 14px;
+    font-family: arial, sans-serif;
+    background-color: #eeeeff
+}
+
+.crossword #action-tabs table
+{
+    border: 1
+}
+
+.crossword #action-tabs td
+{
+    white-space: nowrap;
+}
+
+.crossword #file-content,
+.crossword #clue-content,
+.crossword #word-content,
+.crossword #wl-content,
+.crossword #rebus-content,
+.crossword #fill-content,
+.crossword #help-content,
+.crossword #forum-content,
+.crossword #stat-content
+{
+    font-size: 12px;
+    font-family: arial, sans-serif;
+    display: none;
+}
+
+.crossword #save-progress
+{
+    font-size: 12px;
+    font-family: arial, sans-serif;
+    display: none;
 }
 
 .crossword #buttons-horizontal
@@ -170,7 +217,7 @@ body
 .crossword form 
 {
 	position: relative;
-	width: 620px;
+	width: 1200px;
 }
 
 .crossword #grid div 

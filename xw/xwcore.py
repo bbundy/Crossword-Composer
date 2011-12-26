@@ -247,7 +247,29 @@ class Puzzle:
                 elif sq.num:
                     this.formatstr += "%dx" % sq.val
             this.formatstr += "e"
-                
+
+        for clue in this.clue:
+            i = clue.row - 1
+            j = clue.col - 1
+            pos = 1
+            shortans = ''
+            while True:
+                if i >= this.size or j >= this.size:
+                    break
+                let = this.row[i][j:j+1].lower()
+                if let == ".":
+                    break
+                shortans += let
+                if clue.dir == 'across':
+                    j += 1
+                else:
+                    i += 1
+            if len(shortans) < len(clue.ans):
+                clue.fullans = clue.ans
+                clue.ans = shortans
+                clue.sq = []
+                for i in range(len(shortans)):
+                    clue.sq.append((i+1, shortans[i:i+1], None))
         return this
 
     @classmethod
@@ -432,6 +454,22 @@ class Puzzle:
             if clue.dir == "down":
                 this.down.append(clue)
         return this
+
+    def toPUZ(self):
+        pz = puz.Puzzle()
+        pz.width = self.size
+        pz.height = self.size
+        pz.author = self.author
+        pz.title = self.title
+        pz.answers = ""
+        for i in range(self.size):
+            pz.answers = pz.answers + self.row[i].encode('latin-1')
+        pz.clues=[]
+        for clue in self.across:
+            pz.clues.append(clue.clue)
+        for clue in self.down:
+            pz.clues.append(clue.clue)
+        return pz
 
     @classmethod
     def fromGridPOST(cls, post):

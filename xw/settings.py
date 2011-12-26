@@ -1,8 +1,8 @@
 # Django settings for xw project.
 import os
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEBUG = False
+# TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Bruce Bundy', 'brbundy@gmail.com'),
