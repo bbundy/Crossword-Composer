@@ -11,7 +11,7 @@ from django.utils.encoding import smart_unicode, smart_str
 from django.template import RequestContext
 from subprocess import Popen, PIPE
 from xwcore import Puzzle
-from xword.models import Grid, RawPuzzles, SolvePuzzles
+from xword.models import Grid, RawPuzzles, SolvePuzzles, Clue
 from random import randrange
 from django.db.models import Q
 import logging
@@ -164,6 +164,29 @@ def examples(request):
         resp = "No examples found for '%s'" % word
     return HttpResponse(resp)
 
+def clues(request):
+    resp = ''
+    clue = request.POST['active'] 
+    (n1,ad,pos) = clue.split('-')
+    p = Puzzle.fromPOST(request.POST)
+    active_clue = p.clue_from_str(n1, ad)
+    if active_clue:
+        word = active_clue.ans.lower()
+        table = Clue
+        cluelist = table.objects.filter(answer=word)
+        if cluelist:
+            for c in cluelist:
+                resp += c.text + "<br> - "
+                resp += c.puzzle.title + "<br> - "
+                resp += c.puzzle.setter.username + "<br>-------<br>"
+    else:
+        word = "(missing word)"
+    logger = logging.getLogger('xw.access')
+    logger.info(" clues request from %s for %s: %s" % (request.META['REMOTE_ADDR'], request.POST["active"], active_clue.ans));
+    if resp == '':
+        resp = "No clues found for '%s'" % word
+    return HttpResponse(resp)
+
 def main_landing(request):
     logger = logging.getLogger('xw.access')
     logger.info(" main page request from %s : %s" % (request.META['REMOTE_ADDR'], request.META['QUERY_STRING']));
@@ -182,7 +205,6 @@ def main_landing(request):
         if request.GET.has_key('solve') or request.GET.has_key('solver'):
             t = get_template('solve.html')
             if request.GET.has_key('solver'):
-                t = get_template('solver.html')
                 solver = request.GET['solver']
                 atname = solver + '-' + atname
                 table = SolvePuzzles

@@ -100,9 +100,9 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     </div>
     <tr><td>
     <div id="file-content">
-      Author:<input type="text" name="author" size=20 value="{{ puzzle.author }}"/><br>
-      Title:<input type="text" name="title" size=40 value="{{ puzzle.title }}"/>
-      <input id="retrieve" type="button" value="Retrieve" /><br>
+      Author:<input type="text" name="author" size=56 value="{{ puzzle.author }}"/><br>
+      Title:<input type="text" name="title" size=60 value="{{ puzzle.title }}"/><br>
+      <input id="retrieve" type="button" value="Retrieve" /> (Get server copy of this Title by this Author)<br>
       <input id="solve" type="button" value="Solve" /> (Opens the current puzzle in solution mode in a new tab)<br>
       <input id="save" type="button" value="Save" style="background-color:#ee8888"/> (Careful, this will overwrite existing Title by this Author, unless a password has been set for that Author/Title)<br>
       <div id="save-progress"> Saving.... </div>
@@ -116,15 +116,18 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     </div>
     <div id="word-content">
       <div id="word-intro">
-      "Find Words" will attempt to the yellow highlighted space, using any existing letters, by searching the configured dictionaries along with any 
+      "Find Words" will attempt to match the yellow highlighted space, using any existing letters, by searching the configured dictionaries along with any 
       user-loaded word lists. For completed words, "Definitions" will look up in all configured dictionaries, and "Examples" will look for recent
       usage with high readership.<br>--------------------<br>
       </div>
 	  <input id="rankedwords" type="button" value="Find Words" />
 	  <input id="definition" type="button" value="Definition" />
 	  <input id="examples" type="button" value="Examples" />
+	  <img src="http://www.wordnik.com/images/media-kit/wordnik_badge_a2.png" />
+	  <br>--------------------<br>
 	  <input id="clearwd" type="button" value="Clear Word" />
 	  <br>--------------------<br>
+	  <input id="clues" type="button" value="Clues For This Word" />
 	  <div id="word-suggestions"></div>
     </div>
     <div id="clue-content">
@@ -161,6 +164,37 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   </div>
   <div id="stat-content">
 	<h4> Statistics </h4>
+	<table border=0>
+	<tr><td>Number of Words: </td><td><div id="numwds"> {{ puzzle.wd_ct }} </div></td></tr>
+	<tr><td>Average Length: </td><td><div id="avelen"> {{ puzzle.ave_wdlen }} </div></td></tr>
+	<tr><td>Number of Letters: </td><td><div id="numlet"> {{ puzzle.let_ct }} </div></td></tr>
+	<tr><td>Number of Blocks: </td><td><div id="numblock"> {{ puzzle.block_ct }} </div></td></tr>
+	<tr><td>Scrabble Total: </td><td><div id="scrscore"> {{ puzzle.scr }} </div></td></tr>
+	<tr><td>Average Scrabble Score: </td><td><div id="avescore"> {{ puzzle.ave_scr }} </div></td></tr>
+	</table>
+	<table border=0><tr><td>
+	Word Lengths:
+	<table border=1 cellspacing=0>
+	  <tr><td><div id="ct-3">3 - {{ puzzle.ct_3 }}</div></td><td><div id="ct-4">4 - {{ puzzle.ct_4 }}</div></td><td><div id="ct-5">5 - {{ puzzle.ct_5 }}</div></td></tr>
+	  <tr><td><div id="ct-6">6 - {{ puzzle.ct_6 }}</div></td><td><div id="ct-7">7 - {{ puzzle.ct_7 }}</div></td><td><div id="ct-8">8 - {{ puzzle.ct_8 }}</div></td></tr>
+	  <tr><td><div id="ct-9">9 - {{ puzzle.ct_9 }}</div></td><td><div id="ct-10">10 - {{ puzzle.ct_10 }}</div></td><td><div id="ct-11">11 - {{ puzzle.ct_11 }}</div></td></tr>
+	  <tr><td><div id="ct-12">12 - {{ puzzle.ct_12 }}</div></td><td><div id="ct-13">13 - {{ puzzle.ct_13 }}</div></td><td><div id="ct-14">14 - {{ puzzle.ct_14 }}</div></td></tr>
+	  <tr><td><div id="ct-15">15 - {{ puzzle.ct_15 }}</div></td><td><div id="ct-16">16 - {{ puzzle.ct_16 }}</div></td><td><div id="ct-17">17 - {{ puzzle.ct_17 }}</div></td></tr>
+	  <tr><td><div id="ct-18">18 - {{ puzzle.ct_18 }}</div></td><td><div id="ct-19">19 - {{ puzzle.ct_19 }}</div></td><td><div id="ct-20">20 - {{ puzzle.ct_20 }}</div></td></tr>
+	  <tr><td><div id="ct-21">21 - {{ puzzle.ct_21 }}</div></td><td><div id="ct-22">22 - {{ puzzle.ct_22 }}</div></td><td><div id="ct-23">23 - {{ puzzle.ct_23 }}</div></td></tr>
+        </table></td><td>
+	Letter Counts:<br>
+	<table border=1 cellspacing=0>
+	  <tr><td><div id="ct-a">A - {{ puzzle.a_ct }}</div></td><td><div id="ct-b">B - {{ puzzle.b_ct }}</div></td><td><div id="ct-c">C - {{ puzzle.c_ct }}</div></td></tr>
+	  <tr><td><div id="ct-d">D - {{ puzzle.d_ct }}</div></td><td><div id="ct-e">E - {{ puzzle.e_ct }}</div></td><td><div id="ct-f">F - {{ puzzle.f_ct }}</div></td></tr>
+	  <tr><td><div id="ct-g">G - {{ puzzle.g_ct }}</div></td><td><div id="ct-h">H - {{ puzzle.h_ct }}</div></td><td><div id="ct-i">I - {{ puzzle.i_ct }}</div></td></tr>
+	  <tr><td><div id="ct-j">J - {{ puzzle.j_ct }}</div></td><td><div id="ct-k">K - {{ puzzle.k_ct }}</div></td><td><div id="ct-l">L - {{ puzzle.l_ct }}</div></td></tr>
+	  <tr><td><div id="ct-m">M - {{ puzzle.m_ct }}</div></td><td><div id="ct-n">N - {{ puzzle.n_ct }}</div></td><td><div id="ct-o">O - {{ puzzle.o_ct }}</div></td></tr>
+	  <tr><td><div id="ct-p">P - {{ puzzle.p_ct }}</div></td><td><div id="ct-q">Q - {{ puzzle.q_ct }}</div></td><td><div id="ct-r">R - {{ puzzle.r_ct }}</div></td></tr>
+	  <tr><td><div id="ct-s">S - {{ puzzle.s_ct }}</div></td><td><div id="ct-t">T - {{ puzzle.t_ct }}</div></td><td><div id="ct-u">U - {{ puzzle.u_ct }}</div></td></tr>
+	  <tr><td><div id="ct-v">V - {{ puzzle.v_ct }}</div></td><td><div id="ct-w">W - {{ puzzle.w_ct }}</div></td><td><div id="ct-x">X - {{ puzzle.x_ct }}</div></td></tr>
+	  <tr><td><div id="ct-y">Y - {{ puzzle.y_ct }}</div></td><td><div id="ct-z">Z - {{ puzzle.z_ct }}</div></td></tr>
+	</table></tr></table>
   </div>
   <div id="rebus-content">
 	<h4> Rebus </h4>
@@ -203,7 +237,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   </div>
   <div id="wl-content">
 	Word Lists are supported using <a href="http://www.wordnik.com"> Wordnik </a> You can <a href="http://http://www.wordnik.com/lists/new">
-      create a new list </a> (You may tag words with "rank: val" where "val" is a number from 0 to 100) or load an existing list:<br><br>
+      create a new list </a> (You may tag words with "rank: val" where "val" is a number from 0 to 100) or load an existing list:<br><img src="http://www.wordnik.com/images/media-kit/wordnik_badge_a2.png" /><br>
 	List Name: <input type="text" id="wdnk-word-list" name="wdnk-word-list" length=30 /> <input type="button" id="load-wl" value="Load" />
 	
   </div>

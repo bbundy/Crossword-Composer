@@ -162,36 +162,7 @@ class Puzzle:
         p.CharacterDataHandler = this.char_data
         p.Parse(puzzle_xml)
         this.size = len(this.row)
-        this.format = []
-        gridstrs = []
-        gridstr = ""
-        gridlen = 0
-        for r in range(this.size):
-            this.format.append([])
-            for s in range(this.size):
-                if this.row[r][s:s+1] == '.':
-                    this.format[r].append(Square(-1))
-                    gridstr += "."
-                else:
-                    this.format[r].append(Square(0))
-                    gridstr += "?"
-                gridlen += 1
-                if gridlen % 6 == 0:
-                    gridstrs.append(gridstr)
-                    gridstr = ""
-        while not (gridlen % 6 == 0):
-            gridstr += '?'
-            gridlen += 1
-        if len(gridstr) == 6:
-            gridstrs.append(gridstr)
-        this.dbgridstr = "%d" % this.size
-        if hasattr(this, "type"):
-            if this.type.lower() == "cryptic":
-                this.dbgridstr += "c"
-        else:
-            this.dbgridstr += "u"
-        for gs in gridstrs:
-            this.dbgridstr += gridlookup[gs]
+        this.setGrid()
         this.across = []
         this.down = []
         this.across_intersections = {}
@@ -270,6 +241,7 @@ class Puzzle:
                 clue.sq = []
                 for i in range(len(shortans)):
                     clue.sq.append((i+1, shortans[i:i+1], None))
+        this.getStats()
         return this
 
     @classmethod
@@ -288,6 +260,7 @@ class Puzzle:
             this.dbgridstr = post['gridstr']
         this.size = len(rows)
         this.format = []
+        this.clue = []
         this.across = []
         this.down = []
         this.rebus={}
@@ -383,11 +356,13 @@ class Puzzle:
                 this.row[i] += letter
 
         for clue in this.across:
+            this.clue.append(clue)
             for down in this.down:
                 if (down.col >= clue.col) and (down.col < clue.col + clue.length) and (clue.row >= down.row) and (clue.row < down.row + down.length):
                     this.across_intersections["%d-across-%d" % (clue.num, down.col - clue.col + 1)] = "%d-down-%d" % (down.num, clue.row - down.row + 1)
 
         for clue in this.down:
+            this.clue.append(clue)
             for across in this.across:
                 if (across.row >= clue.row) and (across.row < clue.row + clue.length) and (clue.col >= across.col) and (clue.col < across.col + across.length):
                     this.down_intersections["%d-down-%d" % (clue.num, across.row - clue.row + 1)] = "%d-across-%d" % (across.num, clue.col - across.col + 1)
@@ -398,7 +373,40 @@ class Puzzle:
         for k in sorted(this.down_intersections.keys()):
             this.intersections.append((k,this.down_intersections[k]))
 
+        this.getStats()
         return this
+
+    def setGrid(self):
+        self.format = []
+        gridstrs = []
+        gridstr = ""
+        gridlen = 0
+        for r in range(self.size):
+            self.format.append([])
+            for s in range(self.size):
+                if self.row[r][s:s+1] == '.':
+                    self.format[r].append(Square(-1))
+                    gridstr += "."
+                else:
+                    self.format[r].append(Square(0))
+                    gridstr += "?"
+                gridlen += 1
+                if gridlen % 6 == 0:
+                    gridstrs.append(gridstr)
+                    gridstr = ""
+        while not (gridlen % 6 == 0):
+            gridstr += '?'
+            gridlen += 1
+        if len(gridstr) == 6:
+            gridstrs.append(gridstr)
+        self.dbgridstr = "%d" % self.size
+        if hasattr(self, "type"):
+            if self.type.lower() == "cryptic":
+                self.dbgridstr += "c"
+        else:
+            self.dbgridstr += "u"
+        for gs in gridstrs:
+            self.dbgridstr += gridlookup[gs]
 
     @classmethod
     def fromGrid(cls, gridstr):
@@ -418,7 +426,7 @@ class Puzzle:
             this.row.append(formatstr[i*this.size:i*this.size+this.size])
 
         this = Puzzle.getFromRows(this)
-                
+        this.getStats()
         return this
 
     @classmethod
@@ -453,6 +461,8 @@ class Puzzle:
                 this.across.append(clue)
             if clue.dir == "down":
                 this.down.append(clue)
+        this.setGrid()
+        this.getStats()
         return this
 
     def toPUZ(self):
@@ -492,6 +502,7 @@ class Puzzle:
             for c in blocks[r]:
                 this.row[r] += c
         this = Puzzle.getFromRows(this)
+        this.getStats()
         return this
 
     def getFromRows(this):
@@ -615,6 +626,87 @@ class Puzzle:
                     xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length, xing_clue.ans)
         return xing
 
+    def getStats(self):
+        wd_cts = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        let_cts = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        self.block_ct = 0
+        self.let_ct = 0
+        self.wd_ct = 0
+        self.ave_wdlen = 0.0
+        self.scr = 0
+
+        for c in self.clue:
+            wd_cts[c.length-3] += 1
+            self.wd_ct += 1
+            self.ave_wdlen += c.length
+
+        for r in self.row:
+            for i in range(len(r)):
+                let = r[i:i+1]
+                if let == '.':
+                    self.block_ct += 1
+                else:
+                    self.let_ct += 1
+                    n = ord(let.upper())
+                    if n >= ord('A') and n <= ord('Z'):
+                        let_cts[n - ord('A')] += 1
+                        self.scr += scrabble[n - ord('A')]
+
+        self.ave_wdlen /= self.wd_ct
+        self.ave_wdlen = "%2.2f" % self.ave_wdlen
+        self.ave_scr = "%2.2f" % (float(self.scr)/float(self.let_ct))
+
+        self.a_ct = let_cts[0]
+        self.b_ct = let_cts[1]
+        self.c_ct = let_cts[2]
+        self.d_ct = let_cts[3]
+        self.e_ct = let_cts[4]
+        self.f_ct = let_cts[5]
+        self.g_ct = let_cts[6]
+        self.h_ct = let_cts[7]
+        self.i_ct = let_cts[8]
+        self.j_ct = let_cts[9]
+        self.k_ct = let_cts[10]
+        self.l_ct = let_cts[11]
+        self.m_ct = let_cts[12]
+        self.n_ct = let_cts[13]
+        self.o_ct = let_cts[14]
+        self.p_ct = let_cts[15]
+        self.q_ct = let_cts[16]
+        self.r_ct = let_cts[17]
+        self.s_ct = let_cts[18]
+        self.t_ct = let_cts[19]
+        self.u_ct = let_cts[20]
+        self.v_ct = let_cts[21]
+        self.w_ct = let_cts[22]
+        self.x_ct = let_cts[23]
+        self.y_ct = let_cts[24]
+        self.z_ct = let_cts[25]
+
+        self.ct_3 = wd_cts[0]
+        self.ct_4 = wd_cts[1]
+        self.ct_5 = wd_cts[2]
+        self.ct_6 = wd_cts[3]
+        self.ct_7 = wd_cts[4]
+        self.ct_8 = wd_cts[5]
+        self.ct_9 = wd_cts[6]
+        self.ct_10 = wd_cts[7]
+        self.ct_11 = wd_cts[8]
+        self.ct_12 = wd_cts[9]
+        self.ct_13 = wd_cts[10]
+        self.ct_14 = wd_cts[11]
+        self.ct_15 = wd_cts[12]
+        self.ct_16 = wd_cts[13]
+        self.ct_17 = wd_cts[14]
+        self.ct_18 = wd_cts[15]
+        self.ct_19 = wd_cts[16]
+        self.ct_20 = wd_cts[17]
+        self.ct_21 = wd_cts[18]
+        self.ct_22 = wd_cts[19]
+        self.ct_23 = wd_cts[20]
+        self.ct_24 = wd_cts[21]
+
+scrabble = [1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10]
 #    def savePDF(self):
 #        c = canvas.canvas()
 #        squares = []
