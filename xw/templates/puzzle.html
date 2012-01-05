@@ -116,14 +116,18 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     </div>
     <div id="word-content">
       <div id="word-intro">
-      "Find Words" will attempt to match the yellow highlighted space, using any existing letters, by searching the configured dictionaries along with any 
+      "Dictionary Words" will attempt to match the yellow highlighted space, using any existing letters, by searching the configured dictionaries. 
+      "Published Words" will search for answers that have appeared in published puzzles. "List Words" will search all 
       user-loaded word lists. For completed words, "Definitions" will look up in all configured dictionaries, and "Examples" will look for recent
-      usage with high readership.<br>--------------------<br>
+      usage with high readership.  "Clues For This Word" will looked for clues in published puzzles.<br>--------------------<br>
       </div>
-	  <input id="rankedwords" type="button" value="Find Words" />
+	  <input id="rankedwords" type="button" value="Dictionary Words" />
+	  <input id="listwords" type="button" value="List Words" />
 	  <input id="definition" type="button" value="Definition" />
 	  <input id="examples" type="button" value="Examples" />
 	  <img src="http://www.wordnik.com/images/media-kit/wordnik_badge_a2.png" />
+	  <br>--------------------<br>
+	  <input id="pubwords" type="button" value="Published Words" />
 	  <br>--------------------<br>
 	  <input id="clearwd" type="button" value="Clear Word" />
 	  <br>--------------------<br>
@@ -131,6 +135,9 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	  <div id="word-suggestions"></div>
     </div>
     <div id="clue-content">
+      <div id="clue-intro">
+	Enter a clue for the yellow highlighted word by typing into the box below and clicking "Update Clue" or pressing the "Enter" key.
+      </div>
       <div id="active-clue-edit">
 	<input type="text" name="clue" size=128 value=""/>
 	<input id="update-clue" type="button" value="Update Clue" />

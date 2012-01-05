@@ -471,14 +471,44 @@ class Puzzle:
         pz.height = self.size
         pz.author = self.author
         pz.title = self.title
-        pz.answers = ""
+        answers = []
+        fill = []
         for i in range(self.size):
-            pz.answers = pz.answers + self.row[i].encode('latin-1')
+            answers.append(self.row[i].upper().encode('latin-1'))
+        pz.answers= ''.join(answers)
+        for i in range(self.size):
+            fillrow=[]
+            for j in range(self.size):
+                if self.row[i][j:j+1] == '.':
+                    fillrow.append('.')
+                else:
+                    fillrow.append('-')
+            fill.append(''.join(fillrow))
+        pz.fill = ''.join(fill).encode('latin-1')
         pz.clues=[]
-        for clue in self.across:
-            pz.clues.append(clue.clue)
-        for clue in self.down:
-            pz.clues.append(clue.clue)
+        across = 0
+        down = 0
+        while True:
+            if across + down > len(self.clue):
+                break;
+            if across < len(self.across):
+                across_clue = self.across[across]
+            else:
+                across_clue = None
+            if down < len(self.down):
+                down_clue = self.down[down]
+            else:
+                down_clue = None
+            if down_clue:
+                if across_clue == None or down_clue.num < across_clue.num:
+                    pz.clues.append(down_clue.clue)
+                    down += 1
+                    continue
+            if across_clue:
+                pz.clues.append(across_clue.clue)
+                across += 1
+                continue
+            break
         return pz
 
     @classmethod

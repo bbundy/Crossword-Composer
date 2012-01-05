@@ -55,6 +55,31 @@ def thanks(request):
     html = t.render(Context({}))
     return HttpResponse(html)
 
+def pub_words(request):
+    start_time = time.time()
+    resp = ''
+    word_matches = []
+    clue = request.POST['active'] 
+    (n1,ad,pos) = clue.split('-')
+    p = Puzzle.fromPOST(request.POST)
+    active_clue = p.clue_from_str(n1, ad)
+    if active_clue:
+        pat = active_clue.ans.lower()
+        q = Clue.objects.extra(where=['answer LIKE "%s"' % pat.replace('?','_')])
+        q = q.distinct(['answer'])
+        ans = {}
+        for r in q.all()[:300]:
+            a = r.answer.lower()
+            if ans.has_key(a):
+                ans[a] += 1
+            else:
+                ans[a] = 1
+        for k in sorted(ans.keys(), lambda x,y: cmp(ans[y],ans[x])):
+            word_matches.append(k)
+        logger = logging.getLogger('xw.access')
+        logger.info(" list words  request from %s for %s (%s) took %f seconds" % (request.META['REMOTE_ADDR'], request.POST["active"], pat, time.time() - start_time));
+    resp = '&'.join(word_matches)
+    return HttpResponse(resp)
     
 apiKey="2e17a1567a9f6bc3792010e8e16057aa32d96f10e55d58b52"
 wdnk_oldclient = Wordnik(api_key=apiKey, username="bbundy", password="rbb2wdnk")
@@ -85,6 +110,24 @@ def ranked_words(request):
         res = wdnk_words.searchWords(wi)
         logger = logging.getLogger('xw.access')
         logger.info(" ranked words  request from %s for %s (%s) took %f seconds" % (request.META['REMOTE_ADDR'], request.POST["active"], pat, time.time() - start_time));
+        if res:
+            for r in res:
+                word_matches.append((r.wordstring, r.wordstring))
+    resp = '&'.join(x[0] for x in word_matches)
+    return HttpResponse(resp)
+
+def list_words(request):
+    start_time = time.time()
+    resp = ''
+    clue = request.POST['active'] 
+    (n1,ad,pos) = clue.split('-')
+    p = Puzzle.fromPOST(request.POST)
+    active_clue = p.clue_from_str(n1, ad)
+    if active_clue:
+        word_matches = []
+        res = None
+        logger = logging.getLogger('xw.access')
+        logger.info(" list words  request from %s for %s (%s) took %f seconds" % (request.META['REMOTE_ADDR'], request.POST["active"], pat, time.time() - start_time));
         if res:
             for r in res:
                 word_matches.append((r.wordstring, r.wordstring))
