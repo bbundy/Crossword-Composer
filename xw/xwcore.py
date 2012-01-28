@@ -47,8 +47,8 @@ class Clue:
                     self.sq.append((i+1, "", ""))
                 else:
                     self.sq.append((i+1, self.ans[i:i+1].lower(), ""))
-        self.cr = 11 + 35 * (int(self.row) - 1)
-        self.cc = 11 + 35 * (int(self.col) - 1)
+        self.cr = 7 + 35 * (int(self.row) - 1)
+        self.cc = 7 + 35 * (int(self.col) - 1)
         self.is_across = (self.dir == "across")
 
 class Square:
@@ -138,6 +138,10 @@ class Puzzle:
             self.date = self.data
         if self.element == "Type":
             self.type = self.data
+        if self.element == "Rows":
+            self.height = int(self.data)
+        if self.element == "Cols":
+            self.width = int(self.data)
         self.element = ""
         self.attrs = {}
 
@@ -181,9 +185,9 @@ class Puzzle:
                 if i == 0:
                     this.format[clue.row - 1][clue.col - 1].setVal(clue.num)
                 else:
-                    if clue.col - 1 + i < this.size:
+                    if clue.col - 1 + i < this.width:
                         this.format[clue.row - 1][clue.col - 1 + i].setVal(0)
-                if (clue.col - 1 + i < this.size) and not grid_only and not clue.ans[i:i+1] == '?' and not grid_only:
+                if (clue.col - 1 + i < this.width) and not grid_only and not clue.ans[i:i+1] == '?' and not grid_only:
                     this.format[clue.row - 1][clue.col - 1 + i].setLetter(clue.ans[i:i+1])
             for down in this.down:
                 if (down.col >= clue.col) and (down.col < clue.col + clue.length) and (clue.row >= down.row) and (clue.row < down.row + down.length):
@@ -194,9 +198,9 @@ class Puzzle:
                 if i == 0:
                     this.format[clue.row - 1][clue.col - 1].setVal(clue.num)
                 else:
-                    if clue.row - 1 + i < this.size:
+                    if clue.row - 1 + i < this.height:
                         this.format[clue.row - 1 + i][clue.col - 1].setVal(0)
-                if (clue.row - 1 + i < this.size) and not grid_only and not clue.ans[i:i+1] == '?' and not grid_only:
+                if (clue.row - 1 + i < this.height) and not grid_only and not clue.ans[i:i+1] == '?' and not grid_only:
                     this.format[clue.row - 1 + i][clue.col - 1].setLetter(clue.ans[i:i+1])
             for across in this.across:
                 if (across.row >= clue.row) and (across.row < clue.row + clue.length) and (clue.col >= across.col) and (clue.col < across.col + across.length):
@@ -225,7 +229,7 @@ class Puzzle:
             pos = 1
             shortans = ''
             while True:
-                if i >= this.size or j >= this.size:
+                if i >= this.height or j >= this.width:
                     break
                 let = this.row[i][j:j+1].lower()
                 if let == ".":
@@ -259,6 +263,7 @@ class Puzzle:
                 this.type = 'us'
             this.dbgridstr = post['gridstr']
         this.size = len(rows)
+        this.height = this.size
         this.format = []
         this.clue = []
         this.across = []
@@ -271,6 +276,7 @@ class Puzzle:
         for r in rows:
             cols = r.split('x')
             cols.pop()
+            this.width = len(cols)
             if rnum < this.size:
                 this.format.append([])
                 cnum = 0
@@ -317,7 +323,7 @@ class Puzzle:
                         letter = c[0:1].lower()
                 else:
                     break
-                if (clue.col - 2 + i) < this.size:
+                if (clue.col - 2 + i) < this.width:
                     this.format[clue.row - 1][clue.col - 2 + i].isletter = True
                     this.format[clue.row - 1][clue.col - 2 + i].letter = letter
                 ans += letter
@@ -337,7 +343,7 @@ class Puzzle:
                         letter = c[0:1].lower()
                 else:
                     break
-                if (clue.row - 2 + i) < this.size:
+                if (clue.row - 2 + i) < this.width:
                     this.format[clue.row - 2 + i][clue.col - 1].isletter = True
                     this.format[clue.row - 2 + i][clue.col - 1].letter = letter
                 ans += letter
@@ -345,10 +351,10 @@ class Puzzle:
             clue.ans = ans.upper()
             clue.length = len(ans)
         this.row = []
-        for i in range(this.size):
+        for i in range(this.height):
             this.row.append([])
             this.row[i] = ""
-            for j in range(this.size):
+            for j in range(this.width):
                 if this.format[i][j].isletter:
                     letter = this.format[i][j].letter
                 else:
@@ -381,9 +387,9 @@ class Puzzle:
         gridstrs = []
         gridstr = ""
         gridlen = 0
-        for r in range(self.size):
+        for r in range(self.height):
             self.format.append([])
-            for s in range(self.size):
+            for s in range(self.width):
                 if self.row[r][s:s+1] == '.':
                     self.format[r].append(Square(-1))
                     gridstr += "."
@@ -399,12 +405,15 @@ class Puzzle:
             gridlen += 1
         if len(gridstr) == 6:
             gridstrs.append(gridstr)
-        self.dbgridstr = "%d" % self.size
-        if hasattr(self, "type"):
-            if self.type.lower() == "cryptic":
-                self.dbgridstr += "c"
+        self.dbgridstr = "%d" % self.width
+        if self.width == self.height:
+            if hasattr(self, "type"):
+                if self.type.lower() == "cryptic":
+                    self.dbgridstr += "c"
+                else:
+                    self.dbgridstr += "u"
         else:
-            self.dbgridstr += "u"
+            self.dbgridstr += "x%02d" % self.height
         for gs in gridstrs:
             self.dbgridstr += gridlookup[gs]
 
@@ -413,17 +422,25 @@ class Puzzle:
         this = cls()
         this.dbgridstr = gridstr
         this.size = int(gridstr[0:2])
+        this.height = this.size
+        this.width = this.size
+        startpat = 3
         if gridstr[2:3] == 'u':
             this.type = "us"
-        else:
+        elif gridstr[2:3] == 'c':
             this.type = "cryptic"
-
+        elif gridstr[2:3] == 'x':
+            this.type = 'us'
+            this.width = this.size
+            this.height = int(gridstr[3:5])
+            this.size = this.height
+            startpat = 5
         formatstr=""
         this.row=[]
-        for chr in gridstr[3:]:
+        for chr in gridstr[startpat:]:
             formatstr += gridreverse[chr]
-        for i in range(this.size):
-            this.row.append(formatstr[i*this.size:i*this.size+this.size])
+        for i in range(this.height):
+            this.row.append(formatstr[i*this.width:i*this.width+this.width])
 
         this = Puzzle.getFromRows(this)
         this.getStats()
@@ -441,16 +458,17 @@ class Puzzle:
         return None
 
     @classmethod
-    def fromPUZ(cls, puz_file):
+    def fromPUZ(cls, pz):
         this = cls()
-        pz = puz.load(puz_file)
         this.author = pz.author
         this.title = pz.title
         this.publisher = pz.copyright
-        this.size = pz.width
+        this.size = max(pz.width, pz.height)
+        this.height = pz.height
+        this.width = pz.width
         this.row=[]
-        for i in range(this.size):
-            this.row.append(pz.answers[i*this.size:i*this.size+this.size])
+        for i in range(this.height):
+            this.row.append(pz.answers[i*this.width:i*this.width+this.width])
         this = Puzzle.getFromRows(this)
         for i in range(len(pz.clues)):
             this.clue[i].clue = pz.clues[i]
@@ -467,18 +485,18 @@ class Puzzle:
 
     def toPUZ(self):
         pz = puz.Puzzle()
-        pz.width = self.size
-        pz.height = self.size
+        pz.width = self.width
+        pz.height = self.height
         pz.author = self.author
         pz.title = self.title
         answers = []
         fill = []
-        for i in range(self.size):
+        for i in range(self.height):
             answers.append(self.row[i].upper().encode('latin-1'))
         pz.answers= ''.join(answers)
-        for i in range(self.size):
+        for i in range(self.height):
             fillrow=[]
-            for j in range(self.size):
+            for j in range(self.width):
                 if self.row[i][j:j+1] == '.':
                     fillrow.append('.')
                 else:
@@ -544,18 +562,18 @@ class Puzzle:
         this.down_intersections = {}
         this.intersections = []
         clue_num = 1
-        for i in range(1, this.size+1):
+        for i in range(1, this.height+1):
             this.format.append([])
-            for j in range(1, this.size+1):
+            for j in range(1, this.width+1):
                 if this.row[i-1][j-1:j] == '.':
                     this.format[i-1].append(Square(-1))
                 else:
                     this.format[i-1].append(Square(0))
                     if j == 1 or this.row[i-1][j-2:j-1] == '.':  # beginning of horizontal clue
-                        if j - 1 < this.size - 2 and this.row[i-1][j:j+1] != '.':  #room for a word
+                        if j - 1 < this.width - 2 and this.row[i-1][j:j+1] != '.':  #room for a word
                             clue_len = 2
                             cl = this.row[i-1][j-1:j+1]
-                            while j + clue_len - 1 < this.size and this.row[i-1][j+clue_len-1:j+clue_len] != '.':
+                            while j + clue_len - 1 < this.width and this.row[i-1][j+clue_len-1:j+clue_len] != '.':
                                 cl += this.row[i-1][j+clue_len-1:j+clue_len]
                                 clue_len += 1
                             attrs = {}
@@ -569,10 +587,10 @@ class Puzzle:
                             this.format[i-1][j-1].setVal(clue_num)
 
                     if i == 1 or this.row[i-2][j-1:j] == '.':  # beginning of vertical clue
-                        if i - 1 < this.size - 2 and this.row[i][j-1:j] != '.':  #room for a word
+                        if i - 1 < this.height - 2 and this.row[i][j-1:j] != '.':  #room for a word
                             clue_len = 2
                             cl = this.row[i-1][j-1:j] + this.row[i][j-1:j]
-                            while i + clue_len -1 < this.size and this.row[i+clue_len-1][j-1:j] != '.':
+                            while i + clue_len -1 < this.height and this.row[i+clue_len-1][j-1:j] != '.':
                                 cl += this.row[i+clue_len-1][j-1:j]
                                 clue_len += 1
                             attrs = {}
@@ -740,9 +758,8 @@ scrabble = [1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4
 #    def savePDF(self):
 #        c = canvas.canvas()
 #        squares = []
-#        size = self.size
-#        for i in range(size):
-#            for j in range(size):
+#        for i in range(self.height):
+#            for j in range(self.width):
 #                rect = path.path(path.moveto(i, -j), path.lineto(i+1, -j),
 #                                 path.lineto(i+1, -j-1), path.lineto(i, -j-1),
 #                                 path.lineto(i, -j), path.closepath())

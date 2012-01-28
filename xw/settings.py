@@ -138,7 +138,7 @@ LOGGING = {
         'log_access': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/tmp/xw.log',
+            'filename': '/var/log/xw.log',
             'formatter': 'simple'
         },
     },

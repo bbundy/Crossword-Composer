@@ -26,6 +26,7 @@ from WordAPI import WordAPI
 from WordsAPI import WordsAPI
 import model
 import time
+import puz
 
 class ContactForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
@@ -66,9 +67,9 @@ def pub_words(request):
     if active_clue:
         pat = active_clue.ans.lower()
         q = Clue.objects.extra(where=['answer LIKE "%s"' % pat.replace('?','_')])
-        q = q.distinct(['answer'])
+        q = q.only('answer')
         ans = {}
-        for r in q.all()[:300]:
+        for r in q.all()[:5000]:
             a = r.answer.lower()
             if ans.has_key(a):
                 ans[a] += 1
@@ -77,7 +78,7 @@ def pub_words(request):
         for k in sorted(ans.keys(), lambda x,y: cmp(ans[y],ans[x])):
             word_matches.append(k)
         logger = logging.getLogger('xw.access')
-        logger.info(" list words  request from %s for %s (%s) took %f seconds" % (request.META['REMOTE_ADDR'], request.POST["active"], pat, time.time() - start_time));
+        logger.info(" published words  request from %s for %s (%s) took %f seconds" % (request.META['REMOTE_ADDR'], request.POST["active"], pat, time.time() - start_time));
     resp = '&'.join(word_matches)
     return HttpResponse(resp)
     
@@ -221,7 +222,7 @@ def clues(request):
             for c in cluelist:
                 resp += c.text + "<br> - "
                 resp += c.puzzle.title + "<br> - "
-                resp += c.puzzle.setter.username + "<br>-------<br>"
+                resp += c.puzzle.setter.username + " - " + c.puzzle.publisher.username + "<br>-------<br>"
     else:
         word = "(missing word)"
     logger = logging.getLogger('xw.access')
@@ -384,9 +385,15 @@ def download_puz(request):
 
 def from_puz(request):
     t = get_template('puzzle.html')
-    puz_handle = urllib.urlopen(request.POST["puzurl"])
-    p = Puzzle.fromPUZ(puz_handle.read())
-    html = t.render(RequestContext(request, {'puzzle': p}))
+    if request.POST.has_key("puzurl"):
+        puz_handle = urllib.urlopen(request.POST["puzurl"])
+        puz_data = puz_handle.read()
+    else:
+        puz_data = request.FILES["puzfile"].read()
+
+    p = puz.load(puz_data)
+    pz = Puzzle.fromPUZ(p)
+    html = t.render(RequestContext(request, {'puzzle': pz}))
     return HttpResponse(html)
 
 def mobile_find(request):
@@ -408,7 +415,10 @@ def newcryptic(request):
 
 def newus(request):
     t = get_template('puzzle.html')
-    gridstrs = Grid.objects.filter(Q(format__startswith='15u'))
+    if request.GET.has_key("size") and request.GET["size"] == "21":
+        gridstrs = Grid.objects.filter(Q(format__startswith='21u'))
+    else:
+        gridstrs = Grid.objects.filter(Q(format__startswith='15u'))
     p = Puzzle.fromGrid(gridstrs[randrange(len(gridstrs))].format)
     html = t.render(RequestContext(request, {'puzzle': p}))
     return HttpResponse(html)

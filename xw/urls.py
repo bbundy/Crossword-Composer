@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
+from django.views.generic.simple import direct_to_template
 from xw.views import main_landing, member_request, thanks, print_cw, mobile_find, usegrid, ranked_words, definition, examples, print_cw_all
 from xw.views import download_xpf, from_xpf, doc, newus, newcryptic, download_puz, from_puz, save, retrieve, solve, gridedit, clues, pub_words, list_words
 admin.autodiscover()
@@ -32,4 +33,6 @@ urlpatterns = patterns('',
     url(r'^usegrid/', usegrid),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^robots\.txt$', direct_to_template,
+     {'template': 'robots.txt', 'mimetype': 'text/plain'}),
 )

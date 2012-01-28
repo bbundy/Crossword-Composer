@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 def impXPF(url):
     xml_handle = urlopen(url)
-    fname = sys.argv[1].split("/").pop()
+    fname = "-".join(sys.argv[1].split("/")) + ".xpf"
     file_contents = xml_handle.read()
     save_file = open("/home/bbundy/puzzles/nyt/" + fname,"w")
     save_file.write(file_contents)

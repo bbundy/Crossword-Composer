@@ -7,8 +7,8 @@
     <Publisher>{{ puzzle.publisher }}</Publisher>
     <Date>{{ puzzle.date }}</Date>
     <Size>
-      <Rows>{{ puzzle.size }}</Rows>
-      <Cols>{{ puzzle.size }}</Cols>
+      <Rows>{{ puzzle.height }}</Rows>
+      <Cols>{{ puzzle.width }}</Cols>
     </Size>
     <Grid>
 {% for row in puzzle.row %}

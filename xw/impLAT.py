@@ -3,7 +3,8 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), os.path.pardir)))
 from datetime import date, timedelta
 from time import sleep
-from importPUZ import impPUZFile
+from importPUZ import impPUZ
+
 (m, d, y) = sys.argv[1].split('/')
 fromdate = date(int(y),int(m),int(d))
 
@@ -12,13 +13,15 @@ todate = date(int(y),int(m),int(d))
 
 thisdate = fromdate
 
-months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 while thisdate <= todate:
-    month = months[thisdate.month - 1]
-    filename = thisdate.strftime("/home/bbundy/puzzles/nyt/%s%%d%%y.puz" % month)
-    print "Importing: %s" % filename
+    url = thisdate.strftime("http://www.cruciverb.com/puzzles/lat/lat%y%m%d.puz")
+    print "Importing: %s" % url
     try:
-        impPUZFile(filename, "NY Times")
+        data = impPUZ(url, "LA Times")
+        f = open(thisdate.strftime("/home/bbundy/puzzles/lat/lat%y%m%d.puz"), 'w')
+        f.write(data)
+        f.close()
     except IndexError:
         pass
     thisdate += timedelta(1)
+    sleep(5)

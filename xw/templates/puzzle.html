@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load expr %}
-{% block title %}Crossword Composer{% endblock %}
+{% block title %}Crossword Composer - Professional Construction Tools{% endblock %}
 {% block content %}
 <script type="text/javascript"
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
@@ -23,16 +23,17 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   intersections["{{ k }}"] = "{{ v }}";
 {% endfor %}
 </script>
-<form id="crossword" method="post"> {% csrf_token %}
+<form id="crossword" method="post" enctype="multipart/form-data"> {% csrf_token %}
 <input id="gridstr" type="hidden" name="gridstr" value = "{{ puzzle.dbgridstr }}"/>
 <input id="format" type="hidden" name="format" value ="{{ puzzle.formatstr }}"/>
 
-<table border=5 bordercolor=#333399>
+<table border=3 bordercolor=#333399 style="border-collapse:collapse">
   <tr><td valign=top>
-  <table noborder><tr><td>
-  {% expr 35*puzzle.size as pxsize %}
-  <div id="grid" style="width: {{ pxsize }}px; height: {{ pxsize }}px;">
-    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: {{ pxsize }}px; height: {{ pxsize }}px;" />
+  <table border=0><tr><td>
+  {% expr 35*puzzle.width+1 as pxwidth %}
+  {% expr 35*puzzle.height+1 as pxheight %}
+  <div id="grid" style="width: {{ pxwidth }}px; height: {{ pxheight }}px;">
+    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: {{ pxwidth }}px; height: {{ pxheight }}px;" />
 {% for clue in puzzle.clue %}
 
     <span style="left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir}}"> {{ clue.num }}</span>
@@ -54,18 +55,19 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   </td></tr>
   <tr><td>
   <div id="buttons-horizontal-left">
-    <input id="newus" type="button" value="New US Grid" />
-    <input id="newcryptic" type="button" value="New Cryptic Grid" />
+    <input id="newus" type="button" value="Random US 15x15" />
+    <input id="newus21" type="button" value="Random US 21x21" />
+    <input id="newcryptic" type="button" value="Random Cryptic Grid" />
     <input id="gridedit" type="button" value="Customize Grid" />
     <div id="settings-load"></div>
   </div>
   </td></tr>
 </table>
   </td><td valign="top">
-  <table border=5 bordercolor=#993333 bgcolor=white>
+  <table border=3 bordercolor=#993333 bgcolor=white style="border-collapse:collapse; padding:0">
     <div id="action-tabs">
       <tr><td>
-      <table border=1 cellspacing=0>
+      <table border=1 style="border-collapse:collapse; padding:0" >
       <tr>
 	<td>
 	  <div id="file-tab"> File </div>
@@ -104,14 +106,15 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
       Title:<input type="text" name="title" size=60 value="{{ puzzle.title }}"/><br>
       <input id="retrieve" type="button" value="Retrieve" /> (Get server copy of this Title by this Author)<br>
       <input id="solve" type="button" value="Solve" /> (Opens the current puzzle in solution mode in a new tab)<br>
-      <input id="save" type="button" value="Save" style="background-color:#ee8888"/> (Careful, this will overwrite existing Title by this Author, unless a password has been set for that Author/Title)<br>
+      <input id="save" type="button" value="Save" style="background-color:#ee8888"/><br>
       <div id="save-progress"> Saving.... </div>
       <input id="print" type="button" value="Print Without Solutions" /> (Opens printable page in a new tab)<br>
       <input id="printall" type="button" value="Print With Solutions" /><br>
       <input id="toxpf" type="button" value="Render as XPF for Export" /> (Opens XPF rendering in a new tab)<br>
       <input id="fromxpf" type="button" value="Load XPF puzzle from URL" /><br>
       <input id="frompuz" type="button" value="Load .puz (Across Lite) from URL" /></br>
-      <input id="topuz" type="button" value="Save in .puz (Across Lite) format" /></br>
+      <input id="frompuzlocal" type="button" value="Load .puz (Across Lite) from local file" /></br>
+      <input id="topuz" type="button" value="Save in .puz (Across Lite) format to local file" /></br>
     <div id="file-load"></div>
     </div>
     <div id="word-content">
@@ -300,6 +303,7 @@ The "Clue" button will look up any existing clues for the selected answer in the
 Please join the <a href="http://groups.google.com/group/crosswordcomposer"> Discussion Group </a> if you have word lists to contribute, or questions about the service.  Have Fun!
   </div>
   </td></tr>
+<tr><td align=center><img src="http://67.207.128.158/xw/cc.png"></td></tr>
 </table>
 </td></tr>
 </table>

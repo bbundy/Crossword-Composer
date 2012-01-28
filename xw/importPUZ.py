@@ -2,6 +2,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), os.path.pardir)))
 import xwcore
+import puz
 from urllib import urlopen
 from xword.models import  Clue, User, UserType, PuzzleType, Grid, Puzzle
 from datetime import date
@@ -11,8 +12,18 @@ from django.utils.encoding import smart_str
 def impPUZ(url, publisher=None):
     puz_handle = urlopen(url)
     file_contents = puz_handle.read()
+    puz_handle.close()
+    return impPUZdata(file_contents, publisher)
 
-    p = xwcore.Puzzle.fromPUZ(file_contents)
+def impPUZFile(filename, publisher=None):
+    puz_handle = open(filename)
+    file_contents = puz_handle.read()
+    puz_handle.close()
+    return impPUZdata(file_contents, publisher)
+
+def impPUZdata(file_contents, publisher):
+    pz = puz.load(file_contents)
+    p = xwcore.Puzzle.fromPUZ(pz)
     if publisher:
         p.publisher = publisher
     try:
@@ -139,4 +150,4 @@ def impPUZ(url, publisher=None):
                     t += clue.clue[i:i+1]
             cl.text = t
             cl.save()
-
+    return file_contents
