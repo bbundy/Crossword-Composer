@@ -1,8 +1,8 @@
 $('ready', init_cw);
-//$('ready', load_from_cookie);
 
 var focus_fired = false;
 var active_words = [];
+var active_tab = 'file'
 
 function init_cw() {
     var inputs = $('#grid').find('input');
@@ -49,6 +49,9 @@ function init_cw() {
     inputs.bind('keyup', function(e) {
 	    var key = e.keyCode || e.charCode;
 	    if (is_letter(key)) {
+		if (active_tab != 'word') {
+		    setActionTab('word');
+		}
 		$(e.target).val(String.fromCharCode(key).toLowerCase());
 		copyChangeToIntersectingLetter($(e.target));
 		focusOnNextInput($(e.target));
@@ -141,11 +144,17 @@ function init_cw() {
 	if (pattern.indexOf("0") == -1) {
 	    $('#definition').show();
 	    $('#examples').show();
+	    $('#clues').show();
 	    $('#rankedwords').hide();
+	    $('#pubwords').hide();
+	    $('#listwords').hide();
 	} else {
 	    $('#definition').hide();
 	    $('#examples').hide();
+	    $('#clues').hide();
 	    $('#rankedwords').show();
+	    $('#pubwords').show();
+	    $('#listwords').show();
 	}
     }
 
@@ -172,6 +181,7 @@ function init_cw() {
 	    clue_for(active_words[0]).append(clue);
 	    input_for(active_words[0]).attr('value', clue);
 	    $(active_words[0]).find('input:first').focus();
+	    $('#clue-intro').hide();
 	});    
 
     $('#save').bind('click', function(e) {
@@ -196,6 +206,23 @@ function init_cw() {
 		letter.attr('value', '');
 		intersecting_letter.attr('value', '');
 	    }
+	});
+	inputs[0].focus();
+	adjust_find_define();
+	});
+    
+    $('#revwd').bind('click', function(e) {
+	var i = 0;
+	inputs = active_words[0].find('input');
+	ans = solutions[active_words[0].attr('id')];
+	$.each(inputs, function() {
+	    var letter = $(this);
+	    var intersecting_letter = getIntersectingLetter(letter);
+	    var intersecting_word = words_for_letter(intersecting_letter);
+	    var letr = ans.substring(i, i+1);
+	    letter.attr('value', letr);
+	    intersecting_letter.attr('value', letr);
+	    i += 1;
 	});
 	inputs[0].focus();
 	adjust_find_define();
@@ -230,10 +257,43 @@ function init_cw() {
 	    if (active_words[0]) {
 		active = $(active_words[0]).find('input:first').attr('id');
 		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
-		$("#word-suggestions").append("Looking for matches...");
+		$("#word-suggestions").append("Looking for dictionary matches...");
 		$("#word-suggestions").show();
 		var form = $(this).closest('form');
 		loadXMLPost('/rankedwords/', form.serialize(), processReqChange);
+	    }
+	});
+
+    $('#pubwords').bind('click', function(e) {
+	    $("#word-intro").hide();
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").hide();
+	    if (active_words[0]) {
+		active = $(active_words[0]).find('input:first').attr('id');
+		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		$("#word-suggestions").append("Looking for published matches...");
+		$("#word-suggestions").show();
+		var form = $(this).closest('form');
+		loadXMLPost('/pubwords/', form.serialize(), processReqChange);
+	    }
+	});
+
+    $('#auto-fill').bind('click', function(e) {
+	    var form = $(this).closest('form');
+	    loadXMLPost('/fill/', form.serialize(), fillReqChange);
+	});
+
+    $('#listwords').bind('click', function(e) {
+	    $("#word-intro").hide();
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").hide();
+	    if (active_words[0]) {
+		active = $(active_words[0]).find('input:first').attr('id');
+		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		$("#word-suggestions").append("Looking for list matches...");
+		$("#word-suggestions").show();
+		var form = $(this).closest('form');
+		loadXMLPost('/pubwords/', form.serialize(), processReqChange);
 	    }
 	});
 
@@ -262,6 +322,20 @@ function init_cw() {
 		$("#word-suggestions").show();
 		var form = $(this).closest('form');
 		loadXMLPost('/examples/', form.serialize(), defReqChange);
+	    }
+	});
+
+    $('#clues').bind('click', function(e) {
+	    $("#word-intro").hide();
+	    $("#word-suggestions").empty();
+	    $("#buttons-horizontal").hide();
+	    if (active_words[0]) {
+		active = $(active_words[0]).find('input:first').attr('id');
+		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		$("#word-suggestions").append("Looking for clues...");
+		$("#word-suggestions").show();
+		var form = $(this).closest('form');
+		loadXMLPost('/clues/', form.serialize(), defReqChange);
 	    }
 	});
 
@@ -341,6 +415,10 @@ function init_cw() {
 	setActionTab('help');
 	});
 
+    $('#contact-tab').bind('click', function(e) {
+	setActionTab('contact');
+	});
+
     $('#forum-tab').bind('click', function(e) {
 	window.open('http://groups.google.com/group/crosswordcomposer');
 	});
@@ -373,7 +451,7 @@ function init_cw() {
 	$(e.target).attr('style', 'background-color: #222288;color: white');
 	});
 
-    $('#help-tab').bind('mouseover', function(e) {
+    $('#contact-tab').bind('mouseover', function(e) {
 	$(e.target).attr('style', 'background-color: #222288;color: white');
 	});
 
@@ -429,6 +507,12 @@ function init_cw() {
 	}
 	});
 
+    $('#contact-tab').bind('mouseout', function(e) {
+	if ($(e.target).attr('active') != "true") {
+	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
+	}
+	});
+
     $('#forum-tab').bind('mouseout', function(e) {
 	if ($(e.target).attr('active') != "true") {
 	    $(e.target).attr('style', 'background-color: #eeeeff;color: black');
@@ -438,6 +522,11 @@ function init_cw() {
     $('#newus').bind('click', function(e) {
 	    deleteAllCookies();
 	    window.location='/newus/';
+	});
+
+    $('#newus21').bind('click', function(e) {
+	    deleteAllCookies();
+	    window.location='/newus/?size=21';
 	});
 
     $('#newcryptic').bind('click', function(e) {
@@ -458,7 +547,18 @@ function init_cw() {
 
     $('#frompuz').bind('click', function(e) {
 	    deleteAllCookies();
-	    $("#file-load").append('<br><input id="puzurl" name="puzurl" type=text" size=100 value=""/> <input id="puz-load-submit" type=button value="Load PUZ"/>');
+	    $("#file-load").append('<br><input id="puzurl" name="puzurl" type="text" size=100 value=""/> <input id="puz-load-submit" type=button value="Load PUZ from URL"/>');
+	    $('#puz-load-submit').bind('click', function(e) {
+		    var form = $(this).closest('form');
+		    form.attr('action','/frompuz/');
+		    form.attr('target','_blank');
+		    form.submit();
+		});
+	});
+
+    $('#frompuzlocal').bind('click', function(e) {
+	    deleteAllCookies();
+	    $("#file-load").append('<br><input id="puzfile" name="puzfile" type="file"/> <input id="puz-load-submit" type=button value="Load local PUZ"/>');
 	    $('#puz-load-submit').bind('click', function(e) {
 		    var form = $(this).closest('form');
 		    form.attr('action','/frompuz/');
@@ -470,7 +570,10 @@ function init_cw() {
     $('#word-suggestions').hide();    
     $('#definition').hide();
     $('#examples').hide();
+    $('#clues').hide();
     $('#rankedwords').hide();
+    $('#pubwords').hide();
+    $('#listwords').hide();
     $('#clearwd').hide();
 
     $('#active-clue-edit:not(.no-number)').bind('keyup', function(e) {
@@ -487,6 +590,7 @@ function init_cw() {
 }
 
 function setActionTab(tabname) {
+    active_tab = tabname;
     setTabInactive('file');
     setTabInactive('word');
     setTabInactive('clue');
@@ -494,6 +598,7 @@ function setActionTab(tabname) {
     setTabInactive('rebus');
     setTabInactive('fill');
     setTabInactive('help');
+    setTabInactive('contact');
     setTabInactive('stat');
     setTabActive(tabname);
 }
@@ -559,8 +664,6 @@ function focusOnNextInput(element) {
 		}
 		if (this.attr('id') === word.attr('id')) {
 		    this_word_was_last_word = true;
-		    $('#active-clue-edit').find('input:first').get(0).setSelectionRange(0,0);
-		    $('#active-clue-edit').find('input:first').focus();
 		} else {
 		    this_word_was_last_word = false;
 		}
@@ -612,11 +715,17 @@ function activate_word(letter) {
     if (pattern.indexOf("0") == -1) {
 	$('#definition').show();
 	$('#examples').show();
+	$('#clues').show();
 	$('#rankedwords').hide();
+	$('#pubwords').hide();
+	$('#listwords').hide();
     } else {
 	$('#definition').hide();
 	$('#examples').hide();
+	$('#clues').hide();
 	$('#rankedwords').show();
+	$('#pubwords').show();
+	$('#listwords').show();
     }
     $('#clearwd').show();
     $('#active-clue:not(.no-number)').append(clue_for(active_words[0]).contents().clone());
@@ -647,7 +756,10 @@ function deactivate_word() {
     $("#word-suggestions").hide();
     $('#definition').hide();
     $('#examples').hide();
+    $('#clues').hide();
     $('#rankedwords').hide();
+    $('#pubwords').hide();
+    $('#listwords').hide();
     $('#clearword').hide();
 }
 
@@ -703,8 +815,8 @@ function processReqChange()
         if (req.status == 200) {
 	    var words = req.response.split('&');
 	    $("#word-suggestions").empty();
-	    if(words[0] == "toomanymatches") {
-		alert("Too many words match this query. Try working on a part of the puzzle with longer words or more filled squares\n");
+	    if(words[0] == "") {
+		$("#word-suggestions").append('No matching results found.');
 	    } else {
 		for (i=0; i<words.length; i++) {
 		    $("#word-suggestions").append('<input id="iw' + i + '" type=button value="' + words[i] + '"/>');
@@ -712,7 +824,10 @@ function processReqChange()
 			    set_word(active_words[0].find('input'), $(e.target).attr('value'));
 			$('#definition').show();
 			$('#examples').show();
+			$('#clues').show();
 			$('#rankedwords').hide();
+			$('#pubwords').hide();
+			$('#listwords').hide();
 			});
 		}
 	    }
@@ -733,6 +848,21 @@ function defReqChange()
 	    $("#word-suggestions").empty();
 	    $("#word-suggestions").append(req.response);
 	    $("#word-suggestions").show();
+        } else {
+            alert("There was a problem retrieving the XML data:\n" + req.statusText);
+        }
+	$("#buttons-horizontal").show();
+    }
+}
+
+function fillReqChange() 
+{
+    // only if req shows "complete"
+    if (req.readyState == 4) {
+        // only if "OK"
+        if (req.status == 200) {
+	    var resp = req.response.split('&');
+	    set_word($('#' + resp[0]).find('input'), resp[1])
         } else {
             alert("There was a problem retrieving the XML data:\n" + req.statusText);
         }

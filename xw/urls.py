@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template
-from xw.views import main_landing, member_request, thanks, print_cw, mobile_find, usegrid, ranked_words, definition, examples, print_cw_all
+from django.views.generic.simple import direct_to_template, redirect_to
+from django.shortcuts import redirect
+from xw.views import main_landing, member_request, thanks, print_cw, mobile_find, usegrid, ranked_words, definition, examples, print_cw_all, fill, auto_clue
 from xw.views import download_xpf, from_xpf, doc, newus, newcryptic, download_puz, from_puz, save, retrieve, solve, gridedit, clues, pub_words, list_words
 admin.autodiscover()
 
@@ -29,6 +30,8 @@ urlpatterns = patterns('',
     url(r'^newcryptic/', newcryptic),
     url(r'^newus/', newus),
     url(r'^solve/', solve),
+    url(r'^fill/', fill),
+    url(r'^autoclue/', auto_clue),
     url(r'^gridedit/', gridedit),
     url(r'^usegrid/', usegrid),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

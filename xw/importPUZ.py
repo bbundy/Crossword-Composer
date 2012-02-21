@@ -85,64 +85,36 @@ def impPUZdata(file_contents, publisher):
 
 
     for clue in p.across:
-        if clue.dir == "across":
-            dir = 1
-        else:
-            dir = 2
-
-        try:
-            cl = Clue.objects.get(puzzle__title=p.title, num=clue.num, dir=dir)
-            cl.answer=clue.ans
-            cl.text=smart_str(clue.clue)
-            cl.type=ptype
-            cl.save()
-
-        except ObjectDoesNotExist:
-            cl = Clue(setter=setter, puzzle=puzzle, row=clue.row, col=clue.col, num=clue.num, answer=clue.ans, dir=dir, text=clue.clue, type=ptype)
-            try:
-                cl.save()
-            except Exception:
-                t = ""
-                for i in range(len(clue.clue)):
-                    if ord(clue.clue[i:i+1]) < 0x80:
-                        t += clue.clue[i:i+1]
-                cl.text = t
-                cl.save()
-        except MultipleObjectsReturned:
-            print "multiple clues found for %s %s %s" % (clue.ans, clue.clue, p.title)
-        except Exception:
-            t = ""
-            for i in range(len(clue.clue)):
-                if ord(clue.clue[i:i+1]) < 0x80:
-                    t += clue.clue[i:i+1]
-            cl.text = t
-            cl.save()
+        save_clue(clue, p, setter, editor, publisher, puzzle, ptype)
 
     for clue in p.down:
-        if clue.dir == "across":
-            dir = 1
-        else:
-            dir = 2
+        save_clue(clue, p, setter, editor, publisher, puzzle, ptype)
+    return file_contents
 
+def save_clue(clue, p, setter, editor, publisher, puzzle, ptype):
+    if clue.dir == "across":
+        dir = 1
+    else:
+        dir = 2
+
+    try:
+        cl = Clue.objects.get(puzzle__title=p.title, num=clue.num, dir=dir)
+        cl.answer=clue.ans
         try:
-            cl = Clue.objects.get(puzzle__title=p.title, num=clue.num, dir=dir)
-            cl.answer=clue.ans
-            cl.text=smart_str(clue.clue)
-            cl.type=ptype
-            cl.save()
+            ans = Answer.objects.get(answer=cl.answer)
+            ans.count += 1
+            ans.save()
         except ObjectDoesNotExist:
-            cl = Clue(setter=setter, puzzle=puzzle, row=clue.row, col=clue.col, num=clue.num, answer=clue.ans, dir=dir, text=clue.clue, type=ptype)
-            try:
-                cl.save()
-            except Exception:
-                t = ""
-                for i in range(len(clue.clue)):
-                    if ord(clue.clue[i:i+1]) < 0x80:
-                        t += clue.clue[i:i+1]
-                cl.text = t
-                cl.save()
-        except MultipleObjectsReturned:
-            print "multiple clues found for %s %s %s" % (clue.ans, clue.clue, p.title)
+            ans = Answer(answer=cl.answer, count=1)
+            ans.save()
+
+        cl.text=smart_str(clue.clue)
+        cl.type=ptype
+        cl.save()
+    except ObjectDoesNotExist:
+        cl = Clue(setter=setter, puzzle=puzzle, row=clue.row, col=clue.col, num=clue.num, answer=clue.ans, dir=dir, text=clue.clue, type=ptype)
+        try:
+            cl.save()
         except Exception:
             t = ""
             for i in range(len(clue.clue)):
@@ -150,4 +122,12 @@ def impPUZdata(file_contents, publisher):
                     t += clue.clue[i:i+1]
             cl.text = t
             cl.save()
-    return file_contents
+    except MultipleObjectsReturned:
+        print "multiple clues found for %s %s %s" % (clue.ans, clue.clue, p.title)
+    except Exception:
+        t = ""
+        for i in range(len(clue.clue)):
+            if ord(clue.clue[i:i+1]) < 0x80:
+                t += clue.clue[i:i+1]
+        cl.text = t
+        cl.save()

@@ -3,7 +3,7 @@
 {% block title %}Crossword Composer - Professional Construction Tools{% endblock %}
 {% block content %}
 <script type="text/javascript"
-src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <div class="crossword">
 
 <style>            
@@ -96,6 +96,9 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<td>
 	  <div id="forum-tab"> Forum </div>
 	</td>
+	<td>
+	  <div id="contact-tab"> Contact </div>
+	</td>
       </tr>
       </table>
       </td></tr>
@@ -141,6 +144,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
       <div id="clue-intro">
 	Enter a clue for the yellow highlighted word by typing into the box below and clicking "Update Clue" or pressing the "Enter" key.
       </div>
+      <input id="auto-clue" type="button" value="Auto Clue" />
       <div id="active-clue-edit">
 	<input type="text" name="clue" size=128 value=""/>
 	<input id="update-clue" type="button" value="Update Clue" />
@@ -253,8 +257,16 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   </div>
   <div id="fill-content">
 	Grid Auto-Fill will attempt to fill the current grid using the selected dictionaries and custom word lists.<br>
-	<input type="button" id="auto-fill" name="auto-fill" value="Start Fill"/> 
+	<input type="button" id="auto-fill" name="auto-fill" value="Auto Fill"/> 
+	<input type="button" id="guided-fill" name="guided-fill" value="Guided Fill"/> 
+	<input type="button" id="step-fill" name="step-fill" value="Step Fill"/> 
 	<input type="button" id="stop-fill" name="stop-fill" value="Stop Fill"/> 
+	<input type="button" id="skip-fill" name="skip-fill" value="Skip"/> 
+	<input type="button" id="pop-fill" name="pop-fill" value="Pop"/> 
+	<input type="button" id="clear-fill" name="clear-fill" value="Accept"/> 
+	<input type="hidden" id="fill-stack" name="fill-stack" value=""></input>
+	<input type="hidden" id="fill-guide" name="fill-guide" value=""></input>
+	<div id="fill-stack-disp"></div>
   </div>
   <div id="help-content">
 <h4>Getting Started</h4>
@@ -297,10 +309,14 @@ appear beneath the puzzle in the form of buttons which, if clicked, will autofil
 Cryptics Dictionary currently, and new dictionaries and custom word lists are added as they become available.
 
 <h4>Clue Lookup</h4>
-The "Clue" button will look up any existing clues for the selected answer in the database of saved puzzles.
+The "Clue" button will look up any previously published clues for the selected answer.
 
 <h4>Questions and Comments</h4>
 Please join the <a href="http://groups.google.com/group/crosswordcomposer"> Discussion Group </a> if you have word lists to contribute, or questions about the service.  Have Fun!
+  </div>
+  <div id="contact-content">
+    Hi, and welcome to Crossword Composer.  I would love to hear your comments, criticisms, requests for assistance, or bug reports.  You can reach me at 
+<a href=mailto:info@crosswordcomposer.com>info@crosswordcomposer.com</a>  
   </div>
   </td></tr>
 <tr><td align=center><img src="http://67.207.128.158/xw/cc.png"></td></tr>

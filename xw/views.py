@@ -11,7 +11,7 @@ from django.utils.encoding import smart_unicode, smart_str
 from django.template import RequestContext
 from subprocess import Popen, PIPE
 from xwcore import Puzzle
-from xword.models import Grid, RawPuzzles, SolvePuzzles, Clue
+from xword.models import Grid, RawPuzzles, SolvePuzzles, Clue, Answer
 from random import randrange
 from django.db.models import Q
 import logging
@@ -27,6 +27,8 @@ from WordsAPI import WordsAPI
 import model
 import time
 import puz
+import random
+
 
 class ContactForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
@@ -66,21 +68,126 @@ def pub_words(request):
     active_clue = p.clue_from_str(n1, ad)
     if active_clue:
         pat = active_clue.ans.lower()
-        q = Clue.objects.extra(where=['answer LIKE "%s"' % pat.replace('?','_')])
-        q = q.only('answer')
-        ans = {}
-        for r in q.all()[:5000]:
-            a = r.answer.lower()
-            if ans.has_key(a):
-                ans[a] += 1
-            else:
-                ans[a] = 1
-        for k in sorted(ans.keys(), lambda x,y: cmp(ans[y],ans[x])):
-            word_matches.append(k)
+        q = Answer.objects.extra(where=['answer LIKE "%s"' % pat.replace('?','_')])
+        q = q.order_by('count').reverse()
+        for r in q.all():
+            word_matches.append(r.answer.lower())
         logger = logging.getLogger('xw.access')
         logger.info(" published words  request from %s for %s (%s) took %f seconds" % (request.META['REMOTE_ADDR'], request.POST["active"], pat, time.time() - start_time));
     resp = '&'.join(word_matches)
     return HttpResponse(resp)
+    
+def fill(request):
+    resp = ''
+    word_matches = []
+    p = Puzzle.fromPOST(request.POST)
+    stackstr = request.POST["fill-stack"]
+    if stackstr == "":
+        stack = p.initial_stack()
+    else:
+        stack = stackstr.split(',')
+    guide = request.POST['fill-guide']
+    if guide == 'on':
+        clue = request.POST['active'] 
+        (n1,ad,pos) = clue.split('-')
+        active_clue = p.clue_from_str(n1, ad)
+    else:
+        active_clue = p.fill_clue(stack)
+    if active_clue:
+        pat = active_clue.ans.lower()
+        q = Answer.objects.extra(where=['answer LIKE "%s"' % pat.replace('?','_')])
+        q = q.order_by('count').reverse()
+        for r in q.all():
+            word_matches.append(r.answer.lower())
+        if len(word_matches) > 0:
+            resp = fill_resp(p, word_matches, active_clue, "", stack)
+        if len(word_matches) == 0 or resp == None:
+            int_hash = {}
+            if active_clue.dir == "across":
+                cross_hash = p.across_intersections
+            else:
+                cross_hash = p.down_intersections
+            for i in range(len(pat)):
+                if not pat[i:i+1] == '?':
+                    cross = cross_hash["%d-%s-%d" % (active_clue.num, active_clue.dir, i+1)].split('-')
+                    int_hash['-'.join(cross[0:2])] = 1
+            do_list = ""
+            got_int = False
+            while True:
+                last = None
+                try:
+                    last = stack.pop().split('&')
+                except Exception:
+                    pass
+                if last == None or last == '' or len(last) < 3:
+                    resp = "unfillable"
+                    break
+                if len(last) >= 3:
+                    (num, ad) = last[0].split('-')
+                    clue = p.clue_from_str(num,ad)
+                    clue.ans = last[1]
+                    if not do_list == "":
+                        do_list += "/"
+                    do_list += "%s&%s" % (last[0], last[1])
+                    if (last[2] == '') or ((not got_int) and (not int_hash.has_key(last[0]))):
+                        if int_hash.has_key(last[0]):
+                            got_int = True
+                        continue;
+                    else:
+                        resp = fill_resp(p, last[2:], clue, do_list, stack)
+                break
+            
+    return HttpResponse(resp)
+
+def fill_resp(p, matches, active_clue, do_list, stack):
+    for i in range(len(matches)):
+        word = matches[i]
+        poss = True;
+        xings = p.clue_xings(active_clue)
+        wd_stack = []
+        wd_do_list = ""
+        for j in range(len(word)):
+            pattern = xings[j][2][0:xings[j][0] - 1] + word[j:j+1].upper() + xings[j][2][xings[j][0]:] 
+            if pattern.find('?') == -1:
+                continue
+            patscore = Answer.objects.extra(where=['answer LIKE "%s"' % pattern.replace('?','_')]).count()
+            if patscore == 0:
+                poss = False
+                break
+            if patscore == 1:
+                xwd = Answer.objects.extra(where=['answer LIKE "%s"' % pattern.replace('?','_')]).all()[0].answer.lower()
+                if not wd_do_list == "":
+                    wd_do_list += "/"
+                wd_do_list += "%s&%s" % (xings[j][3], xwd)
+                wd_stack.append("%s&%s&%s" % (xings[j][3], pattern, ""))
+        if poss:
+            if not do_list == "":
+                do_list += "/"
+            do_list += "%d-%s&%s" % (active_clue.num, active_clue.dir, word)
+            stack.append('%d-%s&%s&%s' % (active_clue.num, active_clue.dir, active_clue.ans, '&'.join(matches[i+1:])))
+            stack += wd_stack
+            if not wd_do_list == "":
+                do_list += '/' + wd_do_list
+            resp = '%s:%s' % (do_list, ','.join(stack))
+            return resp
+        else:
+            continue
+    try:
+        while True:
+            last = stack.pop().split('&')
+            if len(last) > 2 and (not last[2] == ''):
+                break
+            if not do_list == "":
+                do_list += "/"
+            do_list += "%s&%s" % (last[0], last[1])
+        if not do_list == '':
+            do_list += '/'
+        do_list += "%s&%s" % (last[0], last[2])
+        stack.append('%s&%s&%s' % (last[0], last[1], '&'.join(last[3:])))
+        resp = "%s:%s" % (do_list, ','.join(stack))
+        return resp
+    except Exception as e:
+        return ""
     
 apiKey="2e17a1567a9f6bc3792010e8e16057aa32d96f10e55d58b52"
 wdnk_oldclient = Wordnik(api_key=apiKey, username="bbundy", password="rbb2wdnk")
@@ -97,7 +204,6 @@ def ranked_words(request):
     active_clue = p.clue_from_str(n1, ad)
     if active_clue:
         word_matches = []
-        xings = p.clue_xings(active_clue)
         pat = active_clue.ans
         length = len(pat)
         pat = pat.lower()
@@ -206,6 +312,19 @@ def examples(request):
     logger.info(" examples request from %s for %s: %s" % (request.META['REMOTE_ADDR'], request.POST["active"], active_clue.ans));
     if resp == '':
         resp = "No examples found for '%s'" % word
+    return HttpResponse(resp)
+
+def auto_clue(request):
+    resp = ''
+    p = Puzzle.fromPOST(request.POST)
+    for cl in p.clue:
+        if cl.clue == '' and (cl.ans.find('?') == -1):
+            table = Clue
+            matches = table.objects.filter(answer=cl.ans)
+            if len(matches) > 0:
+                if not resp == '':
+                    resp += '~'
+                resp += "%d-%s|%s" % (cl.num, cl.dir, matches[random.randrange(len(matches))].text)
     return HttpResponse(resp)
 
 def clues(request):

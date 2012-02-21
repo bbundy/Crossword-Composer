@@ -3,6 +3,7 @@ import urllib
 import puz
 import re
 from django.utils.encoding import smart_unicode
+from xword.models import Answer
 #from pyx import *
 #text.set(mode="latex")
 #text.preamble(r"\usepackage{times}")
@@ -549,6 +550,8 @@ class Puzzle:
             this.row.append("")
             for c in blocks[r]:
                 this.row[r] += c
+        this.height = len(this.row)
+        this.width = len(blocks[0])
         this = Puzzle.getFromRows(this)
         this.getStats()
         return this
@@ -647,6 +650,44 @@ class Puzzle:
                     break
         return clue
 
+    def initial_stack(self):
+        stack = []
+        for cl in self.clue:
+            if cl.ans.find('?') == -1:
+                stack.append('%d-%s&%s' % (cl.num, cl.dir, cl.ans))
+        return stack
+
+    def fill_clue(self, stack):
+        best = None
+        bestscore = 0.0
+        bestnum = 1000
+        filled = {}
+        for s in stack:
+            vals = s.split('&')
+            filled[vals[0]] = vals[1]
+            
+        for cl in self.clue:
+            if filled.has_key("%d-%s" % (cl.num, cl.dir)):
+                continue
+            letcount = 0
+            clen = len(cl.ans)
+            for i in range(clen):
+                if not cl.ans[i:i+1] == '?':
+                    letcount += 1
+            if letcount > 0:
+                ct = Answer.objects.extra(where=['answer LIKE "%s"' % cl.ans.replace('?','_')]).count()
+                if ct == 0:
+                    return cl
+                score = 100.0/ct
+                if score == bestscore and cl.num < bestnum:
+                    best = cl
+                    bestnum = cl.num
+                if score > bestscore:
+                    bestscore = score
+                    bestnum = cl.num
+                    best = cl
+        return best
+
     def filled_count(self, clue):
         count = 0
         for i in range(clue.length):
@@ -665,13 +706,13 @@ class Puzzle:
                 if re.match(clue_str + ".*", inter):
                     (n1,ad,pos) = self.across_intersections[inter].split('-')
                     xing_clue = self.clue_from_str(n1, ad)
-                    xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length, xing_clue.ans)
+                    xing[xing_clue.col - clue.col] = (int(pos), xing_clue.length, xing_clue.ans, n1 + "-" + ad)
         else:
             for inter in self.down_intersections.keys():
                 if re.match(clue_str + ".*", inter):
                     (n1,ad,pos) = self.down_intersections[inter].split('-')
                     xing_clue = self.clue_from_str(n1, ad)
-                    xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length, xing_clue.ans)
+                    xing[xing_clue.row - clue.row] = (int(pos), xing_clue.length, xing_clue.ans, n1 + "-" + ad)
         return xing
 
     def getStats(self):

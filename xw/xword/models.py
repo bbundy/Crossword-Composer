@@ -12,6 +12,10 @@ class Clue(models.Model):
     dir = models.IntegerField()
     text = models.CharField(max_length=255)
 
+class Answer(models.Model):
+    answer = models.CharField(max_length=255, unique=True, db_index=True)
+    count = models.IntegerField()
+
 class Grid(models.Model):
     format = models.CharField(max_length=255, unique=True)
     type = models.ForeignKey('PuzzleType')
