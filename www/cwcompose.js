@@ -2,7 +2,8 @@ $('ready', init_cw);
 
 var focus_fired = false;
 var active_words = [];
-var active_tab = 'file'
+var active_tab = 'file';
+var fill_type = 0;
 
 function init_cw() {
     var inputs = $('#grid').find('input');
@@ -194,19 +195,43 @@ function init_cw() {
 	    window.location='/';
 	});
     
+    $('#auto-clue').bind('click', function(e) {
+	var form = $(this).closest('form');
+	$("#auto-clue").hide();
+	loadXMLPost('/autoclue/', form.serialize(), clueReqChange);
+	});
+    
     $('#clearwd').bind('click', function(e) {
+	var acted = false;
 	$("#word-intro").hide();
 	inputs = active_words[0].find('input');
+	input_for(active_words[0]).attr('value', '');
+	clue_for(active_words[0]).empty();
 	$.each(inputs, function() {
 	    var letter = $(this);
 	    var intersecting_letter = getIntersectingLetter(letter);
 	    var intersecting_word = words_for_letter(intersecting_letter);
 	    var pattern = get_pattern(intersecting_word[0].find('input'));
-	    if (pattern.indexOf("0") != -1) {
+	    if (pattern.indexOf("0") != -1 && letter.attr('value') != '') {
+		input_for(intersecting_word[0]).attr('value', '');
+		clue_for(intersecting_word[0]).empty();
 		letter.attr('value', '');
 		intersecting_letter.attr('value', '');
+		acted = true;
 	    }
 	});
+	if (!acted) {
+	    $.each(inputs, function() {
+		var letter = $(this);
+		var intersecting_letter = getIntersectingLetter(letter);
+		var intersecting_word = words_for_letter(intersecting_letter);
+		var pattern = get_pattern(intersecting_word[0].find('input'));
+		input_for(intersecting_word[0]).attr('value', '');
+		clue_for(intersecting_word[0]).empty();
+		letter.attr('value', '');
+		intersecting_letter.attr('value', '');
+	    });
+	}
 	inputs[0].focus();
 	adjust_find_define();
 	});
@@ -280,8 +305,93 @@ function init_cw() {
 
     $('#auto-fill').bind('click', function(e) {
 	    var form = $(this).closest('form');
+            fill_type = 1;
+	    $("#auto-fill").hide();
+	    $("#guided-fill").hide();
+	    $("#stop-fill").show();
+	    $("#skip-fill").hide();
+	    $("#pop-fill").hide();
+	    $("#clear-fill").hide();
 	    loadXMLPost('/fill/', form.serialize(), fillReqChange);
 	});
+
+    $('#step-fill').bind('click', function(e) {
+	    var form = $(this).closest('form');
+	    $("#stop-fill").hide();
+	    $("#step-fill").hide();
+	    $("#auto-fill").hide();
+	    $("#guided-fill").hide();
+	    $("#skip-fill").hide();
+	    $("#pop-fill").hide();
+	    $("#clear-fill").hide();
+            fill_type = 0;
+	    loadXMLPost('/fill/', form.serialize(), fillReqChange);
+	});
+
+    $('#guided-fill').bind('click', function(e) {
+	    $("#word-suggestions").empty();
+	    if (active_words[0]) {
+		active = $(active_words[0]).find('input:first').attr('id');
+		$("#word-suggestions").append('<input id="active" name="active" type="hidden" value="' + active + '">');
+		var form = $(this).closest('form');
+		$("#stop-fill").hide();
+		$("#step-fill").hide();
+		$("#guided-fill").hide();
+		$("#auto-fill").hide();
+		$("#skip-fill").hide();
+		$("#pop-fill").hide();
+		$("#clear-fill").hide();
+		fill_type = 0;
+		$('#fill-guide').attr('value', 'on');
+		loadXMLPost('/fill/', form.serialize(), fillReqChange);
+		$('#fill-guide').attr('value', '');
+	    }
+	});
+
+    $('#stop-fill').bind('click', function(e) {
+	    var form = $(this).closest('form');
+	    $("#stop-fill").hide();
+            fill_type = 0;
+	    loadXMLPost('/fill/', form.serialize(), fillReqChange);
+	});
+
+    $('#skip-fill').bind('click', function(e) {
+	var stack = $('#fill-stack').attr('value').split(',');
+	var top = stack.pop().split('&');
+	if (top.length > 2) {
+	    var inputs = $('#' + top[0]).find('input');
+	    activate_word($(inputs[0]));
+	    set_word(inputs, top[2]);
+	    top.splice(2,1); 
+	}
+	stack.push(top.join('&'));
+	stackstr = stack.join(',')
+	$('#fill-stack').attr('value', stackstr);
+	showFillStack(stackstr)
+    });
+
+    $('#pop-fill').bind('click', function(e) {
+	var stack = $('#fill-stack').attr('value').split(',');
+	var top = stack.pop().split('&');
+	var inputs = $('#' + top[0]).find('input');
+	activate_word($(inputs[0]));
+	set_word(inputs, top[1]);
+	$('#' + top[0] + "-clue").empty()
+	if (stack.length > 0) {
+	    top = stack[stack.length - 1].split('&');
+	    inputs = $('#' + top[0]).find('input');
+	    activate_word($(inputs[0]));
+	}
+	stackstr = stack.join(',')
+	$('#fill-stack').attr('value', stackstr);
+	showFillStack(stackstr)
+    });
+
+    $('#clear-fill').bind('click', function(e) {
+	$('#fill-stack').attr('value', '');
+	$("#fill-stack-disp").empty();
+	showFillStack('')
+    });
 
     $('#listwords').bind('click', function(e) {
 	    $("#word-intro").hide();
@@ -575,6 +685,10 @@ function init_cw() {
     $('#pubwords').hide();
     $('#listwords').hide();
     $('#clearwd').hide();
+    $("#stop-fill").hide();
+    $("#skip-fill").hide();
+    $("#pop-fill").hide();
+    $("#clear-fill").hide();
 
     $('#active-clue-edit:not(.no-number)').bind('keyup', function(e) {
 	    if (e.keyCode === 13) {
@@ -780,11 +894,16 @@ function set_word(inputs, word) {
     var idx = 0;
     word = word.replace(/[ \-]+/g, '').toLowerCase();
     inputs.each(function() {
-	    var square = $(this);
-	    square.val(word.substr(idx,1));
-	    copyChangeToIntersectingLetter($(this));
-	    idx = idx + 1;
-	});
+	var square = $(this);
+ 	var letter = word.substr(idx,1);
+	if (letter == "?") {
+	    square.val("");
+	} else {
+	    square.val(letter);
+	}
+	copyChangeToIntersectingLetter($(this));
+	idx = idx + 1;
+    });
 }
 
 function loadXMLDoc(url) 
@@ -855,14 +974,79 @@ function defReqChange()
     }
 }
 
+function showFillStack(stack_str)
+{
+    $("#fill-stack-disp").empty();
+    var tbl_str = "<table border=1 bordercolor=#339933 cellspacing=0 style='border-collapse:collapse'>";
+    var sstr = stack_str.split(',');
+    for (i=sstr.length - 1; i>=0; i--) {
+	var wds = sstr[i].split('&');
+	tbl_str += "<tr>";
+	for (j=0; j<Math.min(wds.length,10); j++) {
+	    tbl_str += "<td>";
+	    tbl_str += wds[j];
+	    tbl_str += "</td>";
+	}
+	if (wds.length > 10) {
+	    tbl_str += "<td>";
+	    tbl_str += (wds.length -10) + " more...";
+	    tbl_str += "</td>";
+	}
+	    
+	tbl_str += "</tr>";
+    }	
+    tbl_str += "</table>";
+    $("#fill-stack-disp").append(tbl_str);
+}
+
 function fillReqChange() 
 {
     // only if req shows "complete"
     if (req.readyState == 4) {
         // only if "OK"
         if (req.status == 200) {
-	    var resp = req.response.split('&');
-	    set_word($('#' + resp[0]).find('input'), resp[1])
+	    var resp = req.response;
+	    if (resp == '') {
+		alert("Fill Complete");
+		$('#fill-stack').attr('value', "");
+		$("#step-fill").show();
+		$("#auto-fill").show();
+		$("#stop-fill").hide();
+		showFillStack("");
+		return;
+	    } else if (resp == 'unfillable') {
+		alert("Unfillable Grid");
+		$("#step-fill").show();
+		$("#auto-fill").show();
+		$("#guided-fill").show();
+		$("#skip-fill").show();
+		$("#pop-fill").show();
+		$("#clear-fill").show();
+		return;
+	    } else {
+		resp = resp.split(':');
+		var set = resp[0].split('/');
+		for (i=0; i<set.length; i++) {
+		    var wset = set[i].split('&');
+		    var inputs = $('#' + wset[0]).find('input');
+		    activate_word($(inputs[0]));
+		    set_word(inputs, wset[1]);
+		    input_for(active_words[0]).attr('value', '');
+		    clue_for(active_words[0]).empty();
+		}
+		$('#fill-stack').attr('value', resp[1]);
+	    }
+	    showFillStack(resp[1]);
+	    if (fill_type == 1) {
+		loadXMLPost('/fill/', $('form').serialize(), fillReqChange);
+	    } else {
+		$("#step-fill").show();
+		$("#auto-fill").show();
+		$("#guided-fill").show();
+		$("#skip-fill").show();
+		$("#pop-fill").show();
+		$("#clear-fill").show();
+	    }
         } else {
             alert("There was a problem retrieving the XML data:\n" + req.statusText);
         }
@@ -880,6 +1064,25 @@ function saveReqChange()
         } else {
             alert("There was a problem saving your puzzle:\n" + req.statusText);
 	    $("#save-progress").hide();
+        }
+    }
+}
+
+function clueReqChange()
+{
+    // only if req shows "complete"
+    if (req.readyState == 4) {
+        // only if "OK"
+        if (req.status == 200) {
+	    var resp = req.response;
+	    var pairs = resp.split('~');
+	    for (i=0; i<pairs.length; i++) {
+		cset = pairs[i].split('|');
+		$('#' + cset[0] + '-clue').empty();
+		$('#' + cset[0] + '-clue').append(cset[1]);
+		$('#' + cset[0] + '-input').attr('value', cset[1]);
+	    }
+	    $("#auto-clue").show();
         }
     }
 }
