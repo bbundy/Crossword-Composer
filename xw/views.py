@@ -11,7 +11,8 @@ from django.utils.encoding import smart_unicode, smart_str
 from django.template import RequestContext
 from subprocess import Popen, PIPE
 from xwcore import Puzzle
-from xword.models import Grid, RawPuzzles, SolvePuzzles, Clue, Answer
+from xword.models import Grid, RawPuzzles, SolvePuzzles, Clue, Answer, Pattern
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from random import randrange
 from django.db.models import Q
 import logging
@@ -99,14 +100,39 @@ def fill(request):
         q = q.order_by('count').reverse()
         for r in q.all():
             word_matches.append(r.answer.lower())
+        if pat == '?' * len(pat):
+            scores={}
+            xings = p.clue_xings(active_clue)
+            for word in word_matches:
+                wordscore = 1.0
+                for j in range(len(word)):
+                    pattern = xings[j][2][0:xings[j][0] - 1] + word[j:j+1].upper() + xings[j][2][xings[j][0]:] 
+                    try:
+                        patscore_obj = Pattern.objects.get(pattern=pattern)
+                        patscore = patscore_obj.count
+                    except ObjectDoesNotExist:
+                        patscore = Answer.objects.extra(where=['answer LIKE "%s"' % pattern.replace('?','_')]).count()
+                        p_obj = Pattern(pattern=pattern, count=patscore)
+                        p_obj.save()
+                    wordscore *= patscore
+                    if wordscore == 0:
+                        break
+                if wordscore > 0:
+                    scores[word] = wordscore
+            word_matches = []
+            ct = 0
+            for wd in sorted(scores.keys(), lambda x,y: cmp(scores[y], scores[x])):
+                word_matches.append(wd)
+                ct += 1
+                if ct > 100:
+                    break
+
+                
         if len(word_matches) > 0:
             resp = fill_resp(p, word_matches, active_clue, "", stack)
         if len(word_matches) == 0 or resp == None:
             int_hash = {}
-            if active_clue.dir == "across":
-                cross_hash = p.across_intersections
-            else:
-                cross_hash = p.down_intersections
+            cross_hash = p.cross_hash(active_clue)
             for i in range(len(pat)):
                 if not pat[i:i+1] == '?':
                     cross = cross_hash["%d-%s-%d" % (active_clue.num, active_clue.dir, i+1)].split('-')
@@ -126,6 +152,13 @@ def fill(request):
                     (num, ad) = last[0].split('-')
                     clue = p.clue_from_str(num,ad)
                     clue.ans = last[1]
+                    last_xings = p.clue_xings(clue)
+                    for i in range(clue.length):
+                        xing_pos = last_xings[i][0]
+                        if not clue.ans[i:i+1] == last_xings[i][2][xing_pos-1:xing_pos]:
+                            (num, ad) = last_xings[i][3].split('-')
+                            xing_clue = p.clue_from_str(num,ad)
+                            xing_clue.ans = xing_clue.ans[0:xing_pos-1] + clue.ans[i:i+1] + xing_clue.ans[xing_pos:]
                     if not do_list == "":
                         do_list += "/"
                     do_list += "%s&%s" % (last[0], last[1])
@@ -150,10 +183,18 @@ def fill_resp(p, matches, active_clue, do_list, stack):
             pattern = xings[j][2][0:xings[j][0] - 1] + word[j:j+1].upper() + xings[j][2][xings[j][0]:] 
             if pattern.find('?') == -1:
                 continue
-            patscore = Answer.objects.extra(where=['answer LIKE "%s"' % pattern.replace('?','_')]).count()
+            try:
+                patscore_obj = Pattern.objects.get(pattern=pattern)
+                patscore = patscore_obj.count
+            except ObjectDoesNotExist:
+                patscore = Answer.objects.extra(where=['answer LIKE "%s"' % pattern.replace('?','_')]).count()
+                p_obj = Pattern(pattern=pattern, count=patscore)
+                p_obj.save()
+
             if patscore == 0:
                 poss = False
                 break
+               
             if patscore == 1:
                 xwd = Answer.objects.extra(where=['answer LIKE "%s"' % pattern.replace('?','_')]).all()[0].answer.lower()
                 if not wd_do_list == "":

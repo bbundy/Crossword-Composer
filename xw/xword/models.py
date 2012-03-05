@@ -16,6 +16,10 @@ class Answer(models.Model):
     answer = models.CharField(max_length=255, unique=True, db_index=True)
     count = models.IntegerField()
 
+class Pattern(models.Model):
+    pattern = models.CharField(max_length=255, unique=True, db_index=True)
+    count = models.IntegerField()
+
 class Grid(models.Model):
     format = models.CharField(max_length=255, unique=True)
     type = models.ForeignKey('PuzzleType')

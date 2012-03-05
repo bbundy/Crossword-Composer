@@ -695,6 +695,13 @@ class Puzzle:
                 count += 1
         return count
 
+    def cross_hash(self, clue):
+        if clue.dir == "across":
+            ret = self.across_intersections
+        else:
+            ret = self.down_intersections
+        return ret
+
     def clue_xings(self, clue):
         xing = []
         for i in range(clue.length):
