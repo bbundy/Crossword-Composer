@@ -178,8 +178,14 @@ with open(sys.argv[1]) as f:
 
 
     for clue in p.across:
+        cstr = "%d-across" % clue.num
+        if len(words_for_clue[cstr]) > 1 and cstr == words_for_clue[cstr][0]:
+            clue.answer = "".join(answer[wd] for wd in words_for_clue[cstr])
         save_clue(clue, p, setter, editor, publisher, puzzle, ptype)
 
     for clue in p.down:
+        cstr = "%d-down" % clue.num
+        if len(words_for_clue[cstr]) > 1 and cstr == words_for_clue[cstr][0]:
+            clue.answer = "".join(answer[wd] for wd in words_for_clue[cstr])
         save_clue(clue, p, setter, editor, publisher, puzzle, ptype)
 
