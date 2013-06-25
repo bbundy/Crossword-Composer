@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load expr %}
+{% block title %}Crossword Composer{% endblock %}
+{% block content %}
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://bundy.org/xw/cwgrid.css";
+</style>
+  
+<script src="http://bundy.org/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://bundy.org/xw/jquery.cookie.js"></script>
+<script src="http://bundy.org/xw/cwgrid.js"></script>
+<form id="crossword" method="post"> {% csrf_token %}
+<table border=5 bordercolor=#333399>
+  <tr><td valign=top>
+  <table noborder><tr><td>
+  <div id="grid" style="width: 525px; height: 525px;">
+    <img src="http://bundy.org/xw/gif/print-background.gif" alt="" id="print-background"  style="width: 525px; height: 525px;" />
+{% expr 0 as c %}
+{% for row in puzzle.format %}
+{% expr 11+35*c as y %}
+<div id="row-{{ forloop.counter }}" class="across" style="left: 11px; top: {{ y }}px">
+{% expr c+1 as c %}
+<ol>
+{% for sq in row %}
+{% expr "black" if sq.block else "white" as bgcolor %}
+{% expr "x" if sq.block else "" as val %}
+ <li><input id="col-{{ c }}-{{ forloop.counter }}" name="col-{{ c }}-{{ forloop.counter }}" class=" " value="{{ val }}" style="background-color:{{ bgcolor }}"></li>
+{% endfor %}
+</ol>
+</div>
+{% endfor %}
+  </div>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+<input id="usegrid" type="button" value="Create Puzzle" />
+</form>
+{% endblock %}

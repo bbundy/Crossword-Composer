@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Sign Up!{% endblock %}
+
+{% block content %}
+Enter your information below and we will contact you when enrollment is available:
+
+<form action="/member_request/" method="post">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

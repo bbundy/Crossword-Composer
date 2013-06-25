@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Crossword Composer{% endblock %}
+{% block content %}
+
+<h4>Getting Started</h4>
+Crossword Composer supports the creation, editing, and sharing of two puzzle types, the US type that you might see in, say, the New York Times, and the
+Cryptic variety that you might see in the Guardian or the Independent, or many other UK newspapers.  You may select a grid by clicking on "New US Grid" 
+or "New Cryptic Grid".  Keep clicking until you see a grid you like.  Once you have selected a grid, type your name and a title for your puzzle in the 
+upper left of the screen.  Remember what you typed, because these fields will be used to save and retrieve the puzzle as you work on it.
+If you click on any open square in the grid, you will see a yellow bar highlighting the active answer space.
+Start typing the answer, and as you finish, the focus will
+shift to the clue entry box, where you can type in the clue for the answer that you put in the grid.
+
+<h4>Saving and Retrieving</h4>
+Once your puzzle has an Author and Title assigned to it, you may save it at any time.  You may share your puzzle with others by giving them the Author and Title 
+fields that you selected.  Anyone can retrieve a puzzle by typing in the author and title associated with it.
+
+<h4>Import and Export</h4>
+"From XPF" and "From .puz" will accept a URL and will try to load the file from that URL. This must be a publicly available site with no password required
+(cruciverb.com will not work, for example, because it requires a password).
+
+<h4>Word Lookup</h4>
+Often in the process of answer entry it becomes difficult to find words given the constraints imposed by answers already constructed in the puzzle.  If the yellow bar
+encompasses one or more letters in such a thorny situation, the "Words" button may be used to look up possibilities.  Alternatives will
+appear beneath the puzzle in the form of buttons which, if clicked, will autofill the answer space.  The dictionary used for this is the UK Advanced 
+Cryptics Dictionary currently, and new dictionaries and custom word lists are added as they become available.
+
+<h4>Clue Lookup</h4>
+The "Clue" button will look up any existing clues for the selected answer in the database of saved puzzles.
+
+<h4>Questions and Comments</h4>
+Please join the <a href="http://groups.google.com/group/crosswordcomposer"> Discussion Group </a> if you have word lists to contribute, or questions about the service.  Have Fun!
+{% endblock %}

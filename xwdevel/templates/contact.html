@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Sign Up!{% endblock %}
+
+{% block content %}
+<style>            
+  @import "http://bundy.org/xw/cw.css";
+</style>
+Enter your information below and we will contact you when enrollment is available:
+
+<form action="/member-request/" method="post">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

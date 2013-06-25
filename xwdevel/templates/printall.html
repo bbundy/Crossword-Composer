@@ -1,0 +1,72 @@
+{% extends "pbase.html" %}
+{% block title %}Crossword Composer{% endblock %}
+{% block content %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://bundy.org/xw/pcw.css";
+</style>
+  
+<script src="http://bundy.org/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://bundy.org/xw/jquery.cookie.js"></script>
+<script>
+  $('body').attr('bgcolor','#FFFFFF')
+</script>
+<h4>{{ puzzle.title }} by {{ puzzle.author }}</h4>
+<div class="box">
+<div class="crossword">
+  
+  <style>
+    @import "http://bundy.org/xw/xw.css";
+    @import "http://bundy.org/xw/print.css";
+  </style>
+  <div id="content">
+    <table cellspacing="0" cellpadding="0">
+{% for row in puzzle.format %}
+      <tr>
+{% for sq in row %}
+{% if sq.block %}
+	<td class="blank"><img width="28" height="28" border="0" alt="" src="http://bundy.org/xw/grey.gif"/></td>
+{% endif %}
+{% if sq.space %}
+	<td style="font-family:sans-serif; font-variant:small-caps; font-weight:bold; font-size:1.5em">{{ sq.letter }}</td>
+{% endif %}
+{% if sq.num %}
+	<td style="font-family:sans-serif; font-variant:small-caps; font-weight:bold; font-size:1.5em"><span class="clue-number" style="font-size:0.1em">{{ sq.val }}</span>{{ sq.letter }}</td>
+{% endif %}
+{% endfor %}
+      </tr>
+{% endfor %}
+
+    </table>
+
+    <div id="clues">
+      <div class="clues-col">
+	
+	<h4>Across</h4>
+				
+	<ol>
+{% for clue in puzzle.across %}				
+	  <li><label id="{{ clue.num }}-across-clue" for="{{ clue.num }}-across">
+	      <span class="clue-number">{{ clue.num }}</span>  
+	      {{ clue.clue }}</label></li>
+{% endfor %}
+	</ol>
+      </div>
+      <div class="clues-col last">
+				
+	<h4>Down</h4>
+				
+	<ol>
+{% for clue in puzzle.down %}
+	  <li><label id="{{ clue.num }}-down-clue" for="{{ clue.num }}-down">
+	      <span class="clue-number">{{ clue.num }}</span>
+	      {{ clue.clue }}</label></li>
+{% endfor %}
+	</ol>
+      </div>
+    </div>
+  </div>
+	
+{% endblock %}

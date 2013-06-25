@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load expr %}
+{% block title %}Crossword Composer{% endblock %}
+{% block content %}
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://67.207.128.158/xw/cwgrid.css";
+</style>
+  
+<script src="http://67.207.128.158/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://67.207.128.158/xw/jquery.cookie.js"></script>
+<script src="http://67.207.128.158/xw/cwgrid.js"></script>
+<script>
+  puzzle_size = {{ puzzle.size }};
+</script>
+
+<form id="crossword" method="post"> {% csrf_token %}
+<table border=5 bordercolor=#333399>
+  <tr><td valign=top>
+  <table noborder><tr><td>
+  {% expr 35*puzzle.size as pxsize %}
+  <div id="grid" style="width: {{ pxsize }}px; height: {{ pxsize }}px;">
+    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: {{ pxsize }}px; height: {{ pxsize }}px;" />
+{% expr 0 as c %}
+{% for row in puzzle.format %}
+{% expr 11+35*c as y %}
+<div id="row-{{ forloop.counter }}" class="across" style="left: 11px; top: {{ y }}px">
+{% expr c+1 as c %}
+<ol>
+{% for sq in row %}
+{% expr "black" if sq.block else "white" as bgcolor %}
+{% expr "x" if sq.block else "" as val %}
+ <li><input id="col-{{ c }}-{{ forloop.counter }}" name="col-{{ c }}-{{ forloop.counter }}" class=" " value="{{ val }}" style="background-color:{{ bgcolor }}"></li>
+{% endfor %}
+</ol>
+</div>
+{% endfor %}
+  </div>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+<input id="usegrid" type="button" value="Create Puzzle" />
+<input id="toggle" type="button" value="Toggle Symmetry" />
+</form>
+{% endblock %}

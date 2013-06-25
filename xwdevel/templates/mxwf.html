@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</head>
+<body style="background-image:none">
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://bundy.org/xw/cwm.css";
+</style>
+
+<script src="http://bundy.org/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://bundy.org/xw/jquery.cookie.js"></script>
+<script src="http://bundy.org/xw/cwf.js"></script>
+<form id="crossword" method="post"> {% csrf_token %}
+<table>
+  <tr><td nowrap>
+<div id="grid" style="width:400px;height:20px">
+  <ol>
+    <div id="1-across" class="across">
+    </div>
+  </ol>
+</div>
+
+</td></tr>
+<tr><td>
+  <div id="buttons-horizontal" style="width:400px;height:20px">
+    <input id="addsq" type="button" value="+">
+    <input id="subsq" type="button" value="-">
+    <input id="lookup" type="button" value="Words">
+  </div>
+</td></tr>
+<tr><td>
+<div id="word-suggestions" class="across">
+XXX
+</div>
+</td></tr>
+</table>
+</form>
+</body>
+</html>

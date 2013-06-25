@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+{% load expr %}
+{% block title %}Crossword Composer - Professional Construction Tools{% endblock %}
+{% block content %}
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://67.207.128.158/xw/cw.css";
+</style>
+  
+<script src="http://67.207.128.158/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://67.207.128.158/xw/jquery.cookie.js"></script>
+<script src="http://67.207.128.158/xw/cwcompose.js"></script>
+<script>		
+  var intersections = {};
+  var words_for_clue = {};
+  var solutions = {};
+  var has_numbers = true;
+
+{% for k, v in puzzle.intersections %}
+  intersections["{{ k }}"] = "{{ v }}";
+{% endfor %}
+</script>
+<form id="crossword" method="post" enctype="multipart/form-data"> {% csrf_token %}
+<input id="gridstr" type="hidden" name="gridstr" value = "{{ puzzle.dbgridstr }}"/>
+<input id="format" type="hidden" name="format" value ="{{ puzzle.formatstr }}"/>
+
+<table border=3 bordercolor=#333399 style="border-collapse:collapse">
+  <tr><td valign=top>
+  <table border=0><tr><td>
+  {% expr 35*puzzle.width+1 as pxwidth %}
+  {% expr 35*puzzle.height+1 as pxheight %}
+  <div id="grid" style="width: {{ pxwidth }}px; height: {{ pxheight }}px;">
+    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: {{ pxwidth }}px; height: {{ pxheight }}px;" />
+{% for clue in puzzle.clue %}
+
+    <span style="left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir}}"> {{ clue.num }}</span>
+    
+    <div id="{{ clue.num }}-{{ clue.dir }}" style="z-index: {{ clue.num }}; left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir }}">
+      <fieldset>
+	<legend>{{ clue.num }} {{ clue.dir }}</legend>
+	<ol>
+{% for dig, let, style in clue.sq %}	  
+	  <li>
+	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" " value="{{ let }}" autocomplete="off" {{ style }} />
+	  </li>
+{% endfor %}
+	</ol>
+	</fieldset>
+	</div>
+{% endfor %}
+  </div>
+  </td></tr>
+  <tr><td>
+  <div id="buttons-horizontal-left">
+    <input id="newus" type="button" value="Random US 15x15" />
+    <input id="newus21" type="button" value="Random US 21x21" />
+    <input id="newcryptic" type="button" value="Random Cryptic Grid" />
+    <input id="gridedit" type="button" value="Customize Grid" />
+    <div id="settings-load"></div>
+  </div>
+  </td></tr>
+</table>
+  </td><td valign="top">
+  <table border=3 bordercolor=#993333 bgcolor=white style="border-collapse:collapse; padding:0">
+    <div id="action-tabs">
+      <tr><td>
+      <table border=1 style="border-collapse:collapse; padding:0" >
+      <tr>
+	<td>
+	  <div id="file-tab"> File </div>
+	</td>
+	<td>
+	  <div id="word-tab"> Words </div>
+	</td>
+	<td>
+	  <div id="clue-tab"> Clues </div>
+	</td>
+	<td>
+	  <div id="stat-tab"> Statistics </div>
+	</td>
+	<td>
+	  <div id="wl-tab"> WordLists </div>
+	</td>
+	<td>
+	  <div id="rebus-tab"> Rebus </div>
+	</td>
+	<td>
+	  <div id="fill-tab"> Fill </div>
+	</td>
+	<td>
+	  <div id="help-tab"> Help </div>
+	</td>
+	<td>
+	  <div id="forum-tab"> Forum </div>
+	</td>
+	<td>
+	  <div id="contact-tab"> Contact </div>
+	</td>
+      </tr>
+      </table>
+      </td></tr>
+    </div>
+    <tr><td>
+    <div id="file-content">
+      Author:<input type="text" name="author" size=56 value="{{ puzzle.author }}"/><br>
+      Title:<input type="text" name="title" size=60 value="{{ puzzle.title }}"/><br>
+      <input id="retrieve" type="button" value="Retrieve" /> (Get server copy of this Title by this Author)<br>
+      <input id="solve" type="button" value="Solve" /> (Opens the current puzzle in solution mode in a new tab)<br>
+      <input id="save" type="button" value="Save" style="background-color:#ee8888"/><br>
+      <div id="save-progress"> Saving.... </div>
+      <input id="print" type="button" value="Print Without Solutions" /> (Opens printable page in a new tab)<br>
+      <input id="printall" type="button" value="Print With Solutions" /><br>
+      <input id="toxpf" type="button" value="Render as XPF for Export" /> (Opens XPF rendering in a new tab)<br>
+      <input id="fromxpf" type="button" value="Load XPF puzzle from URL" /><br>
+      <input id="frompuz" type="button" value="Load .puz (Across Lite) from URL" /></br>
+      <input id="frompuzlocal" type="button" value="Load .puz (Across Lite) from local file" /></br>
+      <input id="topuz" type="button" value="Save in .puz (Across Lite) format to local file" /></br>
+    <div id="file-load"></div>
+    </div>
+    <div id="word-content">
+      <div id="word-intro">
+      "Dictionary Words" will attempt to match the yellow highlighted space, using any existing letters, by searching the configured dictionaries. 
+      "Published Words" will search for answers that have appeared in published puzzles. "List Words" will search all 
+      user-loaded word lists. For completed words, "Definitions" will look up in all configured dictionaries, and "Examples" will look for recent
+      usage with high readership.  "Clues For This Word" will looked for clues in published puzzles.<br>--------------------<br>
+      </div>
+	  <input id="rankedwords" type="button" value="Dictionary Words" />
+	  <input id="listwords" type="button" value="List Words" />
+	  <input id="definition" type="button" value="Definition" />
+	  <input id="examples" type="button" value="Examples" />
+	  <img src="http://www.wordnik.com/images/media-kit/wordnik_badge_a2.png" />
+	  <br>--------------------<br>
+	  <input id="pubwords" type="button" value="Published Words" />
+	  <br>--------------------<br>
+	  <input id="clearwd" type="button" value="Clear Word" />
+	  <br>--------------------<br>
+	  <input id="clues" type="button" value="Clues For This Word" />
+	  <div id="word-suggestions"></div>
+    </div>
+    <div id="clue-content">
+      <div id="clue-intro">
+	Enter a clue for the yellow highlighted word by typing into the box below and clicking "Update Clue" or pressing the "Enter" key.
+      </div>
+      <input id="auto-clue" type="button" value="Auto Clue" />
+      <div id="active-clue-edit">
+	<input type="text" name="clue" size=128 value=""/>
+	<input id="update-clue" type="button" value="Update Clue" />
+      </div>
+      <div id="clues">
+	<div class="clues-col">
+      <h4>Across</h4>
+      <ol>
+{% for clue in puzzle.across %}
+	<li>
+	  <span class="clue-number">{{ clue.num }}</span>  
+	  <label id="{{ clue.num }}-across-clue" for="{{ clue.num }}-across">{{ clue.clue }}</label>
+	  <input type=hidden id="{{ clue.num }}-across-input" name="{{ clue.num }}-across-input" value="{{ clue.clue }}"/>
+	</li>
+{% endfor %}
+      </ol>
+    </div>
+    <div class="clues-col last">
+	<h4>Down</h4>
+	<ol>
+{% for clue in puzzle.down %}
+	  <li>
+	    <span class="clue-number">{{ clue.num }}</span>  
+	    <label id="{{ clue.num }}-down-clue" for="{{ clue.num }}-down">{{ clue.clue }}</label>
+	    <input type=hidden id="{{ clue.num }}-down-input" name="{{ clue.num }}-down-input" value="{{ clue.clue }}"/>
+	  </li>
+{% endfor %}
+	</ol>
+    </div>
+  </div>
+  </div>
+  <div id="stat-content">
+	<h4> Statistics </h4>
+	<table border=0>
+	<tr><td>Number of Words: </td><td><div id="numwds"> {{ puzzle.wd_ct }} </div></td></tr>
+	<tr><td>Average Length: </td><td><div id="avelen"> {{ puzzle.ave_wdlen }} </div></td></tr>
+	<tr><td>Number of Letters: </td><td><div id="numlet"> {{ puzzle.let_ct }} </div></td></tr>
+	<tr><td>Number of Blocks: </td><td><div id="numblock"> {{ puzzle.block_ct }} </div></td></tr>
+	<tr><td>Scrabble Total: </td><td><div id="scrscore"> {{ puzzle.scr }} </div></td></tr>
+	<tr><td>Average Scrabble Score: </td><td><div id="avescore"> {{ puzzle.ave_scr }} </div></td></tr>
+	</table>
+	<table border=0><tr><td>
+	Word Lengths:
+	<table border=1 cellspacing=0>
+	  <tr><td><div id="ct-3">3 - {{ puzzle.ct_3 }}</div></td><td><div id="ct-4">4 - {{ puzzle.ct_4 }}</div></td><td><div id="ct-5">5 - {{ puzzle.ct_5 }}</div></td></tr>
+	  <tr><td><div id="ct-6">6 - {{ puzzle.ct_6 }}</div></td><td><div id="ct-7">7 - {{ puzzle.ct_7 }}</div></td><td><div id="ct-8">8 - {{ puzzle.ct_8 }}</div></td></tr>
+	  <tr><td><div id="ct-9">9 - {{ puzzle.ct_9 }}</div></td><td><div id="ct-10">10 - {{ puzzle.ct_10 }}</div></td><td><div id="ct-11">11 - {{ puzzle.ct_11 }}</div></td></tr>
+	  <tr><td><div id="ct-12">12 - {{ puzzle.ct_12 }}</div></td><td><div id="ct-13">13 - {{ puzzle.ct_13 }}</div></td><td><div id="ct-14">14 - {{ puzzle.ct_14 }}</div></td></tr>
+	  <tr><td><div id="ct-15">15 - {{ puzzle.ct_15 }}</div></td><td><div id="ct-16">16 - {{ puzzle.ct_16 }}</div></td><td><div id="ct-17">17 - {{ puzzle.ct_17 }}</div></td></tr>
+	  <tr><td><div id="ct-18">18 - {{ puzzle.ct_18 }}</div></td><td><div id="ct-19">19 - {{ puzzle.ct_19 }}</div></td><td><div id="ct-20">20 - {{ puzzle.ct_20 }}</div></td></tr>
+	  <tr><td><div id="ct-21">21 - {{ puzzle.ct_21 }}</div></td><td><div id="ct-22">22 - {{ puzzle.ct_22 }}</div></td><td><div id="ct-23">23 - {{ puzzle.ct_23 }}</div></td></tr>
+        </table></td><td>
+	Letter Counts:<br>
+	<table border=1 cellspacing=0>
+	  <tr><td><div id="ct-a">A - {{ puzzle.a_ct }}</div></td><td><div id="ct-b">B - {{ puzzle.b_ct }}</div></td><td><div id="ct-c">C - {{ puzzle.c_ct }}</div></td></tr>
+	  <tr><td><div id="ct-d">D - {{ puzzle.d_ct }}</div></td><td><div id="ct-e">E - {{ puzzle.e_ct }}</div></td><td><div id="ct-f">F - {{ puzzle.f_ct }}</div></td></tr>
+	  <tr><td><div id="ct-g">G - {{ puzzle.g_ct }}</div></td><td><div id="ct-h">H - {{ puzzle.h_ct }}</div></td><td><div id="ct-i">I - {{ puzzle.i_ct }}</div></td></tr>
+	  <tr><td><div id="ct-j">J - {{ puzzle.j_ct }}</div></td><td><div id="ct-k">K - {{ puzzle.k_ct }}</div></td><td><div id="ct-l">L - {{ puzzle.l_ct }}</div></td></tr>
+	  <tr><td><div id="ct-m">M - {{ puzzle.m_ct }}</div></td><td><div id="ct-n">N - {{ puzzle.n_ct }}</div></td><td><div id="ct-o">O - {{ puzzle.o_ct }}</div></td></tr>
+	  <tr><td><div id="ct-p">P - {{ puzzle.p_ct }}</div></td><td><div id="ct-q">Q - {{ puzzle.q_ct }}</div></td><td><div id="ct-r">R - {{ puzzle.r_ct }}</div></td></tr>
+	  <tr><td><div id="ct-s">S - {{ puzzle.s_ct }}</div></td><td><div id="ct-t">T - {{ puzzle.t_ct }}</div></td><td><div id="ct-u">U - {{ puzzle.u_ct }}</div></td></tr>
+	  <tr><td><div id="ct-v">V - {{ puzzle.v_ct }}</div></td><td><div id="ct-w">W - {{ puzzle.w_ct }}</div></td><td><div id="ct-x">X - {{ puzzle.x_ct }}</div></td></tr>
+	  <tr><td><div id="ct-y">Y - {{ puzzle.y_ct }}</div></td><td><div id="ct-z">Z - {{ puzzle.z_ct }}</div></td></tr>
+	</table></tr></table>
+  </div>
+  <div id="rebus-content">
+	<h4> Rebus </h4>
+	Text: <input type="text" id="rebus1" name="rebus1" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus1abbr" name="rebus1abbr" size=1 /> 
+	<input type="button" id="use_rebus1" name="use_rebus1" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus2" name="rebus2" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus2abbr" name="rebus2abbr" size=1 /> 
+	<input type="button" id="use_rebus2" name="use_rebus2" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus2" name="rebus2" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus2abbr" name="rebus2abbr" size=1 /> 
+	<input type="button" id="use_rebus2" name="use_rebus2" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus3" name="rebus3" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus3abbr" name="rebus3abbr" size=1 /> 
+	<input type="button" id="use_rebus3" name="use_rebus3" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus4" name="rebus4" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus4abbr" name="rebus4abbr" size=1 /> 
+	<input type="button" id="use_rebus4" name="use_rebus4" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus5" name="rebus5" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus5abbr" name="rebus5abbr" size=1 /> 
+	<input type="button" id="use_rebus5" name="use_rebus5" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus6" name="rebus6" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus6abbr" name="rebus6abbr" size=1 /> 
+	<input type="button" id="use_rebus6" name="use_rebus6" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus7" name="rebus7" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus7abbr" name="rebus7abbr" size=1 /> 
+	<input type="button" id="use_rebus7" name="use_rebus7" value="Use" /><br>
+	
+	Text: <input type="text" id="rebus8" name="rebus8" size=10 /> 
+	1-letter Abbr: <input type="text" id="rebus8abbr" name="rebus8abbr" size=1 /> 
+	<input type="button" id="use_rebus8" name="use_rebus8" value="Use" /><br>
+	
+  </div>
+  <div id="wl-content">
+	Word Lists are supported using <a href="http://www.wordnik.com"> Wordnik </a> You can <a href="http://http://www.wordnik.com/lists/new">
+      create a new list </a> (You may tag words with "rank: val" where "val" is a number from 0 to 100) or load an existing list:<br><img src="http://www.wordnik.com/images/media-kit/wordnik_badge_a2.png" /><br>
+	List Name: <input type="text" id="wdnk-word-list" name="wdnk-word-list" length=30 /> <input type="button" id="load-wl" value="Load" />
+	
+  </div>
+  <div id="fill-content">
+	Grid Auto-Fill will attempt to fill the current grid using the selected dictionaries and custom word lists.<br>
+	<input type="button" id="auto-fill" name="auto-fill" value="Auto Fill"/> 
+	<input type="button" id="guided-fill" name="guided-fill" value="Guided Fill"/> 
+	<input type="button" id="step-fill" name="step-fill" value="Step Fill"/> 
+	<input type="button" id="stop-fill" name="stop-fill" value="Stop Fill"/> 
+	<input type="button" id="skip-fill" name="skip-fill" value="Skip"/> 
+	<input type="button" id="pop-fill" name="pop-fill" value="Pop"/> 
+	<input type="button" id="clear-fill" name="clear-fill" value="Accept"/> 
+	<input type="hidden" id="fill-stack" name="fill-stack" value=""></input>
+	<input type="hidden" id="fill-guide" name="fill-guide" value=""></input>
+	<div id="fill-stack-disp"></div>
+  </div>
+  <div id="help-content">
+<h4>Getting Started</h4>
+Crossword Composer supports the creation, editing, and sharing of two puzzle types, the US type that you might see in, say, the New York Times, and the
+Cryptic variety that you might see in the Guardian or the Independent, or many other UK newspapers.  You may select a grid by clicking on "New US Grid" 
+or "New Cryptic Grid".  Keep clicking until you see a grid you like.  Once you have selected a grid, type your name and a title for your puzzle in the 
+upper left of the screen.  Remember what you typed, because these fields will be used to save and retrieve the puzzle as you work on it.
+If you click on any open square in the grid, you will see a yellow bar highlighting the active answer space.
+Start typing the answer, and as you finish, the focus will
+shift to the clue entry box, where you can type in the clue for the answer that you put in the grid.
+
+<h4>Saving and Retrieving</h4>
+Once your puzzle has an Author and Title assigned to it, you may save it at any time.  You may share your puzzle with others by giving them the Author and Title 
+fields that you selected.  Anyone can retrieve a puzzle by typing in the author and title associated with it. Alternatively, whenever you save or retrieve, the URL in
+the location bar of your browser may be copied and shared with others via chat or email in order to provide them with a reusable link to your puzzle.  All saved puzzles,
+whether composing or solving, are saved on the server and not on the computer you are using, so you can go back to the site from any computer and access your
+saved puzzles (or other people's public saved puzzles) much as you would with web-based email such as gmail or Yahoo mail.
+
+<h4>Printing</h4>
+Pressing the "Print" button will open a printable page in a separate tab in your browser.  This is available in either Compose or Solve mode.
+
+<h4>Solving</h4>
+If you press the "Solve" button, you will enter a mode with the answers hidden.  You may enter a solver name and fill in the answer squares. The "Save" button will save
+your solution attempt.  It's a good idea to copy or bookmark the URL of a saved solution attempt so you can get back to it easily.
+
+<h4>Grid Design</h4>
+Many valid grids are available simply by clicking on "New Cryptic Grid" or "New US Grid".  You may also design your own grid by clicking "Customize Grid". This
+will put you in a Grid Design mode which will enforce standard symmetry rules for you.  When you are happy with the result, click "Use Grid" and you will be returned to 
+compose mode with the grid you have created.
+
+<h4>Import and Export</h4>
+"From XPF" and "From .puz" will accept a URL and will try to load the file from that URL. This must be a publicly available site with no password required.  If the file
+is local to your computer, use a "file://" url to access it.  You may also save the file to an XPF (XML) or .puz (Across Lite) file using the "To XPF" or "To .puz"
+button.
+
+<h4>Word Lookup</h4>
+Often in the process of answer entry it becomes difficult to find words given the constraints imposed by answers already constructed in the puzzle.  If the yellow bar
+encompasses one or more letters in such a thorny situation, the "Words" button may be used to look up possibilities.  Alternatives will
+appear beneath the puzzle in the form of buttons which, if clicked, will autofill the answer space.  The dictionary used for this is the UK Advanced 
+Cryptics Dictionary currently, and new dictionaries and custom word lists are added as they become available.
+
+<h4>Clue Lookup</h4>
+The "Clue" button will look up any previously published clues for the selected answer.
+
+<h4>Questions and Comments</h4>
+Please join the <a href="http://groups.google.com/group/crosswordcomposer"> Discussion Group </a> if you have word lists to contribute, or questions about the service.  Have Fun!
+  </div>
+  <div id="contact-content">
+    Hi, and welcome to Crossword Composer.  I would love to hear your comments, criticisms, requests for assistance, or bug reports.  You can reach me at 
+<a href=mailto:info@crosswordcomposer.com>info@crosswordcomposer.com</a>  
+  </div>
+  </td></tr>
+<tr><td align=center><img src="http://67.207.128.158/xw/cc.png"></td></tr>
+</table>
+</td></tr>
+</table>
+</div>
+</form>
+{% endblock %}

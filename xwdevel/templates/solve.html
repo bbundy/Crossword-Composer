@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load expr %}
+{% block title %}Crossword Composer{% endblock %}
+{% block content %}
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://67.207.128.158/xw/cw.css";
+</style>
+  
+<script src="http://67.207.128.158/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://67.207.128.158/xw/jquery.cookie.js"></script>
+<script src="http://67.207.128.158/xw/cwcompose.js"></script>
+<script>		
+  var intersections = {};
+  var words_for_clue = {};
+  var solutions = {};
+  var has_numbers = true;
+
+{% for k, v in puzzle.intersections %}
+  intersections["{{ k }}"] = "{{ v }}";
+{% endfor %}
+{% for clue in puzzle.clue %}
+  {% expr clue.ans.lower() as ans %}
+  solutions["{{ clue.num }}-{{ clue.dir }}"] = "{{ ans }}";
+{% endfor %}
+</script>
+<form id="crossword" method="post"> {% csrf_token %}
+<input id="gridstr" type="hidden" name="gridstr" value = "{{ puzzle.gridstr }}"/>
+<input id="format" type="hidden" name="format" value ="{{ puzzle.formatstr }}"/>
+
+<table border=3 bordercolor=#333399 style="border-collapse:collapse">
+  <tr><td valign=top>
+  {% expr 35*puzzle.height+1 as pxheight %}
+  {% expr 35*puzzle.width+1 as pxwidth %}
+  <table noborder><tr><td>
+  <div id="grid" style="width: {{ pxwidth }}px; height: {{ pxheight }}px;">
+    <img src="http://67.207.128.158/xw/gif/print-background.gif" alt="" id="print-background"  style="width: {{ pxwidth }}px; height: {{ pxheight }}px;" />
+{% for clue in puzzle.clue %}
+
+    <span style="left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir}}"> {{ clue.num }}</span>
+    
+    <div id="{{ clue.num }}-{{ clue.dir }}" style="z-index: {{ clue.num }}; left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir }}">
+      <fieldset>
+	<legend>{{ clue.num }} {{ clue.dir }}</legend>
+	<ol>
+{% for dig, let in clue.sq %}	  
+	  <li>
+	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" " value="" autocomplete="off"/>
+	  </li>
+{% endfor %}
+	</ol>
+	</fieldset>
+	</div>
+{% endfor %}
+  </div>
+  </td></tr>
+  <tr><td>
+  </td></tr>
+</table>
+  </td><td valign="top">
+  <table border=3 bordercolor=#993333 bgcolor=white style="border-collapse:collapse"><tr><td>
+    <div id="author-title">
+      Author:<input type="text" name="author" size=20 value="{{ puzzle.author }}"/>
+      Title:<input type="text" name="title" size=40 value="{{ puzzle.title }}"/>
+      <input id="retrieve" type="button" value="Retrieve" />
+    </div>
+    <div id="buttons-horizontal">
+      Solver:<input type="text" name="solver" size=20 value="{{ puzzle.solver }}"/><br>
+      <input id="print" type="button" value="Print" />
+      <input id="show" type="button" value="Show Solution" />
+      <input id="rankedwords" type="button" value="Find Words" />
+      <input id="definition" type="button" value="Definition" />
+      <input id="examples" type="button" value="Examples" />
+      <input id="clearwd" type="button" value="Clear Word" />
+      <input id="revwd" type="button" value="Reveal Word" />
+    </div>
+    </td></tr>
+<tr><td>
+<div id="word-suggestions"></div>
+<div id="active-clue-edit">
+</div>
+</td></tr>
+  <tr><td>
+  <div id="clues-container">
+    <div class="clues-col">
+      <h4>Across</h4>
+      <ol>
+{% for clue in puzzle.across %}
+	<li>
+	  <span class="clue-number">{{ clue.num }}</span>  
+	  <label id="{{ clue.num }}-across-clue" for="{{ clue.num }}-across">{{ clue.clue }}</label>
+	  <input type=hidden id="{{ clue.num }}-across-input" name="{{ clue.num }}-across-input" value="{{ clue.clue }}"/>
+	</li>
+{% endfor %}
+      </ol>
+    </div>
+    <div class="clues-col last">
+	<h4>Down</h4>
+	<ol>
+{% for clue in puzzle.down %}
+	  <li>
+	    <span class="clue-number">{{ clue.num }}</span>  
+	    <label id="{{ clue.num }}-down-clue" for="{{ clue.num }}-down">{{ clue.clue }}</label>
+	    <input type=hidden id="{{ clue.num }}-down-input" name="{{ clue.num }}-down-input" value="{{ clue.clue }}"/>
+	  </li>
+{% endfor %}
+	</ol>
+    </div>
+  </div></td></tr>
+</table>
+</td></tr>
+</table>
+</div>
+</form>
+{% endblock %}

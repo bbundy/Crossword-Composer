@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Crossword Composer{% endblock %}
+{% block content %}
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<div class="crossword">
+
+<style>            
+  @import "http://bundy.org/xw/cw.css";
+</style>
+  
+<script src="http://bundy.org/xw/jquery.hotkeys-0.7.9.js"></script>
+<script src="http://bundy.org/xw/jquery.cookie.js"></script>
+<script src="http://bundy.org/xw/cwcompose.js"></script>
+<script>		
+  var crossword_identifier = 'crossword-zzzw';
+  var intersections = {};
+  var words_for_clue = {};
+  var solutions = {};
+  var has_numbers = true;
+
+{% for k, v in puzzle.intersections %}
+  intersections["{{ k }}"] = "{{ v }}";
+{% endfor %}
+</script>
+<form id="crossword" method="post"> {% csrf_token %}
+<input id="format" type="hidden" name="format" value ="{{ puzzle.formatstr }}"/>
+
+<table border=5 bordercolor=#333399>
+  <tr><td valign=top>
+  <div id="grid" style="width: 525px; height: 525px;">
+    <img src="http://bundy.org/xw/gif/print-background.gif" alt="" id="print-background"  style="width: 525px; height: 525px;" />
+{% for clue in puzzle.clue %}
+
+    <span style="left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir}}"> {{ clue.num }}</span>
+    
+    <div id="{{ clue.num }}-{{ clue.dir }}" style="z-index: {{ clue.num }}; left: {{ clue.cc }}px; top: {{ clue.cr }}px;" class="{{ clue.dir }}">
+      <fieldset>
+	<legend>{{ clue.num }} {{ clue.dir }}</legend>
+	<ol>
+{% for dig in clue.sq %}	  
+	  <li>
+	    <input id="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" name="{{ clue.num }}-{{ clue.dir }}-{{ dig }}" maxlength="1" class=" "/>
+	  </li>
+{% endfor %}
+	</ol>
+	</fieldset>
+	</div>
+{% endfor %}
+  </div>
+  </td><td valign="top">
+  <table border=5 bordercolor=#993333 bgcolor=white><tr><td>
+  <div id="buttons-horizontal">
+    <h3>Actions</h3>
+    <input id="save" type="button" value="Save" />
+    <input id="retrieve" type="button" value="Retrieve" />
+    <input id="clear" type="button" value="Clear All" />
+    <input id="words" type="button" value="Words" />
+    <input id="clues" type="button" value="Clues" />
+    <input id="print" type="button" value="Print" />
+    <input id="download" type="button" value="Download XPF" />
+  </div></td></tr>
+  <tr><td>
+  <div id="clues">
+    <div class="clues-col">
+      <h4>Across</h4>
+      <ol>
+{% for clue in puzzle.across %}
+	<li>
+	  <span class="clue-number">{{ clue.num }}</span>  
+	  <label id="{{ clue.num }}-across-clue" for="{{ clue.num }}-across">{{ clue.clue }}</label>
+	  <input type=hidden id="{{ clue.num }}-across-input" name="{{ clue.num }}-across-input" value="{{ clue.clue }}"/>
+	</li>
+{% endfor %}
+      </ol>
+    </div>
+    <div class="clues-col last">
+	<h4>Down</h4>
+	<ol>
+{% for clue in puzzle.down %}
+	  <li>
+	    <span class="clue-number">{{ clue.num }}</span>  
+	    <label id="{{ clue.num }}-down-clue" for="{{ clue.num }}-down">{{ clue.clue }}</label>
+	    <input type=hidden id="{{ clue.num }}-down-input" name="{{ clue.num }}-down-input" value="{{ clue.clue }}"/>
+	  </li>
+{% endfor %}
+	</ol>
+    </div>
+  </div></td></tr>
+<tr><td>
+<div id="active-clue-edit">
+  <input type="text" name="clue" size=128 value=""/>
+  <input id="update-clue" type="button" value="Update Clue" />
+</div>
+</td></tr>
+</table>
+</td></tr>
+</table>
+<div id="word-suggestions">
+</div>
+</form>
+{% endblock %}
